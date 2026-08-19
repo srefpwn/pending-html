@@ -1,0 +1,1270 @@
+<style>
+.honda-zoom {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+}
+
+/*
+ * ============================================================
+ * FIX HONDA KOORDINĂTARENDSZER
+ * ============================================================
+ *
+ * Az eredeti Honda koordinĂĄtĂĄk mindig ebben
+ * a 475 Ă 320 px rendszerben maradnak.
+ *
+ */
+.honda-zoom-inner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-origin: top left;
+    transform: scale(var(--honda-scale, 1));
+}
+
+/*
+ * ============================================================
+ * KĂP
+ * ============================================================
+ */
+.honda-zoom-image {
+    display: block;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    object-fit: fill;
+}
+
+/*
+ * ============================================================
+ * FELIRATOK
+ * ============================================================
+ */
+.honda-zoom-label {
+    position: absolute;
+    font-family: Arial, sans-serif;
+    font-size: 9.20pt;
+    font-weight: normal;
+    line-height: 1.15;
+    color: #000000;
+    white-space: nowrap;
+    pointer-events: auto;
+    z-index: 2;
+}
+
+.honda-zoom-label b {
+    font-weight: bold;
+}
+
+.honda-zoom-label a {
+    pointer-events: auto;
+    color: inherit;
+}
+</style>
+<script>
+
+(function() {
+
+    function resizeHondaZoom() {
+
+        document
+        .querySelectorAll('.honda-zoom')
+        .forEach(function(zoom) {
+
+            var inner =
+            zoom.querySelector('.honda-zoom-inner');
+
+            if (!inner) {
+                return;
+            }
+
+            var width =
+            zoom.clientWidth;
+
+            if (width <= 0) {
+                return;
+            }
+
+            var scale =
+            width / 475;
+
+            zoom.style.setProperty(
+            '--honda-scale',
+            scale
+            );
+
+        });
+    }
+
+    /*
+         * ElsĹ mĂŠretezĂŠs
+         */
+
+    if (
+    document.readyState === 'loading'
+    ) {
+
+        document.addEventListener(
+        'DOMContentLoaded',
+        resizeHondaZoom
+        );
+
+    } else {
+
+        resizeHondaZoom();
+
+    }
+
+    /*
+         * Ablak ĂĄtmĂŠretezĂŠse
+         */
+
+    window.addEventListener(
+    'resize',
+    resizeHondaZoom
+    );
+
+    /*
+         * Ha a kontĂŠner mĂŠrete vĂĄltozik
+         * nem csak az ablakĂŠ.
+         */
+
+    if (
+    typeof ResizeObserver !== 'undefined'
+    ) {
+
+        var observer =
+        new ResizeObserver(
+        resizeHondaZoom
+        );
+
+        document
+        .querySelectorAll('.honda-zoom')
+        .forEach(function(zoom) {
+
+            observer.observe(zoom);
+
+        });
+
+    }
+
+})();
+</script>
+<style>
+.manual-wiring-box {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: 700px;
+    overflow: auto;
+    margin: 10px 0 0 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: 1px solid #cccccc;
+    background: #ffffff;
+    position: relative;
+}
+
+.manual-wiring-canvas {
+    display: block;
+    position: relative;
+    width: max-content;
+    min-width: 100%;
+    height: max-content;
+    margin: 0;
+    padding: 0;
+    line-height: normal;
+    box-sizing: border-box;
+}
+
+.manual-wiring-canvas img {
+    max-width: none;
+}
+</style>
+<div class="top_title">
+KapcsolĂĄsi rajz
+</div>
+<div class="manual-wiring-box">
+    <div class="manual-wiring-canvas">
+        <div class="manual-wiring-diagram-box" style="display:block;width:100%;max-width:100%;height:80vh;overflow:hidden;box-sizing:border-box;border:1px solid #cccccc;background:#ffffff;margin:15px 0;padding:0;">
+            <iframe srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;hu&quot; xmlns:v=&quot;urn:schemas-microsoft-com:vml&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;style&gt;v\:*{behavior:url(#default#VML);}.drag{position:relative;cursor:hand;}.drag{position:relative;cursor:hand;margin:0;padding:0;}html,body{margin:0;padding:0;background:#ffffff;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
+            &lt;div id=&quot;divBody&quot; style=&quot;display:none&quot;&gt;
+            &lt;div xmlns:v=&quot;urn:schemas-microsoft-com:vml&quot;&gt;
+            &lt;div id=&quot;toolbar&quot; style=&quot;position:relative; top:0px; left:0px; z-index:200&quot;&gt;
+            &lt;v:group xmlns:v=&quot;urn:schemas-microsoft-com:vml&quot; id=&quot;groupbar&quot; style=&quot;position:relative; top:0px; left:0px; width:360px; height:26px;&quot; coordsize=&quot;360,26&quot;&gt;
+            &lt;v:rect id=&quot;rectbar&quot; style=&quot;width:200px; height:28px;&quot; strokeweight=&quot;1&quot;&gt;
+            &lt;table align=&quot;left&quot;&gt;
+            &lt;tr&gt;
+            &lt;td width=&quot;40&quot;&gt;
+            &lt;a href=&quot;#&quot; onClick=&quot;prZoomOut();&quot;&gt;
+            &lt;img src=&quot;../img/SIZE_S.PNG&quot; style=&quot;width:35px; height:24px;&quot; border=&quot;0&quot; alt=&quot;Zoom Out&quot;&gt;
+            &lt;/a&gt;&lt;/td&gt;
+            &lt;td width=&quot;65&quot; align=&quot;right&quot;&gt;
+            &lt;select name=&quot;cmbRateList&quot; onChange=&quot;prRateSelect();&quot;&gt;
+            &lt;option value=&quot;2&quot;&gt;400%&lt;/option&gt;
+            &lt;option value=&quot;1.5&quot;&gt;300%&lt;/option&gt;
+            &lt;option value=&quot;1&quot;&gt;200%&lt;/option&gt;
+            &lt;option value=&quot;0.88&quot;&gt;175%&lt;/option&gt;
+            &lt;option value=&quot;0.75&quot;&gt;150%&lt;/option&gt;
+            &lt;option value=&quot;0.62&quot;&gt;125%&lt;/option&gt;
+            &lt;option value=&quot;0.5&quot;&gt;100%&lt;/option&gt;
+            &lt;option value=&quot;0.38&quot;&gt;75%&lt;/option&gt;
+            &lt;option value=&quot;0.25&quot;&gt;50%&lt;/option&gt;
+            &lt;option value=&quot;0.12&quot;&gt;25%&lt;/option&gt;
+            &lt;/select&gt;
+            &lt;/a&gt;
+            &lt;input type=&quot;hidden&quot; name=&quot;hidDefaultSelectedItem&quot; value=&quot;2&quot;&gt;
+            &lt;/td&gt;
+            &lt;td width=&quot;40&quot;&gt;
+            &lt;a href=&quot;#&quot; onClick=&quot;prZoomIn();&quot;&gt;
+            &lt;img src=&quot;../img/SIZE_L.PNG&quot; style=&quot;width:35px; height:24px;&quot; border=&quot;0&quot; alt=&quot;Zoom In&quot;&gt;
+            &lt;/a&gt;&lt;/td&gt;
+            &lt;td width=&quot;50&quot; align=&quot;right&quot;&gt;
+            &lt;a href=&quot;#&quot; onClick=&quot;prResetImage();&quot;&gt;
+            &lt;img src=&quot;../img/RESET_SIZE.PNG&quot; style=&quot;width:48px; height:23px;&quot; border=&quot;0&quot; alt=&quot;Reset Picture Size&quot;&gt;
+            &lt;/a&gt;&lt;/td&gt;
+            &lt;/tr&gt;&lt;/table&gt;
+            &lt;/v:rect&gt;
+            &lt;/v:group&gt;
+            &lt;/div&gt;
+            &lt;br clear=&quot;left&quot;&gt;
+            &lt;a name=&quot;i010&quot;&gt;
+            &lt;/a&gt;
+            &lt;div&gt;
+
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;script&gt;with(document) {
+            write(&quot;&lt;v:group id=\&quot;group1\&quot;  name=\&quot;PrtGrpId\&quot; class=\&quot;drag\&quot; style=\&quot;position:relative; width:1900px; height:950px;\&quot; coordsize=\&quot;1900,950\&quot;&gt;&quot;);
+            write(&quot;&lt;v:rect id=\&quot;rect1\&quot; name=\&quot;PrtRectId\&quot;class=\&quot;drag\&quot;  style=\&quot;width:1900px;height:950px;\&quot;&gt;&quot;);
+            write(&quot;&lt;img id=\&quot;img1\&quot; name=\&quot;PrtImgId\&quot; src=\&quot;/manual/images/SEA6EJ4000000000000EBHD10.PNG\&quot; border=\&quot;1\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:0px;top:0px;width:1900px;height:950px;border-color:#ffffff\&quot;&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_1\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:279px;top:46px;font-weight:normal;font-size:7.08pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;A&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_2\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:723px;top:46px;font-weight:normal;font-size:7.08pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;B&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_3\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1166px;top:46px;font-weight:normal;font-size:7.08pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;C&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_4\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1609px;top:46px;font-weight:normal;font-size:7.08pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;D&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_5\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:118px;top:-581px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_6\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:783px;top:337px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;Âˇ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_7\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:783px;top:363px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;Âˇ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_8\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:783px;top:383px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;Âˇ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_9\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1168px;top:474px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;LT BLU&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_10\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:102px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;22. sz. (AKK) (100 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_11\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1681px;top:226px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;: BalkormĂĄnyos&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_12\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1668px;top:226px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_13\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1668px;top:240px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_14\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1681px;top:240px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;: JobbkormĂĄnyos&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_15\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1693px;top:413px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_16\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1575px;top:542px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;HĂTSĂ ABLAK PĂRAMENTESĂTĹ KAPCSOLĂ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_17\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1698px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;G506&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_18\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1700px;top:618px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_19\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1264px;top:890px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;(KlĂ­maszabĂĄlyozĂĄssal)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_20\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1250px;top:412px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_21\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:383px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;ĂLĂSFĹ°TĂS RELĂ âš15âDâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_22\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:355px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;âš20âCâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_23\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:346px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;(vagy FĹ°TĹEGYSĂG VEZĂRLĹPULT)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_24\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:337px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;KLĂMASZABĂLYOZĂ EGYSĂG&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_25\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:839px;top:313px;font-weight:normal;font-size:4.44pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;47&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_26\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:837px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;: G601&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_27\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:837px;top:886px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;: G602&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_28\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:825px;top:886px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_29\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:825px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_30\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1103px;top:388px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_31\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1083px;top:380px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;2. sz.&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_32\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1082px;top:389px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;(30 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_33\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1166px;top:403px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;MICU &lt;br&gt;âš14âAâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_34\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1072px;top:424px;font-weight:normal;font-size:4.44pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;32&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_35\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:955px;top:223px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;(40 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_36\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:932px;top:618px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLU/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_37\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:932px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_38\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1129px;top:542px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;HĂTSĂ ABLAK PĂRAMENTESĂTĹ KAPCSOLĂ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_39\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1255px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;G506&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_40\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1257px;top:618px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_41\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:932px;top:401px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_42\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:932px;top:468px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_43\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:827px;top:618px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_44\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:586px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_45\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:586px;top:886px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_46\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:599px;top:886px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;: G601&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_47\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:599px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;: G503&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_48\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:222px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;: G503&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_49\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:222px;top:886px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;: G601&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_50\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:209px;top:886px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_51\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:209px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_52\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:646px;top:222px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_53\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:622px;top:223px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;(7,5 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_54\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:624px;top:214px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;30. sz.&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_55\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:212px;top:274px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_56\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:455px;top:315px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;LĂMPA (LED)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_57\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:610px;top:725px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;PĂRAMENTESĂTĹ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_58\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:596px;top:584px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;ORN&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_59\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:597px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_60\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:220px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_61\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:219px;top:584px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;ORN&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_62\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:233px;top:725px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;PĂRAMENTESĂTĹ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_63\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:588px;top:404px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;JOBB OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_64\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:459px;top:403px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BAL OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_65\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:624px;top:404px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;LE&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_66\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:738px;top:404px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;FEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_67\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:407px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;G601&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_68\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:719px;top:584px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;WHT/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_69\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:465px;top:712px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;JOBB &lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_70\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:560px;top:712px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;FEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_71\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:553px;top:656px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;LE&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_72\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:465px;top:648px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BAL &lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_73\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:745px;top:485px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;JOBB &lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_74\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:684px;top:489px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BAL &lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_75\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:460px;top:486px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BAL&lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_76\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:527px;top:492px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;JOBB OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_77\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:637px;top:281px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;ELEKTROMOS ĂLLĂTĂSĂ KĂLSĹ TĂKĂR KAPCSOLĂ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_78\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:526px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;WHT/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_79\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:271px;top:656px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;LE&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_80\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:357px;top:647px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BAL &lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_81\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:360px;top:712px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;JOBB &lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_82\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:278px;top:712px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;FEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_83\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:481px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;GRN/WHT&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_84\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:288px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLU/WHT&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_85\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:331px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;GRN/WHT&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_86\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:505px;top:584px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;RED/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_87\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:311px;top:584px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLU/BLK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_88\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:420px;top:584px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;GRN/WHT&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_89\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:409px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_90\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:600px;top:274px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_91\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:698px;top:534px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLU/WHT&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_92\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:219px;top:534px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;ORN&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_93\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1178px;top:433px;font-weight:normal;font-size:4.44pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;48&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_94\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:957px;top:214px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;14. sz.&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_95\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:978px;top:222px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_96\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:182px;top:180px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_97\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:139px;top:190px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_98\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:99px;top:191px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;7. sz. (10 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_99\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:139px;top:179px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_100\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:95px;top:180px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;15. sz. (30 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_101\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:139px;top:123px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_102\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:93px;top:124px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;21. sz. (7,5 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_103\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1791px;top:190px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_104\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:191px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;7. sz. (10 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_105\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1700px;top:180px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_106\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:124px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;21. sz. (7,5 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_107\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1798px;top:123px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_108\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1692px;top:147px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_109\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:173px;top:147px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_110\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:72px;top:25px;font-weight:normal;font-size:7.08pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;Elektromos tĂźkrĂśk, HĂĄtsĂł ablak pĂĄramentesĂ­tĹ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_111\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1840px;top:37px;font-weight:normal;font-size:17.63pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;10&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_112\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:24px;top:37px;font-weight:normal;font-size:17.63pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;10&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_113\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1796px;top:179px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_114\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:180px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;15. sz. (30 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_115\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:68px;top:102px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;22. sz. (AKK) (100 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_116\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:139px;top:101px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_117\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1637px;top:206px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*1 : A MOTORHĂZTETĹ ALATTI BIZTOSĂTĂK/RELĂ DOBOZ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_118\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1637px;top:215px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*2 : MĹ°SZERFALâ ALATTI BIZTOSĂTĂK/RELĂ DOBOZ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_119\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1796px;top:112px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_120\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:113px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;19. sz. (30 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_121\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1823px;top:101px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_122\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:172px;top:169px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_123\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:172px;top:158px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_124\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:171px;top:135px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;WHT/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_125\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:181px;top:113px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_126\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:139px;top:168px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_127\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:132px;top:147px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;IG1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_128\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:95px;top:169px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;18. sz. (15 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_129\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:132px;top:158px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;IG2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_130\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:98px;top:135px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;TARTOZĂKOK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_131\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:91px;top:69px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;AKKUMULĂTOR&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_132\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:139px;top:112px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_133\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:95px;top:113px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;19. sz. (30 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_134\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:69px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;AKKUMULĂTOR&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_135\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:135px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;TARTOZĂKOK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_136\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:147px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;IG1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_137\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:169px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;18. sz. (15 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_138\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1689px;top:135px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;WHT/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_139\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1691px;top:169px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_140\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1700px;top:114px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_141\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1796px;top:168px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_142\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:244px;top:308px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;PĂRAMENTESĂTĹ &lt;br&gt;KAPCSOLĂ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_143\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:148px;top:593px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BAL &lt;br&gt;OLDALI ELEKTROMOS &lt;br&gt;ĂLLĂTĂSĂ &lt;br&gt;KĂLSĹ TĂKĂR&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_144\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:344px;top:354px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;KIJELZĹ &lt;br&gt;LĂMPA &lt;br&gt;(LED)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_145\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:465px;top:593px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;JOBB OLDALI &lt;br&gt;ELEKTROMOS &lt;br&gt;ĂLLĂTĂSĂ &lt;br&gt;KĂLSĹ TĂKĂR&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_146\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:363px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;VISSZAKERINGETĂS VEZĂRLĂS &lt;br&gt;MOTORâš20âCâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_147\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:871px;top:686px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;HANG&lt;br&gt;TOMPĂTĂ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_148\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:976px;top:681px;font-weight:normal;font-size:3.73pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;A HĂTSĂ&lt;br&gt;ABLAK &lt;br&gt;PĂRAMENTESĂTĹJE&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_149\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:976px;top:531px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;ABLAKRA &lt;br&gt;SZERELHETĹ &lt;br&gt;ANTENNA&lt;br&gt;TEKERCS&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_150\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1050px;top:447px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;RELĂ VEZĂRLĹ &lt;br&gt;MODUL &lt;br&gt;âš6âCâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_151\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1092px;top:310px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;A HĂTSĂ &lt;br&gt;ABLAK &lt;br&gt;PĂRAMENTESĂTĹ &lt;br&gt;RELĂJE&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_152\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1292px;top:517px;font-weight:normal;font-size:3.73pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;FĹ°TĂS &lt;br&gt;VEZĂRLĹ &lt;br&gt;PANEL/ &lt;br&gt;LĂGKONDICIONĂLĂ-&lt;br&gt;VEZĂRLĹ&lt;br&gt;EGYSĂG&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_153\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1525px;top:310px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;A HĂTSĂ &lt;br&gt;ABLAK &lt;br&gt;PĂRAMENTESĂTĹ &lt;br&gt;RELĂJE&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_154\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1735px;top:531px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;FĹ°TĂS&lt;br&gt;SZABĂLYOZĂ &lt;br&gt;TĂBLA&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_155\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:783px;top:393px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;Âˇ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_156\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:393px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;MOTORVEZĂRLĹ EGYSĂG âš24âCâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_157\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1504px;top:400px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;: YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_158\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1495px;top:400px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_159\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1495px;top:412px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_160\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1504px;top:411px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;: YEL/BLK &lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_161\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:829px;top:273px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_162\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1713px;top:890px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;(KlĂ­maszabĂĄlyozĂĄs nĂŠlkĂźl)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_163\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:181px;top:124px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_164\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1700px;top:124px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_165\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:783px;top:403px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;Âˇ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_166\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:783px;top:423px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;Âˇ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_167\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:422px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;MĂGNESSZELEP âš20âCâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;p id=\&quot;p1_168\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:404px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
+            write(&quot;&lt;nobr&gt;&lt;b&gt;LĂGKONDICIONĂLĂ HĹ°TĹVENTILĂTOR RELAY&lt;br&gt;âš20âCâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
+            write(&quot;&lt;/p&gt;&quot;);
+            write(&quot;&lt;/v:rect&gt;&quot;);
+            write(&quot;&lt;/v:group&gt;&quot;);
+            }&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:block;width:100%;height:100%;border:0;margin:0;padding:0;background:#ffffff;" frameborder="0" scrolling="auto"></iframe>
+        </div>
+        <div xmlns:v="urn:schemas-microsoft-com:vml">
+
+            <br clear="left">
+            <a name="i010"></a>
+            <div>
+                <div class="honda-zoom" style="--honda-width:950px;--honda-height:475px;aspect-ratio:950 / 475;">
+                    <div class="honda-zoom-inner" style="width:950px;height:475px;">
+                        <img id="img1" name="PrtImgId" src="/manual/images/SEA6EJ4000000000000EBH910.PNG" border="1" class="drag honda-zoom-image" style="width:950px;height:475px;">
+                        <div class="honda-zoom-label" style="left:140.00px;top:23.00px;">
+                            <b>A </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:362.00px;top:23.00px;">
+                            <b>B </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:584.00px;top:23.00px;">
+                            <b>C </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:805.00px;top:23.00px;">
+                            <b>D </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:392.00px;top:169.00px;">
+                            <b>Âˇ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:392.00px;top:182.00px;">
+                            <b>Âˇ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:392.00px;top:192.00px;">
+                            <b>Âˇ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:584.00px;top:237.00px;">
+                            <b>LT BLU </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:876.00px;top:52.00px;">
+                            <b>22. sz. (AKK) (100 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:841.00px;top:114.00px;">
+                            <b>: BalkormĂĄnyos </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:835.00px;top:114.00px;">
+                            <b>1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:835.00px;top:120.00px;">
+                            <b>2 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:841.00px;top:120.00px;">
+                            <b>: JobbkormĂĄnyos </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:847.00px;top:207.00px;">
+                            <b>BLK/YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:788.00px;top:272.00px;">
+                            <b>HĂTSĂ ABLAK PĂRAMENTESĂTĹ KAPCSOLĂ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:849.00px;top:437.00px;">
+                            <b>G506 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:851.00px;top:309.00px;">
+                            <b>BLK </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:632.00px;top:446.00px;">
+                            <b>(KlĂ­maszabĂĄlyozĂĄssal) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:626.00px;top:207.00px;">
+                            <b>BLK/YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:396.00px;top:192.00px;">
+                            <b>ĂLĂSFĹ°TĂS RELĂ âš15âDâş </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:396.00px;top:178.00px;">
+                            <b>âš20âCâş </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:396.00px;top:173.00px;">
+                            <b>(vagy FĹ°TĹEGYSĂG VEZĂRLĹPULT) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:396.00px;top:169.00px;">
+                            <b>KLĂMASZABĂLYOZĂ EGYSĂG </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:420.00px;top:157.00px;">
+                            <b>47 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:419.00px;top:437.00px;">
+                            <b>: G601 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:419.00px;top:443.00px;">
+                            <b>: G602 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:413.00px;top:443.00px;">
+                            <b>2 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:413.00px;top:437.00px;">
+                            <b>1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:552.00px;top:195.00px;">
+                            <b>*1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:542.00px;top:191.00px;">
+                            <b>2. sz. </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:542.00px;top:195.00px;">
+                            <b>(30 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:583.00px;top:202.00px;">
+                            <b>MICU  âš14âAâş </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:537.00px;top:213.00px;">
+                            <b>32 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:478.00px;top:112.00px;">
+                            <b>(40 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:467.00px;top:309.00px;">
+                            <b>BLU/YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:467.00px;top:381.00px;">
+                            <b>BLK/YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:565.00px;top:272.00px;">
+                            <b>HĂTSĂ ABLAK PĂRAMENTESĂTĹ KAPCSOLĂ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:628.00px;top:437.00px;">
+                            <b>G506 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:629.00px;top:309.00px;">
+                            <b>BLK </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:467.00px;top:201.00px;">
+                            <b>BLK/YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:467.00px;top:234.00px;">
+                            <b>BLK/YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:414.00px;top:309.00px;">
+                            <b>BLK/YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:294.00px;top:437.00px;">
+                            <b>1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:294.00px;top:443.00px;">
+                            <b>2 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:300.00px;top:443.00px;">
+                            <b>: G601 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:300.00px;top:437.00px;">
+                            <b>: G503 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:112.00px;top:437.00px;">
+                            <b>: G503 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:112.00px;top:443.00px;">
+                            <b>: G601 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:105.00px;top:443.00px;">
+                            <b>2 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:105.00px;top:437.00px;">
+                            <b>1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:323.00px;top:112.00px;">
+                            <b>*2 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:312.00px;top:112.00px;">
+                            <b>(7,5 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:313.00px;top:108.00px;">
+                            <b>30. sz. </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:106.00px;top:138.00px;">
+                            <b>BLK/YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:228.00px;top:158.00px;">
+                            <b>LĂMPA (LED) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:306.00px;top:363.00px;">
+                            <b>PĂRAMENTESĂTĹ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:298.00px;top:293.00px;">
+                            <b>ORN </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:299.00px;top:381.00px;">
+                            <b>BLK </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:111.00px;top:381.00px;">
+                            <b>BLK </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:110.00px;top:293.00px;">
+                            <b>ORN </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:117.00px;top:363.00px;">
+                            <b>PĂRAMENTESĂTĹ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:294.00px;top:202.00px;">
+                            <b>JOBB OLDALI </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:230.00px;top:202.00px;">
+                            <b>BAL OLDALI </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:313.00px;top:202.00px;">
+                            <b>LE </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:369.00px;top:202.00px;">
+                            <b>FEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:204.00px;top:437.00px;">
+                            <b>G601 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:360.00px;top:293.00px;">
+                            <b>WHT/RED </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:233.00px;top:356.00px;">
+                            <b>JOBB  OLDALI </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:281.00px;top:356.00px;">
+                            <b>FEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:277.00px;top:329.00px;">
+                            <b>LE </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:233.00px;top:325.00px;">
+                            <b>BAL  OLDALI </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:373.00px;top:243.00px;">
+                            <b>JOBB  OLDALI </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:342.00px;top:245.00px;">
+                            <b>BAL  OLDALI </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:231.00px;top:243.00px;">
+                            <b>BAL OLDALI </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:264.00px;top:247.00px;">
+                            <b>JOBB OLDALI </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:319.00px;top:141.00px;">
+                            <b>ELEKTROMOS ĂLLĂTĂSĂ KĂLSĹ TĂKĂR KAPCSOLĂ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:263.00px;top:381.00px;">
+                            <b>WHT/RED </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:136.00px;top:329.00px;">
+                            <b>LE </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:179.00px;top:324.00px;">
+                            <b>BAL  OLDALI </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:180.00px;top:356.00px;">
+                            <b>JOBB  OLDALI </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:139.00px;top:356.00px;">
+                            <b>FEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:241.00px;top:381.00px;">
+                            <b>GRN/WHT </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:144.00px;top:381.00px;">
+                            <b>BLU/WHT </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:166.00px;top:381.00px;">
+                            <b>GRN/WHT </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:253.00px;top:293.00px;">
+                            <b>RED/YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:156.00px;top:293.00px;">
+                            <b>BLU/BLK </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:210.00px;top:293.00px;">
+                            <b>GRN/WHT </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:205.00px;top:381.00px;">
+                            <b>BLK </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:300.00px;top:138.00px;">
+                            <b>BLK/YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:350.00px;top:268.00px;">
+                            <b>BLU/WHT </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:110.00px;top:268.00px;">
+                            <b>ORN </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:589.00px;top:217.00px;">
+                            <b>48 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:479.00px;top:108.00px;">
+                            <b>14. sz. </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:490.00px;top:112.00px;">
+                            <b>*1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:91.00px;top:90.00px;">
+                            <b>YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:70.00px;top:95.00px;">
+                            <b>*2 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:50.00px;top:96.00px;">
+                            <b>7. sz. (10 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:70.00px;top:90.00px;">
+                            <b>*1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:48.00px;top:90.00px;">
+                            <b>15. sz. (30 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:70.00px;top:62.00px;">
+                            <b>*2 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:47.00px;top:63.00px;">
+                            <b>21. sz. (7,5 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:896.00px;top:95.00px;">
+                            <b>*2 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:876.00px;top:96.00px;">
+                            <b>7. sz. (10 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:851.00px;top:90.00px;">
+                            <b>YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:876.00px;top:63.00px;">
+                            <b>21. sz. (7,5 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:900.00px;top:62.00px;">
+                            <b>*2 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:846.00px;top:74.00px;">
+                            <b>BLK/YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:87.00px;top:74.00px;">
+                            <b>BLK/YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:37.00px;top:13.00px;">
+                            <b>Elektromos tĂźkrĂśk, HĂĄtsĂł ablak pĂĄramentesĂ­tĹ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:920.00px;top:19.00px;">
+                            <b>10 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:13.00px;top:19.00px;">
+                            <b>10 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:898.00px;top:90.00px;">
+                            <b>*1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:876.00px;top:90.00px;">
+                            <b>15. sz. (30 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:35.00px;top:52.00px;">
+                            <b>22. sz. (AKK) (100 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:70.00px;top:51.00px;">
+                            <b>*1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:819.00px;top:104.00px;">
+                            <b>*1 : A MOTORHĂZTETĹ ALATTI BIZTOSĂTĂK/RELĂ DOBOZ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:819.00px;top:108.00px;">
+                            <b>*2 : MĹ°SZERFALâ ALATTI BIZTOSĂTĂK/RELĂ DOBOZ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:898.00px;top:57.00px;">
+                            <b>*1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:876.00px;top:57.00px;">
+                            <b>19. sz. (30 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:912.00px;top:51.00px;">
+                            <b>*1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:87.00px;top:85.00px;">
+                            <b>BLK/RED </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:87.00px;top:79.00px;">
+                            <b>BLK/RED </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:86.00px;top:68.00px;">
+                            <b>WHT/RED </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:91.00px;top:57.00px;">
+                            <b>RED </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:70.00px;top:84.00px;">
+                            <b>*2 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:67.00px;top:74.00px;">
+                            <b>IG1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:48.00px;top:85.00px;">
+                            <b>18. sz. (15 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:67.00px;top:79.00px;">
+                            <b>IG2 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:50.00px;top:68.00px;">
+                            <b>TARTOZĂKOK </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:46.00px;top:35.00px;">
+                            <b>AKKUMULĂTOR </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:70.00px;top:57.00px;">
+                            <b>*1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:48.00px;top:57.00px;">
+                            <b>19. sz. (30 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:876.00px;top:35.00px;">
+                            <b>AKKUMULĂTOR </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:876.00px;top:68.00px;">
+                            <b>TARTOZĂKOK </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:876.00px;top:74.00px;">
+                            <b>IG1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:876.00px;top:85.00px;">
+                            <b>18. sz. (15 A) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:845.00px;top:68.00px;">
+                            <b>WHT/RED </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:846.00px;top:85.00px;">
+                            <b>BLK/RED </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:851.00px;top:57.00px;">
+                            <b>RED </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:898.00px;top:84.00px;">
+                            <b>*2 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:123.00px;top:155.00px;">
+                            <b>PĂRAMENTESĂTĹ  KAPCSOLĂ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:75.00px;top:297.00px;">
+                            <b>BAL  OLDALI ELEKTROMOS  ĂLLĂTĂSĂ  KĂLSĹ TĂKĂR </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:173.00px;top:177.00px;">
+                            <b>KIJELZĹ  LĂMPA  (LED) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:233.00px;top:297.00px;">
+                            <b>JOBB OLDALI  ELEKTROMOS  ĂLLĂTĂSĂ  KĂLSĹ TĂKĂR </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:396.00px;top:182.00px;">
+                            <b>VISSZAKERINGETĂS VEZĂRLĂS  MOTORâš20âCâş </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:436.00px;top:344.00px;">
+                            <b>HANG TOMPĂTĂ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:488.00px;top:341.00px;">
+                            <b>A HĂTSĂ ABLAK  PĂRAMENTESĂTĹJE </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:488.00px;top:266.00px;">
+                            <b>ABLAKRA  SZERELHETĹ  ANTENNA TEKERCS </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:525.00px;top:224.00px;">
+                            <b>RELĂ VEZĂRLĹ  MODUL  âš6âCâş </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:547.00px;top:156.00px;">
+                            <b>A HĂTSĂ  ABLAK  PĂRAMENTESĂTĹ  RELĂJE </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:646.00px;top:259.00px;">
+                            <b>FĹ°TĂS  VEZĂRLĹ  PANEL/  LĂGKONDICIONĂLĂ- VEZĂRLĹ EGYSĂG </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:763.00px;top:156.00px;">
+                            <b>A HĂTSĂ  ABLAK  PĂRAMENTESĂTĹ  RELĂJE </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:868.00px;top:266.00px;">
+                            <b>FĹ°TĂS SZABĂLYOZĂ  TĂBLA </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:392.00px;top:197.00px;">
+                            <b>Âˇ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:396.00px;top:197.00px;">
+                            <b>MOTORVEZĂRLĹ EGYSĂG âš24âCâş </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:752.00px;top:200.00px;">
+                            <b>: YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:748.00px;top:200.00px;">
+                            <b>1 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:748.00px;top:206.00px;">
+                            <b>2 </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:752.00px;top:206.00px;">
+                            <b>: YEL/BLK  </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:415.00px;top:137.00px;">
+                            <b>BLK/YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:857.00px;top:446.00px;">
+                            <b>(KlĂ­maszabĂĄlyozĂĄs nĂŠlkĂźl) </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:91.00px;top:63.00px;">
+                            <b>YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:850.00px;top:63.00px;">
+                            <b>YEL </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:392.00px;top:202.00px;">
+                            <b>Âˇ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:392.00px;top:212.00px;">
+                            <b>Âˇ </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:396.00px;top:211.00px;">
+                            <b>MĂGNESSZELEP âš20âCâş </b>
+                        </div>
+                        <div class="honda-zoom-label" style="left:396.00px;top:203.00px;">
+                            <b>LĂGKONDICIONĂLĂ HĹ°TĹVENTILĂTOR RELAY âš20âCâş </b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
