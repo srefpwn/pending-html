@@ -2112,20 +2112,88 @@ $fragment = preg_replace(
     $fragment
 );
 
-    $fragment = preg_replace(
-        '#\s+onload\s*=\s*["\'][^"\']*["\']#i',
-        '',
-        $fragment
-    );
+$fragment = preg_replace(
+    '#\s+onload\s*=\s*["\'][^"\']*["\']#i',
+    '',
+    $fragment
+);
 
 
+/*
+ * Honda gyári külső JS fájlok feldolgozása
+ *
+ * A Zoom oldalak a rajzot nem közvetlenül
+ * a HTML-ben tartalmazzák, hanem egy
+ * külső JS fájl write(...) hívásaival
+ * generálják.
+ */
+$fragment = preg_replace_callback(
+    '#<script\b[^>]*\bsrc\s*=\s*["\']([^"\']+\.js(?:\?[^"\']*)?)["\'][^>]*>\s*</script>#is',
+    function ($match) use (
+        $jsDir,
+        $type,
+        $year
+    ) {
+
+        $scriptSrc =
+            trim($match[1]);
+
+        $scriptPath =
+            parse_url(
+                $scriptSrc,
+                PHP_URL_PATH
+            );
+
+        if (
+            $scriptPath === false ||
+            $scriptPath === null
+        ) {
+            return '';
+        }
+
+        $scriptFilename =
+            basename(
+                $scriptPath
+            );
+
+        if (
+            $scriptFilename === ''
+        ) {
+            return '';
+        }
+
+        $jsFile =
+            rtrim(
+                $jsDir,
+                '/\\'
+            )
+            . '/'
+            . $scriptFilename;
+
+        if (
+            !is_file($jsFile)
+        ) {
+            return '';
+        }
+
+        return processJsFile(
+            $jsFile,
+            $type,
+            $year
+        );
+    },
+    $fragment
+);
 
 
-    $fragment = preg_replace(
-        '#<script\b[^>]*>.*?</script>#is',
-        '',
-        $fragment
-    );
+/*
+ * A feldolgozatlan script tagek eltávolítása.
+ */
+$fragment = preg_replace(
+    '#<script\b[^>]*>.*?</script>#is',
+    '',
+    $fragment
+);
 
 
 
@@ -2251,11 +2319,8 @@ if (
         );
 
 } else {
-
-
-
     $fragment =
-        keepManualGraphBesideText(
+        moveManualGraphBelowText(
             $fragment
         );
 }
