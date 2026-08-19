@@ -1439,87 +1439,114 @@ function removeHondaPrintBlocks(
 
     return $html;
 }
+
 function moveManualGraphBelowText(
     string $html
 ): string {
-
-
-
     $pattern =
-        '#'
-        . '<tr\b[^>]*>'
+        '#<table\b([^>]*\bclass\s*=\s*["\'][^"\']*\bViewer\b[^"\']*["\'][^>]*)>'
         . '(.*?)'
-        . '<td\b(?=[^>]*\bid\s*=\s*["\']textTd["\'])[^>]*>'
-        . '(.*?)'
-        . '</td>'
-        . '\s*'
-        . '<td\b(?=[^>]*\bid\s*=\s*["\']graphTd["\'])[^>]*>'
-        . '(.*?)'
-        . '</td>'
-        . '\s*'
-        . '</tr>'
-        . '#is';
-
+        . '</table>#is';
 
     return preg_replace_callback(
         $pattern,
         function ($match) {
 
-            $beforeText =
+            $tableAttributes =
                 $match[1];
 
-            $textContent =
+            $tableContent =
                 $match[2];
 
+            if (
+                stripos(
+                    $tableContent,
+                    'id="graphTd"'
+                ) === false &&
+                stripos(
+                    $tableContent,
+                    "id='graphTd'"
+                ) === false
+            ) {
+                return $match[0];
+            }
+
+            if (
+                !preg_match(
+                    '#<td\b([^>]*\bid\s*=\s*["\']textTd["\'][^>]*)>(.*?)</td>#is',
+                    $tableContent,
+                    $textMatch
+                )
+            ) {
+                return $match[0];
+            }
+
+            if (
+                !preg_match(
+                    '#<td\b([^>]*\bid\s*=\s*["\']graphTd["\'][^>]*)>(.*?)</td>#is',
+                    $tableContent,
+                    $graphMatch
+                )
+            ) {
+                return $match[0];
+            }
+
+            $textContent =
+                $textMatch[2];
+
             $graphContent =
-                $match[3];
+                $graphMatch[2];
 
-
-
+            /*
+             * Csak a Honda Zoom esetén tesszük
+             * a grafikát új sorba.
+             */
             if (
                 strpos(
                     $graphContent,
                     'class="honda-zoom"'
                 ) === false
             ) {
-
                 return $match[0];
             }
 
-
-
-
             return
-                '<tr>'
+                '<table'
+                . $tableAttributes
+                . '>'
                 . "\n"
 
+                . '<tr>'
+                . "\n"
                 . '<td'
                 . ' class="manual-text-cell"'
                 . ' style="width:100%;padding:0;vertical-align:top;"'
                 . '>'
                 . $textContent
                 . '</td>'
-
+                . "\n"
                 . '</tr>'
+
                 . "\n"
 
                 . '<tr>'
                 . "\n"
-
                 . '<td'
                 . ' class="manual-graph-cell"'
                 . ' style="width:100%;padding:0;vertical-align:top;"'
                 . '>'
                 . $graphContent
                 . '</td>'
+                . "\n"
+                . '</tr>'
 
-                . '</tr>';
+                . "\n"
+
+                . '</table>';
         },
         $html
     );
 }
-
-
 
 function keepManualGraphBesideText(
     string $html
