@@ -414,18 +414,18 @@ function prepareHondaWiringDiagram(
     width: 100%;
     max-width: 100%;
 
-    height: 700px;
+    height: auto;
 
     overflow: auto;
 
-    margin: 10px 0 0 0;
+    margin: 0px 0 0 0;
     padding: 0;
 
     box-sizing: border-box;
 
     border: 1px solid #cccccc;
 
-    background: #ffffff;
+    background: #cccccc;
 
     position: relative;
 }
@@ -760,7 +760,12 @@ $diagramHtml = preg_replace_callback(
             1
         );
 
-
+$html =
+    preg_replace(
+        '#<v:group\b[^>]*>.*?</v:group>#is',
+        '',
+        $html
+    );
     $iframeHtml =
         '<!DOCTYPE html>'
         . '<html lang="hu" xmlns:v="urn:schemas-microsoft-com:vml">'
@@ -1678,7 +1683,8 @@ function keepManualGraphBesideText(
 function processJsFile(
     string $jsFile,
     string $type,
-    int $year
+    int $year,
+    bool $skipZoom = false
 ): string {
 
     if (!is_file($jsFile)) {
@@ -1884,17 +1890,18 @@ $html =
     );
 
 
-$html =
-    convertHondaZoom(
-        $html
-    );
+if (!$skipZoom) {
 
+    $html =
+        convertHondaZoom(
+            $html
+        );
 
-$html =
-    convertVmlToHtml(
-        $html
-    );
-
+    $html =
+        convertVmlToHtml(
+            $html
+        );
+}
 
     return $html;
 }
@@ -2159,7 +2166,8 @@ $fragment = preg_replace_callback(
     function ($match) use (
         $jsDir,
         $type,
-        $year
+        $year,
+    	$html
     ) {
 
         $scriptSrc =
@@ -2204,10 +2212,11 @@ $fragment = preg_replace_callback(
         }
 
         return processJsFile(
-            $jsFile,
-            $type,
-            $year
-        );
+    $jsFile,
+    $type,
+    $year,
+    isHondaWiringDiagram($html)
+);
     },
     $fragment
 );
@@ -2291,15 +2300,13 @@ $fragment = preg_replace(
             $type,
             $year
         );
-        
-$fragment =
+        $fragment =
     convertManualWiringDiagram(
         $fragment,
         $type,
         (int)$year,
         $jsDir
     );
-
 
 
 
@@ -2312,33 +2319,23 @@ $fragment =
 
 
 
- 
 $fragment =
     removeHondaPrintBlocks(
         $fragment
     );
 
 
-
-$fragment =
-    convertHondaZoom(
-        $fragment
-    );
-
-
-
-$fragment =
-    convertVmlToHtml(
-        $fragment
-    );
-        
-
-
 if (
     isHondaWiringDiagram($html)
 ) {
 
-
+    /*
+     * Kapcsolási rajznál a gyári script
+     * már az iframe-ben van.
+     *
+     * Ezért itt NEM futtatjuk rá még egyszer
+     * a Honda Zoom/VML feldolgozást.
+     */
 
     $fragment =
         prepareHondaWiringDiagram(
@@ -2346,6 +2343,22 @@ if (
         );
 
 } else {
+
+    /*
+     * Normál oldalaknál marad a működő
+     * Honda Zoom feldolgozás.
+     */
+
+    $fragment =
+        convertHondaZoom(
+            $fragment
+        );
+
+    $fragment =
+        convertVmlToHtml(
+            $fragment
+        );
+
     $fragment =
         moveManualGraphBelowText(
             $fragment
