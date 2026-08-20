@@ -424,13 +424,15 @@ if ($isWiringDiagram) {
     $html = loadAndInlineHondaScripts($html, $jsDir, $type, $year);
     $html = addIframeHead($html);
 
-    if (!$isWiringDiagram) {
-        $html = addNormalIframeResizeScript($html);
-    } else {
-        $css = '<style>html,body{overflow:auto !important;} img{max-width:none !important;}</style>';
-        $html = preg_replace('#</head>#i', $css . "\n</head>", $html, 1);
-    }
-
+if (!$isWiringDiagram && !$isZoom) {
+    $html = addNormalIframeResizeScript($html);
+} elseif ($isWiringDiagram) {
+    $css = '<style>html,body{overflow:auto !important;} img{max-width:none !important;}</style>';
+    $html = preg_replace('#</head>#i', $css . "\n</head>", $html, 1);
+} elseif ($isZoom) {
+    $css = '<style>html,body{overflow:auto !important; overflow-x:auto !important; overflow-y:auto !important;} img{max-width:none !important;}</style>';
+    $html = preg_replace('#</head>#i', $css . "\n</head>", $html, 1);
+}
     return trim($html);
 }
 function moveWiringLabelsUp(string $html): string
@@ -503,7 +505,7 @@ JS;
     return '<div class="manual-content-iframe" style="width:100%;margin:0;padding:0;overflow:hidden;">'
 . '<iframe id="honda-iframe" src="/manual/html/'
 . rawurlencode($contentFile)
-. '" style="display:block;width:100%;height:200px;border:0;margin:0;padding:0;background:#fff;" frameborder="0" scrolling="' . ($isZoom ? 'auto' : 'no') . '" loading="eager"></iframe>'
+. '" style="display:block;width:100%;height:' . ($isZoom ? 'calc(100vh - 100px)' : '200px') . ';border:0;margin:0;padding:0;background:#fff;overflow:auto;" frameborder="0" scrolling="' . ($isZoom ? 'yes' : 'no') . '" loading="eager"></iframe>'
        . ($isZoom ? '' : $script)
         . '</div>';
 }
