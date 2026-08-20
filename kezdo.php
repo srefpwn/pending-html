@@ -223,10 +223,13 @@ if (!is_array($pages)) {
 
                                     					$categoryName =
                                         				(string)($category['name'] ?? '');
+                                        				
+                                        				$isActive =
+														($categoryId === $selectedCategoryId);
                                     					?>
                                     				<tr>
                                     					<td>
-                                        				<a href="?type=<?= urlencode($type) ?>&year=<?= (int)$year ?><?= $navigationParams ?>&category=<?= $categoryId ?>">
+                                        				<a href="?type=<?= urlencode($type) ?>&year=<?= (int)$year ?><?= $navigationParams ?>&category=<?= $categoryId ?>" class="<?= $isActive ? '' : 'greybutton' ?>">
                                             			<button type="button"><?= htmlspecialchars($categoryName) ?>
                                             			</button>
                                         				</a>
