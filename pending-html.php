@@ -307,11 +307,9 @@ CSS;
         . $html
         . '</html>';
 }
-function isZoomPage(string $title, string $name): bool
+function isZoomPage(string $filename): bool
 {
-    return
-        mb_stripos($title, 'ZOOM', 0, 'UTF-8') !== false
-        || mb_stripos($name, 'ZOOM', 0, 'UTF-8') !== false;
+    return strncasecmp($filename, 'ZOOM', 4) === 0;
 }
 
 function addNormalIframeResizeScript(string $html): string
@@ -418,12 +416,13 @@ $html = convertManualLinks($html, $type, $year);
 $html = convertJmpLinks($html);
 
 $html = removeHondaButtons($html);
+$html = loadAndInlineHondaScripts($html, $jsDir, $type, $year);
+
 if ($isWiringDiagram) {
     $html = moveWiringLabelsUp($html);
 }
-    $html = loadAndInlineHondaScripts($html, $jsDir, $type, $year);
-    $html = addIframeHead($html);
 
+$html = addIframeHead($html);
 if (!$isWiringDiagram && !$isZoom) {
     $html = addNormalIframeResizeScript($html);
 } elseif ($isWiringDiagram) {
@@ -435,18 +434,21 @@ if (!$isWiringDiagram && !$isZoom) {
 }
     return trim($html);
 }
+// Kapcsolási rajz feliratok függőleges eltolása pixelben.
+// Pozitív érték = felfelé mozgatás.
+const WIRING_LABEL_OFFSET = 10;
+
 function moveWiringLabelsUp(string $html): string
 {
     return preg_replace_callback(
-        '#(<[^>]*\bname\s*=\s*[\'"]PrtPId[\'"][^>]*\bstyle\s*=\s*[\'"][^\'"]*\btop\s*:\s*)(-?\d+(?:\.\d+)?)px([^\'"]*[\'"])#i',
+        '#(name=\\"PrtPId\\"[^>]*style=\\"[^"]*top:)(-?\d+(?:\.\d+)?)(px)#i',
         function ($match) {
-            $top = (float)$match[2] - 5;
-            return $match[1] . $top . 'px' . $match[3];
+            $top = (float)$match[2] - WIRING_LABEL_OFFSET;
+            return $match[1] . $top . $match[3];
         },
         $html
     );
 }
-
 function createNormalIframe(string $id, bool $isZoom = false): string
 {
     $contentFile = $id . '-content.html';
@@ -555,7 +557,7 @@ foreach ($files as $file) {
     $title = extractTitle($html);
     $name = extractName($html);
    $isWiringDiagram = isWiringDiagram($name);
-$isZoom = isZoomPage($title, $name);
+$isZoom = isZoomPage($filename);
 
 $fragment = prepareIframeDocument(
     $html,
