@@ -639,4 +639,3 @@ echo '<h3>Feldolgozás kész</h3>';
 echo '<p>Sikeres: ' . $processed . '</p>';
 echo '<p>Kihagyva: ' . $skipped . '</p>';
 echo '<p>Hibás: ' . $errors . '</p>';
-
