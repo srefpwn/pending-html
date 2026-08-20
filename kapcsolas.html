@@ -1,1453 +1,807 @@
+<html lang="hu" xmlns:v="urn:schemas-microsoft-com:vml">
+<head><base target="_top">
 <style>
-.manual-wiring-box {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    height: 700px;
-    overflow: auto;
-    margin: 10px 0 0 0;
-    padding: 0;
-    box-sizing: border-box;
-    border: 1px solid #cccccc;
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
     background: #ffffff;
-    position: relative;
 }
 
-.manual-wiring-canvas {
-    display: block;
-    position: relative;
-    width: max-content;
-    min-width: 100%;
-    height: max-content;
-    margin: 0;
-    padding: 0;
-    line-height: normal;
-    box-sizing: border-box;
-}
-
-.manual-wiring-canvas img {
+img {
     max-width: none;
 }
 </style>
+
+<meta name="author" content="HONDA MOTOR Co.,Ltd.">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>(
+SEA6EJ4000000000000EBHT00
+)</title>
+<script>
+<!--
+var bufCookie = new Array;
+var strKey,strVal;
+var nPos=0;
+var strPara = location.href.split("?")[1];
+if((typeof(strPara) == "undefined") || (strPara == null)){
+	bufCookie = document.cookie.split(";");
+	while (nPos < bufCookie.length) {
+		strKey = bufCookie[nPos].split("=")[0];
+		strVal = bufCookie[nPos].split("=")[1];
+		if(strKey == "CurrentYearType"){
+			strPara = strVal;
+			break;
+		}
+		nPos++;
+	}
+}
+if((typeof(strPara) != "undefined") && (strPara != null)){
+	document.title = strPara + document.title;
+	document.cookie = "CurrentYearType="+strPara+";";
+	var strUrl = location.href.split("?")[0];
+	if(strUrl != location.href) {
+		location.replace(strUrl);
+	}
+}
+function CtsProc(Type,Key,Anc) {
+	var  strData;
+	strData = Anc
+	if((typeof(strPara) != "undefined") && (strPara != null)){
+		strData += '?'+strPara
+	}
+	if(Type == '0') {
+		parent.Cts(Key,strData);
+	}
+	else if(Type == '1') {
+		parent.parent.Cts(Key,strData);
+	}
+	else if(Type == '2') {
+		opener.top.Cts(Key,strData);
+	}
+	else {
+		parent.Cts(Key,strData);
+	}
+}
+
+function PrtProc(Type,Key,Anc) {
+	var  strData;
+	strData = Anc
+	if((typeof(strPara) != "undefined") && (strPara != null)){
+		strData += '?'+strPara
+	}
+	if(Type == '0') {
+		parent.Prt(Key,strData);
+	}
+	else if(Type == '1') {
+		parent.parent.Prt(Key,strData);
+	}
+	else if(Type == '2') {
+		opener.top.Prt(Key,strData);
+	}
+	else {
+		parent.Prt(Key,strData);
+	}
+}
+-->
+</script>
+<link href="../css/ViewerStyle.css" rel="stylesheet">
+<style>
+	v\:*	{ behavior: url(#default#VML); }
+	.drag	{ position: relative; cursor:   hand; }
+</style>
+<style>html,body{overflow:auto !important;} img{max-width:none !important;}</style>
+</head>
+<script>
+<!--
+function Apf() {
+	var html_name = window.location.href.split("#")[0]+"/../000000000008221_4.html";
+	if(strPara != null) {
+		html_name += "?" + strPara;
+	}
+	var w = 1024;
+	var h = 768;
+	var t = (screen.AvailHeight- h)/2;
+	var l = (screen.AvailWidth - w)/2;
+	h -= 28;
+	win = window.open(html_name,"MARIS_LOCAL_PRINT","top="+t+",left="+l+",width="+w+",height="+h+",menubar=no,status=no,scrollbars=yes,resizable=yes");
+	win.resizeTo(w,h);
+	win.moveTo(l,t);
+	win.focus();
+}
+-->
+</script>
+<body onload="javascript:parent.Old(this)" style="font-family:sans-serif;">
+<div xmlns:v="urn:schemas-microsoft-com:vml">
 <div class="top_title">
-KapcsolĂĄsi rajz
+Kapcsolási rajz
 </div>
-<div class="manual-wiring-box">
-    <div class="manual-wiring-canvas">
-        <div class="manual-wiring-diagram-box" style="display:block;width:100%;max-width:100%;height:80vh;overflow:hidden;box-sizing:border-box;border:1px solid #cccccc;background:#ffffff;margin:15px 0;padding:0;">
-            <iframe srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;hu&quot; xmlns:v=&quot;urn:schemas-microsoft-com:vml&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;style&gt;v\:*{behavior:url(#default#VML);}.drag{position:relative;cursor:hand;}.drag{position:relative;cursor:hand;margin:0;padding:0;}html,body{margin:0;padding:0;background:#ffffff;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
-            &lt;div id=&quot;divBody&quot; style=&quot;display:none&quot;&gt;
-            &lt;div xmlns:v=&quot;urn:schemas-microsoft-com:vml&quot;&gt;
-            &lt;div id=&quot;toolbar&quot; style=&quot;position:relative; top:0px; left:0px; z-index:200&quot;&gt;
-            &lt;v:group xmlns:v=&quot;urn:schemas-microsoft-com:vml&quot; id=&quot;groupbar&quot; style=&quot;position:relative; top:0px; left:0px; width:360px; height:26px;&quot; coordsize=&quot;360,26&quot;&gt;
-            &lt;v:rect id=&quot;rectbar&quot; style=&quot;width:200px; height:28px;&quot; strokeweight=&quot;1&quot;&gt;
-            &lt;table align=&quot;left&quot;&gt;
-            &lt;tr&gt;
-            &lt;td width=&quot;40&quot;&gt;
-            &lt;a href=&quot;#&quot; onClick=&quot;prZoomOut();&quot;&gt;
-            &lt;img src=&quot;../img/SIZE_S.PNG&quot; style=&quot;width:35px; height:24px;&quot; border=&quot;0&quot; alt=&quot;Zoom Out&quot;&gt;
-            &lt;/a&gt;&lt;/td&gt;
-            &lt;td width=&quot;65&quot; align=&quot;right&quot;&gt;
-            &lt;select name=&quot;cmbRateList&quot; onChange=&quot;prRateSelect();&quot;&gt;
-            &lt;option value=&quot;2&quot;&gt;400%&lt;/option&gt;
-            &lt;option value=&quot;1.5&quot;&gt;300%&lt;/option&gt;
-            &lt;option value=&quot;1&quot;&gt;200%&lt;/option&gt;
-            &lt;option value=&quot;0.88&quot;&gt;175%&lt;/option&gt;
-            &lt;option value=&quot;0.75&quot;&gt;150%&lt;/option&gt;
-            &lt;option value=&quot;0.62&quot;&gt;125%&lt;/option&gt;
-            &lt;option value=&quot;0.5&quot;&gt;100%&lt;/option&gt;
-            &lt;option value=&quot;0.38&quot;&gt;75%&lt;/option&gt;
-            &lt;option value=&quot;0.25&quot;&gt;50%&lt;/option&gt;
-            &lt;option value=&quot;0.12&quot;&gt;25%&lt;/option&gt;
-            &lt;/select&gt;
-            &lt;/a&gt;
-            &lt;input type=&quot;hidden&quot; name=&quot;hidDefaultSelectedItem&quot; value=&quot;2&quot;&gt;
-            &lt;/td&gt;
-            &lt;td width=&quot;40&quot;&gt;
-            &lt;a href=&quot;#&quot; onClick=&quot;prZoomIn();&quot;&gt;
-            &lt;img src=&quot;../img/SIZE_L.PNG&quot; style=&quot;width:35px; height:24px;&quot; border=&quot;0&quot; alt=&quot;Zoom In&quot;&gt;
-            &lt;/a&gt;&lt;/td&gt;
-            &lt;td width=&quot;50&quot; align=&quot;right&quot;&gt;
-            &lt;a href=&quot;#&quot; onClick=&quot;prResetImage();&quot;&gt;
-            &lt;img src=&quot;../img/RESET_SIZE.PNG&quot; style=&quot;width:48px; height:23px;&quot; border=&quot;0&quot; alt=&quot;Reset Picture Size&quot;&gt;
-            &lt;/a&gt;&lt;/td&gt;
-            &lt;/tr&gt;&lt;/table&gt;
-            &lt;/v:rect&gt;
-            &lt;/v:group&gt;
-            &lt;/div&gt;
-            &lt;br clear=&quot;left&quot;&gt;
-            &lt;a name=&quot;i010&quot;&gt;
-            &lt;/a&gt;
-            &lt;div&gt;
+<br>
 
-            &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;script&gt;with(document) {
-            write(&quot;&lt;v:group id=\&quot;group1\&quot;  name=\&quot;PrtGrpId\&quot; class=\&quot;drag\&quot; style=\&quot;position:relative; width:1900px; height:950px;\&quot; coordsize=\&quot;1900,950\&quot;&gt;&quot;);
-            write(&quot;&lt;v:rect id=\&quot;rect1\&quot; name=\&quot;PrtRectId\&quot;class=\&quot;drag\&quot;  style=\&quot;width:1900px;height:950px;\&quot;&gt;&quot;);
-            write(&quot;&lt;img id=\&quot;img1\&quot; name=\&quot;PrtImgId\&quot; src=\&quot;/manual/images/SEA6EJ4000000000000EBHD10.PNG\&quot; border=\&quot;1\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:0px;top:0px;width:1900px;height:950px;border-color:#ffffff\&quot;&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_1\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:279px;top:46px;font-weight:normal;font-size:7.08pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;A&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_2\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:723px;top:46px;font-weight:normal;font-size:7.08pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;B&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_3\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1166px;top:46px;font-weight:normal;font-size:7.08pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;C&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_4\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1609px;top:46px;font-weight:normal;font-size:7.08pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;D&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_5\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:118px;top:-581px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_6\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:783px;top:337px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;Âˇ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_7\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:783px;top:363px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;Âˇ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_8\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:783px;top:383px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;Âˇ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_9\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1168px;top:474px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;LT BLU&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_10\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:102px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;22. sz. (AKK) (100 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_11\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1681px;top:226px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;: BalkormĂĄnyos&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_12\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1668px;top:226px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_13\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1668px;top:240px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_14\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1681px;top:240px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;: JobbkormĂĄnyos&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_15\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1693px;top:413px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_16\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1575px;top:542px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;HĂTSĂ ABLAK PĂRAMENTESĂTĹ KAPCSOLĂ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_17\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1698px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;G506&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_18\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1700px;top:618px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_19\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1264px;top:890px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;(KlĂ­maszabĂĄlyozĂĄssal)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_20\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1250px;top:412px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_21\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:383px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;ĂLĂSFĹ°TĂS RELĂ âš15âDâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_22\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:355px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;âš20âCâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_23\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:346px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;(vagy FĹ°TĹEGYSĂG VEZĂRLĹPULT)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_24\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:337px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;KLĂMASZABĂLYOZĂ EGYSĂG&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_25\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:839px;top:313px;font-weight:normal;font-size:4.44pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;47&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_26\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:837px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;: G601&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_27\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:837px;top:886px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;: G602&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_28\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:825px;top:886px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_29\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:825px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_30\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1103px;top:388px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_31\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1083px;top:380px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;2. sz.&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_32\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1082px;top:389px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;(30 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_33\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1166px;top:403px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;MICU &lt;br&gt;âš14âAâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_34\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1072px;top:424px;font-weight:normal;font-size:4.44pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;32&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_35\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:955px;top:223px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;(40 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_36\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:932px;top:618px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLU/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_37\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:932px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_38\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1129px;top:542px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;HĂTSĂ ABLAK PĂRAMENTESĂTĹ KAPCSOLĂ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_39\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1255px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;G506&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_40\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1257px;top:618px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_41\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:932px;top:401px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_42\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:932px;top:468px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_43\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:827px;top:618px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_44\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:586px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_45\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:586px;top:886px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_46\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:599px;top:886px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;: G601&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_47\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:599px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;: G503&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_48\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:222px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;: G503&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_49\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:222px;top:886px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;: G601&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_50\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:209px;top:886px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_51\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:209px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_52\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:646px;top:222px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_53\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:622px;top:223px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;(7,5 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_54\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:624px;top:214px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;30. sz.&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_55\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:212px;top:274px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_56\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:455px;top:315px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;LĂMPA (LED)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_57\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:610px;top:725px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;PĂRAMENTESĂTĹ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_58\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:596px;top:584px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;ORN&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_59\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:597px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_60\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:220px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_61\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:219px;top:584px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;ORN&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_62\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:233px;top:725px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;PĂRAMENTESĂTĹ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_63\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:588px;top:404px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;JOBB OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_64\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:459px;top:403px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BAL OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_65\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:624px;top:404px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;LE&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_66\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:738px;top:404px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;FEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_67\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:407px;top:873px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;G601&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_68\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:719px;top:584px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;WHT/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_69\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:465px;top:712px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;JOBB &lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_70\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:560px;top:712px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;FEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_71\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:553px;top:656px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;LE&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_72\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:465px;top:648px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BAL &lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_73\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:745px;top:485px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;JOBB &lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_74\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:684px;top:489px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BAL &lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_75\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:460px;top:486px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BAL&lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_76\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:527px;top:492px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;JOBB OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_77\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:637px;top:281px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;ELEKTROMOS ĂLLĂTĂSĂ KĂLSĹ TĂKĂR KAPCSOLĂ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_78\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:526px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;WHT/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_79\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:271px;top:656px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;LE&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_80\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:357px;top:647px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BAL &lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_81\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:360px;top:712px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;JOBB &lt;br&gt;OLDALI&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_82\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:278px;top:712px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;FEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_83\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:481px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;GRN/WHT&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_84\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:288px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLU/WHT&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_85\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:331px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;GRN/WHT&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_86\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:505px;top:584px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;RED/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_87\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:311px;top:584px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLU/BLK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_88\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:420px;top:584px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;GRN/WHT&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_89\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:409px;top:762px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_90\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:600px;top:274px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_91\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:698px;top:534px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLU/WHT&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_92\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:219px;top:534px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;ORN&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_93\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1178px;top:433px;font-weight:normal;font-size:4.44pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;48&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_94\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:957px;top:214px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;14. sz.&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_95\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:978px;top:222px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_96\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:182px;top:180px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_97\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:139px;top:190px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_98\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:99px;top:191px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;7. sz. (10 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_99\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:139px;top:179px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_100\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:95px;top:180px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;15. sz. (30 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_101\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:139px;top:123px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_102\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:93px;top:124px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;21. sz. (7,5 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_103\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1791px;top:190px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_104\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:191px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;7. sz. (10 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_105\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1700px;top:180px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_106\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:124px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;21. sz. (7,5 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_107\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1798px;top:123px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_108\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1692px;top:147px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_109\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:173px;top:147px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_110\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:72px;top:25px;font-weight:normal;font-size:7.08pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;Elektromos tĂźkrĂśk, HĂĄtsĂł ablak pĂĄramentesĂ­tĹ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_111\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1840px;top:37px;font-weight:normal;font-size:17.63pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;10&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_112\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:24px;top:37px;font-weight:normal;font-size:17.63pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;10&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_113\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1796px;top:179px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_114\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:180px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;15. sz. (30 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_115\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:68px;top:102px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;22. sz. (AKK) (100 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_116\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:139px;top:101px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_117\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1637px;top:206px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*1 : A MOTORHĂZTETĹ ALATTI BIZTOSĂTĂK/RELĂ DOBOZ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_118\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1637px;top:215px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*2 : MĹ°SZERFALâ ALATTI BIZTOSĂTĂK/RELĂ DOBOZ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_119\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1796px;top:112px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_120\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:113px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;19. sz. (30 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_121\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1823px;top:101px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_122\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:172px;top:169px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_123\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:172px;top:158px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_124\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:171px;top:135px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;WHT/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_125\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:181px;top:113px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_126\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:139px;top:168px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_127\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:132px;top:147px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;IG1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_128\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:95px;top:169px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;18. sz. (15 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_129\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:132px;top:158px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;IG2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_130\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:98px;top:135px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;TARTOZĂKOK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_131\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:91px;top:69px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;AKKUMULĂTOR&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_132\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:139px;top:112px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_133\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:95px;top:113px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;19. sz. (30 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_134\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:69px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;AKKUMULĂTOR&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_135\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:135px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;TARTOZĂKOK&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_136\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:147px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;IG1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_137\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1752px;top:169px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;18. sz. (15 A)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_138\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1689px;top:135px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;WHT/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_139\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1691px;top:169px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_140\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1700px;top:114px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;RED&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_141\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1796px;top:168px;font-weight:normal;font-size:3.54pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;*2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_142\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:244px;top:308px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;PĂRAMENTESĂTĹ &lt;br&gt;KAPCSOLĂ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_143\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:148px;top:593px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BAL &lt;br&gt;OLDALI ELEKTROMOS &lt;br&gt;ĂLLĂTĂSĂ &lt;br&gt;KĂLSĹ TĂKĂR&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_144\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:344px;top:354px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;KIJELZĹ &lt;br&gt;LĂMPA &lt;br&gt;(LED)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_145\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:465px;top:593px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;JOBB OLDALI &lt;br&gt;ELEKTROMOS &lt;br&gt;ĂLLĂTĂSĂ &lt;br&gt;KĂLSĹ TĂKĂR&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_146\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:363px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;VISSZAKERINGETĂS VEZĂRLĂS &lt;br&gt;MOTORâš20âCâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_147\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:871px;top:686px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;HANG&lt;br&gt;TOMPĂTĂ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_148\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:976px;top:681px;font-weight:normal;font-size:3.73pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;A HĂTSĂ&lt;br&gt;ABLAK &lt;br&gt;PĂRAMENTESĂTĹJE&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_149\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:976px;top:531px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;ABLAKRA &lt;br&gt;SZERELHETĹ &lt;br&gt;ANTENNA&lt;br&gt;TEKERCS&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_150\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1050px;top:447px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;RELĂ VEZĂRLĹ &lt;br&gt;MODUL &lt;br&gt;âš6âCâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_151\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1092px;top:310px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;A HĂTSĂ &lt;br&gt;ABLAK &lt;br&gt;PĂRAMENTESĂTĹ &lt;br&gt;RELĂJE&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_152\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1292px;top:517px;font-weight:normal;font-size:3.73pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;FĹ°TĂS &lt;br&gt;VEZĂRLĹ &lt;br&gt;PANEL/ &lt;br&gt;LĂGKONDICIONĂLĂ-&lt;br&gt;VEZĂRLĹ&lt;br&gt;EGYSĂG&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_153\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1525px;top:310px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;A HĂTSĂ &lt;br&gt;ABLAK &lt;br&gt;PĂRAMENTESĂTĹ &lt;br&gt;RELĂJE&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_154\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1735px;top:531px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;FĹ°TĂS&lt;br&gt;SZABĂLYOZĂ &lt;br&gt;TĂBLA&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_155\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:783px;top:393px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;Âˇ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_156\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:393px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;MOTORVEZĂRLĹ EGYSĂG âš24âCâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_157\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1504px;top:400px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;: YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_158\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1495px;top:400px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;1&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_159\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1495px;top:412px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;2&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_160\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1504px;top:411px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;: YEL/BLK &lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_161\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:829px;top:273px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;BLK/YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_162\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1713px;top:890px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;(KlĂ­maszabĂĄlyozĂĄs nĂŠlkĂźl)&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_163\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:181px;top:124px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_164\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:1700px;top:124px;font-weight:normal;font-size:5.28pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;YEL&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_165\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:783px;top:403px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;Âˇ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_166\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:783px;top:423px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;Âˇ&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_167\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:422px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;MĂGNESSZELEP âš20âCâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;p id=\&quot;p1_168\&quot; name=\&quot;PrtPId\&quot; class=\&quot;drag\&quot; style=\&quot;position:absolute;left:791px;top:404px;font-weight:normal;font-size:4.50pt;\&quot;&gt;&quot;);
-            write(&quot;&lt;nobr&gt;&lt;b&gt;LĂGKONDICIONĂLĂ HĹ°TĹVENTILĂTOR RELAY&lt;br&gt;âš20âCâş&lt;br&gt;&lt;/b&gt;&lt;/nobr&gt;&quot;);
-            write(&quot;&lt;/p&gt;&quot;);
-            write(&quot;&lt;/v:rect&gt;&quot;);
-            write(&quot;&lt;/v:group&gt;&quot;);
-            }&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:block;width:100%;height:100%;border:0;margin:0;padding:0;background:#ffffff;" frameborder="0" scrolling="auto"></iframe>
-        </div>
-        <div xmlns:v="urn:schemas-microsoft-com:vml">
-
-            <br clear="left">
-            <a name="i010"></a>
-            <div>
-                <v:group id="group1" name="PrtGrpId" class="drag" style="position:relative; width:950px; height:475px;" coordsize="950,475">
-                    <v:rect id="rect1" name="PrtRectId" class="drag" style="width:950px;height:475px;">
-                        <img id="img1" name="PrtImgId" src="/manual/images/SEA6EJ4000000000000EBH910.PNG" border="1" class="drag" style="position:absolute;left:0px;top:0px;width:950px;height:475px;border-color:#ffffff">
-                        <p id="p1_1" name="PrtPId" class="drag" style="position:absolute;left:140px;top:23px;font-weight:normal;font-size:3.54pt;">
-                            <nobr>
-                                <b>A</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_2" name="PrtPId" class="drag" style="position:absolute;left:362px;top:23px;font-weight:normal;font-size:3.54pt;">
-                            <nobr>
-                                <b>B</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_3" name="PrtPId" class="drag" style="position:absolute;left:584px;top:23px;font-weight:normal;font-size:3.54pt;">
-                            <nobr>
-                                <b>C</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_4" name="PrtPId" class="drag" style="position:absolute;left:805px;top:23px;font-weight:normal;font-size:3.54pt;">
-                            <nobr>
-                                <b>D</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_5" name="PrtPId" class="drag" style="position:absolute;left:59px;top:-289px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b></b>
-                            </nobr>
-                        </p>
-                        <p id="p1_6" name="PrtPId" class="drag" style="position:absolute;left:392px;top:169px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>Âˇ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_7" name="PrtPId" class="drag" style="position:absolute;left:392px;top:182px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>Âˇ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_8" name="PrtPId" class="drag" style="position:absolute;left:392px;top:192px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>Âˇ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_9" name="PrtPId" class="drag" style="position:absolute;left:584px;top:237px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>LT BLU</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_10" name="PrtPId" class="drag" style="position:absolute;left:876px;top:52px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>22. sz. (AKK) (100 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_11" name="PrtPId" class="drag" style="position:absolute;left:841px;top:114px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>: BalkormĂĄnyos</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_12" name="PrtPId" class="drag" style="position:absolute;left:835px;top:114px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_13" name="PrtPId" class="drag" style="position:absolute;left:835px;top:120px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>2</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_14" name="PrtPId" class="drag" style="position:absolute;left:841px;top:120px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>: JobbkormĂĄnyos</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_15" name="PrtPId" class="drag" style="position:absolute;left:847px;top:207px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_16" name="PrtPId" class="drag" style="position:absolute;left:788px;top:272px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>HĂTSĂ ABLAK PĂRAMENTESĂTĹ KAPCSOLĂ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_17" name="PrtPId" class="drag" style="position:absolute;left:849px;top:437px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>G506</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_18" name="PrtPId" class="drag" style="position:absolute;left:851px;top:309px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_19" name="PrtPId" class="drag" style="position:absolute;left:632px;top:446px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>(KlĂ­maszabĂĄlyozĂĄssal)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_20" name="PrtPId" class="drag" style="position:absolute;left:626px;top:207px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_21" name="PrtPId" class="drag" style="position:absolute;left:396px;top:192px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>ĂLĂSFĹ°TĂS RELĂ âš15âDâş</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_22" name="PrtPId" class="drag" style="position:absolute;left:396px;top:178px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>âš20âCâş</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_23" name="PrtPId" class="drag" style="position:absolute;left:396px;top:173px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>(vagy FĹ°TĹEGYSĂG VEZĂRLĹPULT)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_24" name="PrtPId" class="drag" style="position:absolute;left:396px;top:169px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>KLĂMASZABĂLYOZĂ EGYSĂG</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_25" name="PrtPId" class="drag" style="position:absolute;left:420px;top:157px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>47</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_26" name="PrtPId" class="drag" style="position:absolute;left:419px;top:437px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>: G601</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_27" name="PrtPId" class="drag" style="position:absolute;left:419px;top:443px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>: G602</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_28" name="PrtPId" class="drag" style="position:absolute;left:413px;top:443px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>2</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_29" name="PrtPId" class="drag" style="position:absolute;left:413px;top:437px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_30" name="PrtPId" class="drag" style="position:absolute;left:552px;top:195px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_31" name="PrtPId" class="drag" style="position:absolute;left:542px;top:191px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>2. sz.</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_32" name="PrtPId" class="drag" style="position:absolute;left:542px;top:195px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>(30 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_33" name="PrtPId" class="drag" style="position:absolute;left:583px;top:202px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>MICU âš14âAâş</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_34" name="PrtPId" class="drag" style="position:absolute;left:537px;top:213px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>32</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_35" name="PrtPId" class="drag" style="position:absolute;left:478px;top:112px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>(40 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_36" name="PrtPId" class="drag" style="position:absolute;left:467px;top:309px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLU/YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_37" name="PrtPId" class="drag" style="position:absolute;left:467px;top:381px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_38" name="PrtPId" class="drag" style="position:absolute;left:565px;top:272px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>HĂTSĂ ABLAK PĂRAMENTESĂTĹ KAPCSOLĂ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_39" name="PrtPId" class="drag" style="position:absolute;left:628px;top:437px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>G506</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_40" name="PrtPId" class="drag" style="position:absolute;left:629px;top:309px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_41" name="PrtPId" class="drag" style="position:absolute;left:467px;top:201px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_42" name="PrtPId" class="drag" style="position:absolute;left:467px;top:234px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_43" name="PrtPId" class="drag" style="position:absolute;left:414px;top:309px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_44" name="PrtPId" class="drag" style="position:absolute;left:294px;top:437px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_45" name="PrtPId" class="drag" style="position:absolute;left:294px;top:443px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>2</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_46" name="PrtPId" class="drag" style="position:absolute;left:300px;top:443px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>: G601</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_47" name="PrtPId" class="drag" style="position:absolute;left:300px;top:437px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>: G503</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_48" name="PrtPId" class="drag" style="position:absolute;left:112px;top:437px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>: G503</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_49" name="PrtPId" class="drag" style="position:absolute;left:112px;top:443px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>: G601</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_50" name="PrtPId" class="drag" style="position:absolute;left:105px;top:443px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>2</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_51" name="PrtPId" class="drag" style="position:absolute;left:105px;top:437px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_52" name="PrtPId" class="drag" style="position:absolute;left:323px;top:112px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*2</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_53" name="PrtPId" class="drag" style="position:absolute;left:312px;top:112px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>(7,5 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_54" name="PrtPId" class="drag" style="position:absolute;left:313px;top:108px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>30. sz.</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_55" name="PrtPId" class="drag" style="position:absolute;left:106px;top:138px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_56" name="PrtPId" class="drag" style="position:absolute;left:228px;top:158px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>LĂMPA (LED)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_57" name="PrtPId" class="drag" style="position:absolute;left:306px;top:363px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>PĂRAMENTESĂTĹ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_58" name="PrtPId" class="drag" style="position:absolute;left:298px;top:293px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>ORN</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_59" name="PrtPId" class="drag" style="position:absolute;left:299px;top:381px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_60" name="PrtPId" class="drag" style="position:absolute;left:111px;top:381px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_61" name="PrtPId" class="drag" style="position:absolute;left:110px;top:293px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>ORN</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_62" name="PrtPId" class="drag" style="position:absolute;left:117px;top:363px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>PĂRAMENTESĂTĹ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_63" name="PrtPId" class="drag" style="position:absolute;left:294px;top:202px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>JOBB OLDALI</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_64" name="PrtPId" class="drag" style="position:absolute;left:230px;top:202px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BAL OLDALI</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_65" name="PrtPId" class="drag" style="position:absolute;left:313px;top:202px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>LE</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_66" name="PrtPId" class="drag" style="position:absolute;left:369px;top:202px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>FEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_67" name="PrtPId" class="drag" style="position:absolute;left:204px;top:437px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>G601</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_68" name="PrtPId" class="drag" style="position:absolute;left:360px;top:293px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>WHT/RED</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_69" name="PrtPId" class="drag" style="position:absolute;left:233px;top:356px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>JOBB OLDALI</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_70" name="PrtPId" class="drag" style="position:absolute;left:281px;top:356px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>FEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_71" name="PrtPId" class="drag" style="position:absolute;left:277px;top:329px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>LE</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_72" name="PrtPId" class="drag" style="position:absolute;left:233px;top:325px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BAL OLDALI</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_73" name="PrtPId" class="drag" style="position:absolute;left:373px;top:243px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>JOBB OLDALI</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_74" name="PrtPId" class="drag" style="position:absolute;left:342px;top:245px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BAL OLDALI</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_75" name="PrtPId" class="drag" style="position:absolute;left:231px;top:243px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BALOLDALI</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_76" name="PrtPId" class="drag" style="position:absolute;left:264px;top:247px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>JOBB OLDALI</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_77" name="PrtPId" class="drag" style="position:absolute;left:319px;top:141px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>ELEKTROMOS ĂLLĂTĂSĂ KĂLSĹ TĂKĂR KAPCSOLĂ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_78" name="PrtPId" class="drag" style="position:absolute;left:263px;top:381px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>WHT/RED</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_79" name="PrtPId" class="drag" style="position:absolute;left:136px;top:329px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>LE</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_80" name="PrtPId" class="drag" style="position:absolute;left:179px;top:324px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BAL OLDALI</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_81" name="PrtPId" class="drag" style="position:absolute;left:180px;top:356px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>JOBB OLDALI</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_82" name="PrtPId" class="drag" style="position:absolute;left:139px;top:356px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>FEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_83" name="PrtPId" class="drag" style="position:absolute;left:241px;top:381px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>GRN/WHT</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_84" name="PrtPId" class="drag" style="position:absolute;left:144px;top:381px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLU/WHT</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_85" name="PrtPId" class="drag" style="position:absolute;left:166px;top:381px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>GRN/WHT</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_86" name="PrtPId" class="drag" style="position:absolute;left:253px;top:293px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>RED/YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_87" name="PrtPId" class="drag" style="position:absolute;left:156px;top:293px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLU/BLK</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_88" name="PrtPId" class="drag" style="position:absolute;left:210px;top:293px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>GRN/WHT</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_89" name="PrtPId" class="drag" style="position:absolute;left:205px;top:381px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_90" name="PrtPId" class="drag" style="position:absolute;left:300px;top:138px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_91" name="PrtPId" class="drag" style="position:absolute;left:350px;top:268px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLU/WHT</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_92" name="PrtPId" class="drag" style="position:absolute;left:110px;top:268px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>ORN</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_93" name="PrtPId" class="drag" style="position:absolute;left:589px;top:217px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>48</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_94" name="PrtPId" class="drag" style="position:absolute;left:479px;top:108px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>14. sz.</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_95" name="PrtPId" class="drag" style="position:absolute;left:490px;top:112px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_96" name="PrtPId" class="drag" style="position:absolute;left:91px;top:90px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_97" name="PrtPId" class="drag" style="position:absolute;left:70px;top:95px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*2</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_98" name="PrtPId" class="drag" style="position:absolute;left:50px;top:96px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>7. sz. (10 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_99" name="PrtPId" class="drag" style="position:absolute;left:70px;top:90px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_100" name="PrtPId" class="drag" style="position:absolute;left:48px;top:90px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>15. sz. (30 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_101" name="PrtPId" class="drag" style="position:absolute;left:70px;top:62px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*2</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_102" name="PrtPId" class="drag" style="position:absolute;left:47px;top:63px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>21. sz. (7,5 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_103" name="PrtPId" class="drag" style="position:absolute;left:896px;top:95px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*2</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_104" name="PrtPId" class="drag" style="position:absolute;left:876px;top:96px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>7. sz. (10 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_105" name="PrtPId" class="drag" style="position:absolute;left:851px;top:90px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_106" name="PrtPId" class="drag" style="position:absolute;left:876px;top:63px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>21. sz. (7,5 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_107" name="PrtPId" class="drag" style="position:absolute;left:900px;top:62px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*2</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_108" name="PrtPId" class="drag" style="position:absolute;left:846px;top:74px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_109" name="PrtPId" class="drag" style="position:absolute;left:87px;top:74px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_110" name="PrtPId" class="drag" style="position:absolute;left:37px;top:13px;font-weight:normal;font-size:3.54pt;">
-                            <nobr>
-                                <b>Elektromos tĂźkrĂśk, HĂĄtsĂł ablak pĂĄramentesĂ­tĹ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_111" name="PrtPId" class="drag" style="position:absolute;left:920px;top:19px;font-weight:normal;font-size:8.82pt;">
-                            <nobr>
-                                <b>10</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_112" name="PrtPId" class="drag" style="position:absolute;left:13px;top:19px;font-weight:normal;font-size:8.82pt;">
-                            <nobr>
-                                <b>10</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_113" name="PrtPId" class="drag" style="position:absolute;left:898px;top:90px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_114" name="PrtPId" class="drag" style="position:absolute;left:876px;top:90px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>15. sz. (30 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_115" name="PrtPId" class="drag" style="position:absolute;left:35px;top:52px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>22. sz. (AKK) (100 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_116" name="PrtPId" class="drag" style="position:absolute;left:70px;top:51px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_117" name="PrtPId" class="drag" style="position:absolute;left:819px;top:104px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*1 : A MOTORHĂZTETĹ ALATTI BIZTOSĂTĂK/RELĂ DOBOZ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_118" name="PrtPId" class="drag" style="position:absolute;left:819px;top:108px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*2 : MĹ°SZERFALâ ALATTI BIZTOSĂTĂK/RELĂ DOBOZ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_119" name="PrtPId" class="drag" style="position:absolute;left:898px;top:57px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_120" name="PrtPId" class="drag" style="position:absolute;left:876px;top:57px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>19. sz. (30 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_121" name="PrtPId" class="drag" style="position:absolute;left:912px;top:51px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_122" name="PrtPId" class="drag" style="position:absolute;left:87px;top:85px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/RED</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_123" name="PrtPId" class="drag" style="position:absolute;left:87px;top:79px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/RED</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_124" name="PrtPId" class="drag" style="position:absolute;left:86px;top:68px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>WHT/RED</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_125" name="PrtPId" class="drag" style="position:absolute;left:91px;top:57px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>RED</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_126" name="PrtPId" class="drag" style="position:absolute;left:70px;top:84px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*2</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_127" name="PrtPId" class="drag" style="position:absolute;left:67px;top:74px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>IG1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_128" name="PrtPId" class="drag" style="position:absolute;left:48px;top:85px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>18. sz. (15 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_129" name="PrtPId" class="drag" style="position:absolute;left:67px;top:79px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>IG2</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_130" name="PrtPId" class="drag" style="position:absolute;left:50px;top:68px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>TARTOZĂKOK</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_131" name="PrtPId" class="drag" style="position:absolute;left:46px;top:35px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>AKKUMULĂTOR</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_132" name="PrtPId" class="drag" style="position:absolute;left:70px;top:57px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_133" name="PrtPId" class="drag" style="position:absolute;left:48px;top:57px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>19. sz. (30 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_134" name="PrtPId" class="drag" style="position:absolute;left:876px;top:35px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>AKKUMULĂTOR</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_135" name="PrtPId" class="drag" style="position:absolute;left:876px;top:68px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>TARTOZĂKOK</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_136" name="PrtPId" class="drag" style="position:absolute;left:876px;top:74px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>IG1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_137" name="PrtPId" class="drag" style="position:absolute;left:876px;top:85px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>18. sz. (15 A)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_138" name="PrtPId" class="drag" style="position:absolute;left:845px;top:68px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>WHT/RED</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_139" name="PrtPId" class="drag" style="position:absolute;left:846px;top:85px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/RED</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_140" name="PrtPId" class="drag" style="position:absolute;left:851px;top:57px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>RED</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_141" name="PrtPId" class="drag" style="position:absolute;left:898px;top:84px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>*2</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_142" name="PrtPId" class="drag" style="position:absolute;left:123px;top:155px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>PĂRAMENTESĂTĹ KAPCSOLĂ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_143" name="PrtPId" class="drag" style="position:absolute;left:75px;top:297px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BAL OLDALI ELEKTROMOS ĂLLĂTĂSĂ KĂLSĹ TĂKĂR</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_144" name="PrtPId" class="drag" style="position:absolute;left:173px;top:177px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>KIJELZĹ LĂMPA (LED)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_145" name="PrtPId" class="drag" style="position:absolute;left:233px;top:297px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>JOBB OLDALI ELEKTROMOS ĂLLĂTĂSĂ KĂLSĹ TĂKĂR</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_146" name="PrtPId" class="drag" style="position:absolute;left:396px;top:182px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>VISSZAKERINGETĂS VEZĂRLĂS MOTORâš20âCâş</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_147" name="PrtPId" class="drag" style="position:absolute;left:436px;top:344px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>HANGTOMPĂTĂ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_148" name="PrtPId" class="drag" style="position:absolute;left:488px;top:341px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>A HĂTSĂABLAK PĂRAMENTESĂTĹJE</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_149" name="PrtPId" class="drag" style="position:absolute;left:488px;top:266px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>ABLAKRA SZERELHETĹ ANTENNATEKERCS</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_150" name="PrtPId" class="drag" style="position:absolute;left:525px;top:224px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>RELĂ VEZĂRLĹ MODUL âš6âCâş</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_151" name="PrtPId" class="drag" style="position:absolute;left:547px;top:156px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>A HĂTSĂ ABLAK PĂRAMENTESĂTĹ RELĂJE</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_152" name="PrtPId" class="drag" style="position:absolute;left:646px;top:259px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>FĹ°TĂS VEZĂRLĹ PANEL/ LĂGKONDICIONĂLĂ-VEZĂRLĹEGYSĂG</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_153" name="PrtPId" class="drag" style="position:absolute;left:763px;top:156px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>A HĂTSĂ ABLAK PĂRAMENTESĂTĹ RELĂJE</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_154" name="PrtPId" class="drag" style="position:absolute;left:868px;top:266px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>FĹ°TĂSSZABĂLYOZĂ TĂBLA</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_155" name="PrtPId" class="drag" style="position:absolute;left:392px;top:197px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>Âˇ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_156" name="PrtPId" class="drag" style="position:absolute;left:396px;top:197px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>MOTORVEZĂRLĹ EGYSĂG âš24âCâş</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_157" name="PrtPId" class="drag" style="position:absolute;left:752px;top:200px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>: YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_158" name="PrtPId" class="drag" style="position:absolute;left:748px;top:200px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>1</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_159" name="PrtPId" class="drag" style="position:absolute;left:748px;top:206px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>2</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_160" name="PrtPId" class="drag" style="position:absolute;left:752px;top:206px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>: YEL/BLK </b>
-                            </nobr>
-                        </p>
-                        <p id="p1_161" name="PrtPId" class="drag" style="position:absolute;left:415px;top:137px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>BLK/YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_162" name="PrtPId" class="drag" style="position:absolute;left:857px;top:446px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>(KlĂ­maszabĂĄlyozĂĄs nĂŠlkĂźl)</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_163" name="PrtPId" class="drag" style="position:absolute;left:91px;top:63px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_164" name="PrtPId" class="drag" style="position:absolute;left:850px;top:63px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>YEL</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_165" name="PrtPId" class="drag" style="position:absolute;left:392px;top:202px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>Âˇ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_166" name="PrtPId" class="drag" style="position:absolute;left:392px;top:212px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>Âˇ</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_167" name="PrtPId" class="drag" style="position:absolute;left:396px;top:211px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>MĂGNESSZELEP âš20âCâş</b>
-                            </nobr>
-                        </p>
-                        <p id="p1_168" name="PrtPId" class="drag" style="position:absolute;left:396px;top:203px;font-weight:normal;font-size:3.00pt;">
-                            <nobr>
-                                <b>LĂGKONDICIONĂLĂ HĹ°TĹVENTILĂTOR RELAYâš20âCâş</b>
-                            </nobr>
-                        </p>
-                    </v:rect>
-                </v:group>
-            </div>
-        </div>
-
-    </div>
+<br clear="left">
+<a name="i009">
+</a>
+<div>
+<script>
+with(document) {
+write("<v:group id=\"group1\"  name=\"PrtGrpId\" class=\"drag\" style=\"position:relative; width:950px; height:475px;\" coordsize=\"950,475\">");
+write("<v:rect id=\"rect1\" name=\"PrtRectId\"class=\"drag\"  style=\"width:950px;height:475px;\">");
+write("<img id=\"img1\" name=\"PrtImgId\" src=\"/manual/images/SEA6EJ4000000000000EBH909.PNG\" border=\"1\" class=\"drag\" style=\"position:absolute;left:0px;top:0px;width:950px;height:475px;border-color:#ffffff\">");
+write("<p id=\"p1_1\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:140px;top:23px;font-weight:normal;font-size:3.54pt;\">");
+write("<nobr><b>A<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_2\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:362px;top:23px;font-weight:normal;font-size:3.54pt;\">");
+write("<nobr><b>B<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_3\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:584px;top:23px;font-weight:normal;font-size:3.54pt;\">");
+write("<nobr><b>C<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_4\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:805px;top:23px;font-weight:normal;font-size:3.54pt;\">");
+write("<nobr><b>D<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_5\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:104px;top:-289px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b><br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_6\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:311px;top:324px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b><br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_7\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:12px;top:19px;font-weight:normal;font-size:8.82pt;\">");
+write("<nobr><b>9<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_8\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:920px;top:19px;font-weight:normal;font-size:8.82pt;\">");
+write("<nobr><b>9<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_9\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:70px;top:62px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*2<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_10\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:47px;top:63px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>21. sz. (7,5 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_11\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:70px;top:96px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*2<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_12\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:50px;top:96px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>7. sz. (10 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_13\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:91px;top:91px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>YEL<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_14\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:896px;top:96px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*2<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_15\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:877px;top:96px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>7. sz. (10 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_16\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:851px;top:91px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>YEL<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_17\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:900px;top:62px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*2<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_18\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:877px;top:63px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>21. sz. (7,5 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_19\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:899px;top:90px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*1<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_20\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:877px;top:91px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>15. sz. (30 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_21\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:70px;top:90px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*1<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_22\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:48px;top:91px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>15. sz. (30 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_23\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:847px;top:74px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK/YEL<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_24\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:87px;top:74px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK/YEL<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_25\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:35px;top:52px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>22. sz. (AKK) (100 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_26\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:70px;top:51px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*1<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_27\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:817px;top:103px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*1 : A MOTORHÁZTETŐ ALATTI BIZTOSÍTÉK/RELÉ DOBOZ<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_28\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:817px;top:108px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*2 : MŰSZERFAL− ALATTI BIZTOSÍTÉK/RELÉ DOBOZ<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_29\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:899px;top:57px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*1<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_30\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:877px;top:57px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>19. sz. (30 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_31\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:912px;top:51px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*1<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_32\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:87px;top:85px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK/RED<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_33\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:87px;top:79px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK/RED<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_34\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:86px;top:68px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/RED<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_35\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:91px;top:57px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RED<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_36\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:70px;top:85px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*2<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_37\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:67px;top:74px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>IG1<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_38\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:48px;top:85px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>18. sz. (15 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_39\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:67px;top:79px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>IG2<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_40\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:51px;top:68px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>TARTOZÉKOK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_41\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:48px;top:35px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>AKKUMULÁTOR<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_42\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:70px;top:57px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*1<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_43\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:48px;top:57px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>19. sz. (30 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_44\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:877px;top:35px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>AKKUMULÁTOR<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_45\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:877px;top:68px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>TARTOZÉKOK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_46\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:877px;top:74px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>IG1<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_47\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:877px;top:79px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>IG2<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_48\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:877px;top:85px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>18. sz. (15 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_49\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:845px;top:68px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/RED<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_50\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:846px;top:79px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK/RED<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_51\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:846px;top:85px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK/RED<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_52\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:851px;top:57px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RED<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_53\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:899px;top:85px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*2<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_54\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:37px;top:13px;font-weight:normal;font-size:3.54pt;\">");
+write("<nobr><b>Külső lámpák (Irányjelző lámpák), Belső lámpák<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_55\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:142px;top:135px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_56\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:135px;top:166px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>38<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_57\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:160px;top:166px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>39<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_58\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:108px;top:204px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>IRÁNYJELZŐ/VÉSZVILLOGÓ RELÉ<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_59\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:103px;top:127px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_60\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:116px;top:108px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>16. sz.<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_61\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:116px;top:112px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(15 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_62\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:126px;top:112px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*1<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_63\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:141px;top:415px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_64\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:221px;top:225px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RED/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_65\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:186px;top:157px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_66\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:220px;top:157px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_67\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:159px;top:287px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RED/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_68\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:198px;top:440px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>G701<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_69\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:223px;top:440px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>G301<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_70\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:224px;top:393px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_71\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:220px;top:298px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RED/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_72\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:206px;top:372px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b> HÁTSÓ<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_73\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:206px;top:376px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(21 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_74\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:199px;top:393px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_75\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:193px;top:240px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>40<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_76\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:158px;top:235px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BRN<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_77\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:137px;top:235px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RED/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_78\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:116px;top:393px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_79\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:116px;top:440px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>G601<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_80\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:273px;top:365px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>17<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_81\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:251px;top:365px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>16<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_82\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:369px;top:415px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_83\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:271px;top:351px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BRN<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_84\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:245px;top:351px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RED/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_85\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:296px;top:235px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BRN<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_86\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:258px;top:157px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_87\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:292px;top:157px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_88\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:320px;top:440px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>G701<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_89\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:231px;top:372px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ELSŐ<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_90\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:231px;top:376px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(21 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_91\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:295px;top:440px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>G201<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_92\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:296px;top:298px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BRN<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_93\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:303px;top:376px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(21 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_94\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:303px;top:372px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ELSŐ<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_95\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:328px;top:376px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(21 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_96\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:328px;top:372px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b> HÁTSÓ<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_97\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:388px;top:177px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>LÁMPA<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_98\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:388px;top:181px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(0,84 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_99\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:297px;top:393px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_100\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:371px;top:157px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RED/BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_101\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:343px;top:204px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>GRN/RED<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_102\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:376px;top:204px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RED<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_103\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:321px;top:393px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_104\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:378px;top:141px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>29<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_105\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:378px;top:227px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>10<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_106\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:348px;top:227px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>41<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_107\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:136px;top:440px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>1<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_108\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:136px;top:446px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>2<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_109\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:142px;top:446px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>: G503<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_110\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:142px;top:440px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>: G601<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_111\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:369px;top:440px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>: G503<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_112\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:369px;top:446px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>: G601<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_113\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:363px;top:446px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>2<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_114\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:363px;top:440px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>1<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_115\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:558px;top:299px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ON<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_116\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:554px;top:283px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>KI<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_117\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:433px;top:440px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>G503<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_118\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:594px;top:153px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(Napfénytető nélkül)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_119\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:622px;top:216px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>KI<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_120\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:601px;top:222px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ON<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_121\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:619px;top:204px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(8 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_122\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:647px;top:204px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(8 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_123\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:650px;top:216px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ON<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_124\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:627px;top:222px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>KI<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_125\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:621px;top:165px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_126\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:502px;top:153px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(Napfénytetővel)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_127\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:577px;top:146px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_128\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:621px;top:293px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>GRN/RED<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_129\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:530px;top:165px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_130\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:530px;top:135px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_131\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:536px;top:222px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>KI<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_132\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:558px;top:216px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ON<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_133\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:555px;top:204px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(8 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_134\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:527px;top:204px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(8 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_135\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:510px;top:222px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ON<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_136\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:531px;top:216px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>KI<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_137\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:526px;top:260px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>GRN<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_138\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:432px;top:390px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_139\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:444px;top:338px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(3,4 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_140\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:427px;top:157px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RED/BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_141\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:764px;top:440px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>G501, G601<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_142\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:787px;top:293px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>GRN/RED<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_143\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:813px;top:268px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLU/BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_144\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:879px;top:268px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>YEL<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_145\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:873px;top:163px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_146\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:843px;top:163px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_147\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:812px;top:163px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_148\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:768px;top:406px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_149\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:787px;top:324px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ZÁRÁS<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_150\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:797px;top:307px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>NYITÁS<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_151\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:768px;top:370px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_152\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:763px;top:163px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_153\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:713px;top:163px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_154\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:718px;top:370px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_155\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:685px;top:163px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_156\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:696px;top:230px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>AJTÓ<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_157\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:685px;top:282px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>GRN/RED<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_158\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:702px;top:199px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(8 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_159\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:680px;top:218px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ON<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_160\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:701px;top:218px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>KI<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_161\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:654px;top:146px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_162\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:844px;top:268px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>YEL/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_163\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:747px;top:307px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>NYITÁS<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_164\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:737px;top:324px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ZÁRÁS<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_165\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:554px;top:112px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>*2<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_166\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:543px;top:112px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>(10 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_167\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:543px;top:108px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>6. sz.<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_168\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:434px;top:141px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>29<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_169\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:880px;top:307px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>44<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_170\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:594px;top:124px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>42<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_171\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:608px;top:115px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>AUDIOEGYSÉG<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_172\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:608px;top:119px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>‹17−B›<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_173\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:850px;top:307px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>43<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_174\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:836px;top:307px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>45<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_175\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:841px;top:120px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>: Jobbkormányos<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_176\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:835px;top:120px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>2<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_177\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:835px;top:114px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>1<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_178\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:841px;top:114px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>: Balkormányos<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_179\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:877px;top:52px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>22. sz. (AKK) (100 A)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_180\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:191px;top:204px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_181\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:175px;top:308px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BAL <br>OLDALI <br>IRÁNY<br>JELZŐ <br>LÁMPA <br>(LED)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_182\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:203px;top:324px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BAL IRÁNY<br>JELZŐ <br>LÁMPA<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_183\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:250px;top:380px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>IRÁNYJELZŐ <br>VISSZAJELZŐK <br>‹4−D›<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_184\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:304px;top:324px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>JOBB IRÁNY<br>JELZŐ <br>LÁMPA<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_185\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:343px;top:308px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>JOBB <br>OLDALI <br>IRÁNY<br>JELZŐ <br>LÁMPA <br>(LED)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_186\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:369px;top:237px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>MŰSZERFALVILÁGÍTÁS <br>FÉNYERŐ <br>SZABÁLYOZÓJA<br>(A műszer<br>vezérlő modulban) <br>‹2−C›<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_187\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:239px;top:170px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BAL <br>VÉSZ<br>VILLOGÓ <br>LÁMPA <br>RELÉ<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_188\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:311px;top:170px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>JOBB <br>VÉSZ<br>VILLOGÓ <br>LÁMPA <br>RELÉ<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_189\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:391px;top:155px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>VÉSZVILLOGÓ <br>KAPCSOLÓ<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_190\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:444px;top:355px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>KESZTYŰ<br>TARTÓ <br>VILÁGÍTÁS<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_191\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:528px;top:311px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ÖNÁLLÓ <br>TÉRKÉPOLVASÓ LÁMPÁK <br>KAPCSOLÓJA<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_192\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:506px;top:167px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ÖNÁLLÓ <br>TÉRKÉPOLVASÓ <br>LÁMPÁK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_193\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:596px;top:167px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ÖNÁLLÓ <br>TÉRKÉPOLVASÓ <br>LÁMPÁK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_194\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:702px;top:176px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BELSŐ <br>VILÁGÍTÁS<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_195\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:824px;top:238px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>CSOMAGTARTÓ <br>VILÁGÍTÁS <br>(5 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_196\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:854px;top:238px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>VEZETŐOLDALI <br>AJTÓ <br>NYITÁSRA <br>FELKAPCSOLÓDÓ <br>LÁMPA <br>(3,8 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_197\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:885px;top:238px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>ELSŐ <br>UTASOLDALI <br>AJTÓ <br>NYITÁSRA <br>FELKAPCSOLÓDÓ <br>LÁMPA <br>(3,8 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_198\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:788px;top:335px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>UTASOLDALI <br>SMINK <br>TÜKÖR <br>VILÁGÍTÁS <br>(2 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_199\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:737px;top:335px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>VEZETŐOLDALI <br>SMINK <br>TÜKÖR <br>VILÁGÍTÁS <br>(2 W)<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_200\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:137px;top:298px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RED/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_201\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:369px;top:297px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BRN<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_202\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:425px;top:124px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RELÉVEZÉRLŐ<br>MODUL <br>‹5−D›<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_203\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:557px;top:123px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_204\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:853px;top:322px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>MICU <br>‹14−B›<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_205\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:819px;top:375px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>46<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_206\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:141px;top:151px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>MICU <br>‹14−D›<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_207\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:263px;top:203px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_208\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:191px;top:224px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_209\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:196px;top:351px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RED/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_210\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:221px;top:351px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RED/BLU<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_211\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:297px;top:351px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BRN<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_212\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:322px;top:351px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>BRN<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_213\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:91px;top:63px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>YEL<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_214\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:851px;top:63px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>YEL<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_215\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:368px;top:124px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>RELÉVEZÉRLŐ<br>MODUL <br>‹5−D›<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_216\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:188px;top:251px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>MICU <br>‹12−B›<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_217\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:344px;top:238px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>MICU <br>‹14−D›<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_218\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:608px;top:125px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>KÉZ NÉLKÜLI TELEFON <br>VEZÉRLŐ EGYSÉG<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_219\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:608px;top:134px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>‹22−A›<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_220\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:605px;top:115px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>·<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_221\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:605px;top:125px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>·<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_222\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:341px;top:157px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>WHT/BLK<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_223\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:815px;top:387px;font-weight:normal;font-size:3.00pt;\">");
+write("<nobr><b>CSOMAGTÉR <br>AJTÓRETESZ<br>KAPCSOLÓJA <br>‹12−D›<br></b></nobr>");
+write("</p>");
+write("</v:rect>");
+write("</v:group>");
+}
+</script>
 </div>
-
+</div>
+</body>
+</html>
