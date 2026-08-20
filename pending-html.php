@@ -132,12 +132,20 @@ function convertManualLinks(
     return $html;
 }
 
+
+
 function convertJmpLinks(string $html): string
 {
     return preg_replace_callback(
-        '#javascript\s*:\s*parent\.Jmp\s*\(\s*[\'"]([^\'"]+)[\'"]\s*\)#i',
+        '~javascript\s*:\s*parent\.Jmp\s*\(\s*[\'"]([^\'"]+)[\'"]\s*\)~i',
         function ($match) {
-            return '#' . $match[1];
+            $target = $match[1];
+
+            return '#'
+                . $target
+                . '" onclick="window.location.hash=\''
+                . htmlspecialchars($target, ENT_QUOTES, 'UTF-8')
+                . '\'; return false;';
         },
         $html
     );
@@ -299,7 +307,12 @@ CSS;
         . $html
         . '</html>';
 }
-
+function isZoomPage(string $title, string $name): bool
+{
+    return
+        mb_stripos($title, 'ZOOM', 0, 'UTF-8') !== false
+        || mb_stripos($name, 'ZOOM', 0, 'UTF-8') !== false;
+}
 
 function addNormalIframeResizeScript(string $html): string
 {
@@ -417,12 +430,7 @@ if ($isWiringDiagram) {
         $css = '<style>html,body{overflow:auto !important;} img{max-width:none !important;}</style>';
         $html = preg_replace('#</head>#i', $css . "\n</head>", $html, 1);
     }
-function isZoomPage(string $title, string $name): bool
-{
-    return
-        mb_stripos($title, 'ZOOM', 0, 'UTF-8') !== false
-        || mb_stripos($name, 'ZOOM', 0, 'UTF-8') !== false;
-}
+
     return trim($html);
 }
 function moveWiringLabelsUp(string $html): string
@@ -437,7 +445,7 @@ function moveWiringLabelsUp(string $html): string
     );
 }
 
-function createNormalIframe(string $id): string
+function createNormalIframe(string $id, bool $isZoom = false): string
 {
     $contentFile = $id . '-content.html';
 
@@ -493,10 +501,10 @@ function createNormalIframe(string $id): string
 JS;
 
     return '<div class="manual-content-iframe" style="width:100%;margin:0;padding:0;overflow:hidden;">'
-        . '<iframe id="honda-iframe" src="/manual/html/'
-        . rawurlencode($contentFile)
-        . '" style="display:block;width:100%;height:200px;border:0;margin:0;padding:0;background:#fff;" frameborder="0" scrolling="no" loading="eager"></iframe>'
-        . $script
+. '<iframe id="honda-iframe" src="/manual/html/'
+. rawurlencode($contentFile)
+. '" style="display:block;width:100%;height:200px;border:0;margin:0;padding:0;background:#fff;" frameborder="0" scrolling="' . ($isZoom ? 'auto' : 'no') . '" loading="eager"></iframe>'
+       . ($isZoom ? '' : $script)
         . '</div>';
 }
 
@@ -571,9 +579,9 @@ $fragment = prepareIframeDocument(
         continue;
     }
 
-    $displayHtml = $isWiringDiagram
-        ? createWiringDiagramIframe($id)
-        : createNormalIframe($id);
+$displayHtml = $isWiringDiagram
+    ? createWiringDiagramIframe($id)
+    : createNormalIframe($id, $isZoom);
 
     if (file_put_contents($htmlFile, $displayHtml) === false) {
         $errors++;
