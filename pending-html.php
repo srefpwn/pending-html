@@ -3612,61 +3612,6 @@ $fragment =
         $jsDir,
         $isWiringDiagram
     );
-if (
-    isWiringDiagram($title)
-) {
-
-    $contentFile =
-        $htmlTargetDir
-        . '/'
-        . $id
-        . '-content.html';
-
-
-
-    if (
-        file_put_contents(
-            $contentFile,
-            $fragment
-        ) === false
-    ) {
-
-        $errors++;
-
-        echo '<p>❌ Kapcsolási rajz mentési hiba: '
-            . htmlspecialchars($contentFile)
-            . '</p>';
-
-        continue;
-    }
-
-
-
-    $fragment =
-        '<div'
-        . ' class="manual-wiring-diagram"'
-        . ' style="'
-        . 'width:100%;'
-        . 'margin:0;'
-        . 'padding:0;'
-        . '">'
-        . '<iframe'
-        . ' src="/manual/html/'
-        . rawurlencode($id . '-content.html')
-        . '"'
-        . ' style="'
-        . 'display:block;'
-        . 'width:100%;'
-        . 'height:calc(100vh - 100px);'
-        . 'min-height:800px;'
-        . 'border:0;'
-        . 'margin:0;'
-        . 'padding:0;'
-        . '"'
-        . ' scrolling="auto"'
-        . '></iframe>'
-        . '</div>';
-}
 
     if ($fragment === '') {
 
@@ -3679,12 +3624,6 @@ if (
         continue;
     }
 
-
-
-$isWiringDiagram =
-    isWiringDiagram(
-        $title
-    );
 
 
 
