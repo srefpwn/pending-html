@@ -3357,52 +3357,6 @@ $fragment =
     );
 
 
-/*
- * ------------------------------------------------------------
- * Honda iframe feldolgozás
- * ------------------------------------------------------------
- *
- * A kapcsolási rajz felismerése a .top_title tartalma
- * alapján történik.
- */
-
-$isWiringDiagram =
-    isWiringDiagram(
-        $name
-    );
-
-
-$fragment =
-    buildHondaIframeDocument(
-        $html,
-        $type,
-        (int)$year,
-        $jsDir,
-        $isWiringDiagram
-    );
-
-$fragment = preg_replace(
-    '#<div\b[^>]*style\s*=\s*["\'][^"\']*position\s*:\s*absolute\s*;\s*right\s*=\s*10\s*;?[^"\']*["\'][^>]*>.*?</div>#is',
-    '',
-    $fragment
-);
-
-
-if (
-    strpos(
-        $fragment,
-        'class="honda-zoom"'
-    ) !== false
-) {
-
-    $fragment =
-        getHondaZoomCss()
-        . "\n"
-        . getHondaZoomJs()
-        . "\n"
-        . $fragment;
-}
-
 
 
 return trim($fragment);
