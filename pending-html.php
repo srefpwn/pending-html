@@ -2801,14 +2801,37 @@ function buildHondaIframeDocument(
 
     /*
      * ------------------------------------------------------------
-     * 1. KÜLSŐ JS FÁJLOK BEILLESZTÉSE
+     * 1. KÉP URL-EK JAVÍTÁSA
+     * ------------------------------------------------------------
+     */
+
+    $documentHtml =
+        convertImagePaths(
+            $documentHtml
+        );
+
+
+    /*
+     * ------------------------------------------------------------
+     * 2. HTML-BEN LÉVŐ MANUAL LINKEK JAVÍTÁSA
+     * ------------------------------------------------------------
+     */
+
+    $documentHtml =
+        convertManualLinks(
+            $documentHtml,
+            $type,
+            $year
+        );
+
+
+    /*
+     * ------------------------------------------------------------
+     * 3. EREDETI SCRIPT FÁJLOK BEILLESZTÉSE
      * ------------------------------------------------------------
      *
-     * A Honda eredeti JS-ei document.write() hívásokkal
-     * állítják elő a diagram HTML-jét.
-     *
-     * Nem alakítjuk át a document.write() tartalmát.
-     * Egyszerűen inline scriptként futtatjuk.
+     * A Honda JS-t nem értelmezzük.
+     * Csak betöltjük a saját HTML dokumentumba.
      */
 
     $documentHtml =
@@ -2879,9 +2902,7 @@ function buildHondaIframeDocument(
 
 
                 /*
-                 * ------------------------------------------------
-                 * Honda képutak javítása a JS-ben.
-                 * ------------------------------------------------
+                 * A JS-ben lévő képútvonalakat javítjuk.
                  */
 
                 $js =
@@ -2893,8 +2914,7 @@ function buildHondaIframeDocument(
 
 
                 /*
-                 * Ha a JS-ben Honda manual linkek vannak,
-                 * azokat is a saját útvonalunkra igazítjuk.
+                 * A JS-ben lévő linkeket javítjuk.
                  */
 
                 $js =
@@ -2918,204 +2938,97 @@ function buildHondaIframeDocument(
 
     /*
      * ------------------------------------------------------------
-     * 2. HTML-BEN LÉVŐ KÉP URL-EK JAVÍTÁSA
+     * 4. GYÁRI KEZELŐGOMBOK PHP-S, SZÖVEGES ELTÁVOLÍTÁSA
      * ------------------------------------------------------------
+     *
+     * Nincs DOM.
+     * Nem document.querySelector().
+     * Nem getElementById().
+     */
+
+
+    /*
+     * Print / Back / Next / Cancel blokk.
      */
 
     $documentHtml =
-        convertImagePaths(
+        preg_replace(
+            '#<div\b[^>]*>\s*'
+            . '(?:(?:<input\b[^>]*'
+            . '(?:PRINT_PREVIEW|GL_PREV|GL_NEXT|GL_CANCEL)[^>]*>\s*)+)'
+            . '</div>\s*<br\s*/?>#is',
+            '',
+            $documentHtml
+        );
+
+
+    /*
+     * Biztonsági eltávolítás az egyes kezelőgombokra.
+     */
+
+    $documentHtml =
+        preg_replace(
+            '#<input\b[^>]*'
+            . '(?:PRINT_PREVIEW|GL_PREV|GL_NEXT|GL_CANCEL)'
+            . '[^>]*>#is',
+            '',
+            $documentHtml
+        );
+
+
+    /*
+     * OnClick alapján is eltávolítjuk a gombokat.
+     */
+
+    $documentHtml =
+        preg_replace(
+            '#<input\b[^>]*'
+            . 'onClick\s*=\s*["\']'
+            . '(?:PrintFunc|BackFunc|NextFunc|CloseFunc)'
+            . '\s*\([^"\']*\)'
+            . '["\'][^>]*>#is',
+            '',
             $documentHtml
         );
 
 
     /*
      * ------------------------------------------------------------
-     * 3. HTML-BEN LÉVŐ MANUAL LINKEK JAVÍTÁSA
+     * 5. HONDA TOOLBAR SZÖVEGES ELTÁVOLÍTÁSA
      * ------------------------------------------------------------
      */
 
     $documentHtml =
-        convertManualLinks(
-            $documentHtml,
-            $type,
-            $year
+        preg_replace(
+            '#<div\b[^>]*\bid\s*=\s*["\']toolbar["\'][^>]*>'
+            . '.*?'
+            . '</div>#is',
+            '',
+            $documentHtml
+        );
+
+
+    /*
+     * groupbar.
+     */
+
+    $documentHtml =
+        preg_replace(
+            '#<v:group\b[^>]*\bid\s*=\s*["\']groupbar["\'][^>]*>'
+            . '.*?'
+            . '</v:group>#is',
+            '',
+            $documentHtml
         );
 
 
     /*
      * ------------------------------------------------------------
-     * 4. A GYÁRI KAPCSOLÓGOMBOK / TOOLBAR ELTÁVOLÍTÁSA
+     * 6. BASE TARGET
      * ------------------------------------------------------------
      *
-     * A Honda többféle változatban használhatja ezeket,
-     * ezért nem egyetlen konkrét HTML-sorra építünk.
-     *
-     * A document.write() által létrehozott elemeket a böngésző
-     * fogja eltávolítani az iframe betöltése után.
-     */
-
-    $cleanupScript = <<<'JS'
-<script>
-(function () {
-
-    function removeHondaControls() {
-
-        /*
-         * --------------------------------------------------------
-         * Zoom toolbar
-         * --------------------------------------------------------
-         */
-
-        var toolbar =
-            document.getElementById('toolbar');
-
-        if (toolbar) {
-            toolbar.remove();
-        }
-
-
-        /*
-         * --------------------------------------------------------
-         * groupbar
-         * --------------------------------------------------------
-         */
-
-        var groupbar =
-            document.getElementById('groupbar');
-
-        if (groupbar) {
-            groupbar.remove();
-        }
-
-
-        /*
-         * --------------------------------------------------------
-         * Print / Back / Next / Cancel
-         * --------------------------------------------------------
-         */
-
-        document
-            .querySelectorAll(
-                'input[type="image"]'
-            )
-            .forEach(
-                function (input) {
-
-                    var onclick =
-                        input.getAttribute(
-                            'onclick'
-                        ) || '';
-
-                    if (
-                        /PrintFunc|BackFunc|NextFunc|CloseFunc/i.test(
-                            onclick
-                        )
-                    ) {
-
-                        var parent =
-                            input.parentElement;
-
-                        if (
-                            parent &&
-                            parent.tagName.toLowerCase() === 'div'
-                        ) {
-                            parent.remove();
-                        } else {
-                            input.remove();
-                        }
-                    }
-                }
-            );
-
-
-        /*
-         * --------------------------------------------------------
-         * Biztonsági eltávolítás a gombképek alapján.
-         * --------------------------------------------------------
-         */
-
-        document
-            .querySelectorAll('img')
-            .forEach(
-                function (img) {
-
-                    var src =
-                        img.getAttribute(
-                            'src'
-                        ) || '';
-
-                    if (
-                        /PRINT_PREVIEW|GL_PREV|GL_NEXT|GL_CANCEL/i.test(
-                            src
-                        )
-                    ) {
-
-                        var parent =
-                            img.parentElement;
-
-                        if (
-                            parent &&
-                            parent.tagName.toLowerCase() === 'div'
-                        ) {
-                            parent.remove();
-                        } else {
-                            img.remove();
-                        }
-                    }
-                }
-            );
-    }
-
-
-    /*
-     * Első futás.
-     */
-
-    if (
-        document.readyState === 'loading'
-    ) {
-
-        document.addEventListener(
-            'DOMContentLoaded',
-            removeHondaControls
-        );
-
-    } else {
-
-        removeHondaControls();
-
-    }
-
-
-    /*
-     * Második futás.
-     *
-     * A régi Honda JS-ek miatt biztonságból
-     * később is lefuttatjuk.
-     */
-
-    setTimeout(
-        removeHondaControls,
-        50
-    );
-
-    setTimeout(
-        removeHondaControls,
-        250
-    );
-
-})();
-</script>
-JS;
-
-
-    /*
-     * ------------------------------------------------------------
-     * 5. LINK CÉLJA
-     * ------------------------------------------------------------
-     *
-     * Az iframe-en belüli normál <a href="..."> linkek
-     * a teljes szülőoldalt nyissák meg.
+     * Az iframe-ben lévő <a href=""> linkek a teljes
+     * szülőoldalon nyílnak meg.
      */
 
     $baseTag =
@@ -3124,27 +3037,25 @@ JS;
 
     /*
      * ------------------------------------------------------------
-     * 6. SAJÁT IFRAME CSS
+     * 7. SAJÁT MINIMÁLIS CSS
      * ------------------------------------------------------------
      */
 
-    $iframeCss = <<<'CSS'
+    $iframeCss = <<<CSS
 <style>
-
 html,
 body {
     margin: 0 !important;
     padding: 0 !important;
     background: #ffffff;
 }
-
 </style>
 CSS;
 
 
     /*
      * ------------------------------------------------------------
-     * 7. HEAD FELÉPÍTÉSE
+     * 8. HEAD BEILLESZTÉSE
      * ------------------------------------------------------------
      */
 
@@ -3156,35 +3067,13 @@ CSS;
         )
     ) {
 
-        $originalHead =
-            $headMatch[1];
+        $newHead =
+            $baseTag
+            . "\n"
+            . $iframeCss
+            . "\n"
+            . $headMatch[1];
 
-    } else {
-
-        $originalHead = '';
-
-    }
-
-
-    $newHead =
-        $baseTag
-        . "\n"
-        . $iframeCss
-        . "\n"
-        . $originalHead;
-
-
-    /*
-     * Ha volt eredeti HEAD, lecseréljük a saját,
-     * kiegészített HEAD-re.
-     */
-
-    if (
-        preg_match(
-            '#<head\b[^>]*>.*?</head>#is',
-            $documentHtml
-        )
-    ) {
 
         $documentHtml =
             preg_replace(
@@ -3200,16 +3089,14 @@ CSS;
 
     } else {
 
-        /*
-         * Ha nincs HEAD, létrehozunk egy teljes HTML dokumentumot.
-         */
-
         $documentHtml =
             '<!DOCTYPE html>'
             . '<html lang="hu">'
             . '<head>'
             . "\n"
-            . $newHead
+            . $baseTag
+            . "\n"
+            . $iframeCss
             . "\n"
             . '</head>'
             . "\n"
@@ -3221,330 +3108,35 @@ CSS;
 
     /*
      * ------------------------------------------------------------
-     * 8. DINAMIKUS MAGASSÁG
+     * 9. KAPCSOLÁSI RAJZ / NORMÁL OLDAL CSS
      * ------------------------------------------------------------
      *
-     * Normál oldalnál a tényleges tartalommagasságot
-     * elküldjük a szülőoldalnak.
-     */
-
-    $heightScript = <<<'JS'
-<script>
-(function () {
-
-    function sendHondaHeight() {
-
-        var body =
-            document.body;
-
-        var html =
-            document.documentElement;
-
-        if (!body || !html) {
-            return;
-        }
-
-        var height =
-            Math.max(
-                body.scrollHeight,
-                body.offsetHeight,
-                html.scrollHeight,
-                html.offsetHeight,
-                html.clientHeight
-            );
-
-        window.parent.postMessage(
-            {
-                type: 'honda-iframe-height',
-                height: Math.ceil(height)
-            },
-            '*'
-        );
-    }
-
-
-    if (
-        document.readyState === 'loading'
-    ) {
-
-        document.addEventListener(
-            'DOMContentLoaded',
-            sendHondaHeight
-        );
-
-    } else {
-
-        sendHondaHeight();
-
-    }
-
-
-    window.addEventListener(
-        'load',
-        sendHondaHeight
-    );
-
-
-    if (
-        typeof ResizeObserver !== 'undefined'
-    ) {
-
-        var observer =
-            new ResizeObserver(
-                sendHondaHeight
-            );
-
-        observer.observe(
-            document.documentElement
-        );
-
-        if (document.body) {
-            observer.observe(
-                document.body
-            );
-        }
-    }
-
-
-    setTimeout(
-        sendHondaHeight,
-        100
-    );
-
-    setTimeout(
-        sendHondaHeight,
-        500
-    );
-
-})();
-</script>
-JS;
-
-
-    /*
-     * ------------------------------------------------------------
-     * 9. NORMÁL OLDAL MÉRETEZÉSE
-     * ------------------------------------------------------------
+     * Kapcsolási rajznál nem kényszerítjük rá a tartalmat
+     * a rendelkezésre álló szélességre.
      *
-     * Kapcsolási rajznál NEM fut.
+     * Normál oldalnál viszont az iframe maga lesz 100% széles.
      *
-     * A normál oldal teljes Honda tartalmát egyben próbáljuk
-     * a rendelkezésre álló iframe-szélességhez igazítani.
+     * A tényleges iframe méretezést a szülőoldalon kezeljük.
      */
 
-    $fitScript = '';
-
     if (
-        !$isWiringDiagram
-    ) {
-
-        $fitScript = <<<'JS'
-<script>
-(function () {
-
-    function fitHondaContent() {
-
-        var body =
-            document.body;
-
-        var html =
-            document.documentElement;
-
-        if (!body || !html) {
-            return;
-        }
-
-
-        /*
-         * A természetes tartalomszélesség.
-         */
-
-        var contentWidth =
-            Math.max(
-                body.scrollWidth,
-                html.scrollWidth
-            );
-
-
-        var viewportWidth =
-            html.clientWidth;
-
-
-        if (
-            contentWidth <= 0 ||
-            viewportWidth <= 0
-        ) {
-            return;
-        }
-
-
-        /*
-         * Ha eleve elfér, nincs szükség skálázásra.
-         */
-
-        if (
-            contentWidth <= viewportWidth
-        ) {
-
-            body.style.transform = '';
-            body.style.transformOrigin = '';
-            body.style.width = '';
-
-            sendHondaHeight();
-
-            return;
-        }
-
-
-        /*
-         * Az egész Honda dokumentum együtt skálázódik.
-         */
-
-        var scale =
-            viewportWidth /
-            contentWidth;
-
-
-        body.style.transformOrigin =
-            'top left';
-
-        body.style.transform =
-            'scale('
-            + scale
-            + ')';
-
-        body.style.width =
-            contentWidth
-            + 'px';
-
-
-        /*
-         * A skálázás utáni tényleges magasság.
-         */
-
-        var naturalHeight =
-            body.scrollHeight;
-
-        var scaledHeight =
-            naturalHeight *
-            scale;
-
-
-        window.parent.postMessage(
-            {
-                type: 'honda-iframe-height',
-                height: Math.ceil(
-                    scaledHeight
-                )
-            },
-            '*'
-        );
-    }
-
-
-    function sendHondaHeight() {
-
-        var body =
-            document.body;
-
-        if (!body) {
-            return;
-        }
-
-        var rect =
-            body.getBoundingClientRect();
-
-        window.parent.postMessage(
-            {
-                type: 'honda-iframe-height',
-                height: Math.ceil(
-                    rect.height
-                )
-            },
-            '*'
-        );
-    }
-
-
-    if (
-        document.readyState === 'loading'
-    ) {
-
-        document.addEventListener(
-            'DOMContentLoaded',
-            fitHondaContent
-        );
-
-    } else {
-
-        fitHondaContent();
-
-    }
-
-
-    window.addEventListener(
-        'load',
-        fitHondaContent
-    );
-
-    window.addEventListener(
-        'resize',
-        fitHondaContent
-    );
-
-
-    setTimeout(
-        fitHondaContent,
-        100
-    );
-
-    setTimeout(
-        fitHondaContent,
-        500
-    );
-
-})();
-</script>
-JS;
-    }
-
-
-    /*
-     * ------------------------------------------------------------
-     * 10. SAJÁT SCRIPTEK A BODY VÉGÉRE
-     * ------------------------------------------------------------
-     */
-
-    $extraScripts =
-        $cleanupScript
-        . "\n"
-        . $heightScript
-        . "\n"
-        . $fitScript;
-
-
-    if (
-        preg_match(
-            '#</body>#i',
-            $documentHtml
-        )
+        $isWiringDiagram
     ) {
 
         $documentHtml =
             preg_replace(
-                '#</body>#i',
-                $extraScripts
+                '#</head>#i',
+                '<style>'
                 . "\n"
-                . '</body>',
+                . 'html,body{overflow:auto;}'
+                . "\n"
+                . '</style>'
+                . "\n"
+                . '</head>',
                 $documentHtml,
                 1
             );
 
-    } else {
-
-        $documentHtml .=
-            "\n"
-            . $extraScripts;
     }
 
 
@@ -4005,13 +3597,21 @@ foreach ($files as $file) {
 
 
 
-    $fragment =
-        prepareHtmlFragment(
-            $html,
-            $type,
-            (int)$year,
-            $jsDir
-        );
+$isWiringDiagram =
+    isWiringDiagram(
+        extractName(
+            $html
+        )
+    );
+
+$fragment =
+    buildHondaIframeDocument(
+        $html,
+        $type,
+        (int)$year,
+        $jsDir,
+        $isWiringDiagram
+    );
 if (
     isWiringDiagram($title)
 ) {
