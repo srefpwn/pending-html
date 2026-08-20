@@ -132,7 +132,16 @@ function convertManualLinks(
     return $html;
 }
 
-
+function convertJmpLinks(string $html): string
+{
+    return preg_replace_callback(
+        '#javascript\s*:\s*parent\.Jmp\s*\(\s*[\'"]([^\'"]+)[\'"]\s*\)#i',
+        function ($match) {
+            return '#' . $match[1];
+        },
+        $html
+    );
+}
 function extractTitle(string $html): string
 {
     if (preg_match('#<title\b[^>]*>(.*?)</title>#is', $html, $match)) {
@@ -284,14 +293,11 @@ CSS;
         );
     }
 
-return '<!DOCTYPE html>' . "\n"
-    . '<html lang="hu">' . "\n"
-    . '<head>' . "\n"
-    . $base . "\n"
-    . $css . "\n"
-    . '</head>' . "\n"
-    . $html . "\n"
-    . '</html>';
+    return '<!DOCTYPE html>\n<html lang="hu">\n<head>\n'
+        . $base . "\n" . $css
+        . '</head>\n'
+        . $html
+        . '</html>';
 }
 
 
@@ -384,100 +390,52 @@ function prepareIframeDocument(
     string $type,
     int $year,
     string $jsDir,
-    bool $isWiringDiagram
+    bool $isWiringDiagram,
+    bool $isZoom
 ): string {
     /*
      * Fontos: innen nincs DOM és nincs régi Zoom/VML átalakítás.
      * Az eredeti HTML marad, csak a szükséges szöveges módosításokat végezzük.
      */
 
-    $html = convertImagePaths($html);
-    $html = convertManualLinks($html, $type, $year);
-    $html = removeHondaButtons($html);
+$html = convertImagePaths($html);
+
+$html = convertManualLinks($html, $type, $year);
+
+$html = convertJmpLinks($html);
+
+$html = removeHondaButtons($html);
+if ($isWiringDiagram) {
+    $html = moveWiringLabelsUp($html);
+}
     $html = loadAndInlineHondaScripts($html, $jsDir, $type, $year);
     $html = addIframeHead($html);
 
-if (
-    $isWiringDiagram
-) {
-
-    /*
-     * Kapcsolási rajz:
-     * - görgethető
-     * - 2x nagyítás
-     * - a feliratok 5px-rel feljebb kerülnek
-     *   a 2x nagyítás miatt ez a képernyőn 10px.
-     */
-    $css = <<<'CSS'
-<style>
-html,
-body {
-    overflow: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    if (!$isWiringDiagram) {
+        $html = addNormalIframeResizeScript($html);
+    } else {
+        $css = '<style>html,body{overflow:auto !important;} img{max-width:none !important;}</style>';
+        $html = preg_replace('#</head>#i', $css . "\n</head>", $html, 1);
+    }
+function isZoomPage(string $title, string $name): bool
+{
+    return
+        mb_stripos($title, 'ZOOM', 0, 'UTF-8') !== false
+        || mb_stripos($name, 'ZOOM', 0, 'UTF-8') !== false;
 }
-
-img {
-    max-width: none !important;
-}
-
-body {
-    transform: scale(2);
-    transform-origin: top left;
-    width: 50%;
-}
-</style>
-CSS;
-
-    $html =
-        preg_replace(
-            '#</head>#i',
-            $css . "\n</head>",
-            $html,
-            1
-        );
-
-} elseif (
-    $isZoom
-) {
-
-    /*
-     * ZOOM oldal:
-     * ne zsugorítsuk a tartalmat a viewporthoz,
-     * hanem engedjük a görgetést.
-     */
-    $css = <<<'CSS'
-<style>
-html,
-body {
-    overflow: auto !important;
-}
-
-img {
-    max-width: none !important;
-}
-</style>
-CSS;
-
-    $html =
-        preg_replace(
-            '#</head>#i',
-            $css . "\n</head>",
-            $html,
-            1
-        );
-
-} else {
-
-    $html =
-        addNormalIframeResizeScript(
-            $html
-        );
-}
-
     return trim($html);
 }
-
+function moveWiringLabelsUp(string $html): string
+{
+    return preg_replace_callback(
+        '#(<[^>]*\bname\s*=\s*[\'"]PrtPId[\'"][^>]*\bstyle\s*=\s*[\'"][^\'"]*\btop\s*:\s*)(-?\d+(?:\.\d+)?)px([^\'"]*[\'"])#i',
+        function ($match) {
+            $top = (float)$match[2] - 5;
+            return $match[1] . $top . 'px' . $match[3];
+        },
+        $html
+    );
+}
 
 function createNormalIframe(string $id): string
 {
@@ -586,15 +544,17 @@ foreach ($files as $file) {
 
     $title = extractTitle($html);
     $name = extractName($html);
-    $isWiringDiagram = isWiringDiagram($name);
+   $isWiringDiagram = isWiringDiagram($name);
+$isZoom = isZoomPage($title, $name);
 
-    $fragment = prepareIframeDocument(
-        $html,
-        $type,
-        (int)$year,
-        $jsDir,
-        $isWiringDiagram
-    );
+$fragment = prepareIframeDocument(
+    $html,
+    $type,
+    (int)$year,
+    $jsDir,
+    $isWiringDiagram,
+    $isZoom
+);
 
     if ($fragment === '') {
         $errors++;
