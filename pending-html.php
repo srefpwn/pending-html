@@ -278,17 +278,20 @@ CSS;
 
         return preg_replace(
             '#<head\b[^>]*>.*?</head>#is',
-            '<head>\n' . $newHead . '\n</head>',
+            '<head>' . $newHead . '</head>',
             $html,
             1
         );
     }
 
-    return '<!DOCTYPE html>\n<html lang="hu">\n<head>\n'
-        . $base . "\n" . $css
-        . '\n</head>\n'
-        . $html
-        . '\n</html>';
+return '<!DOCTYPE html>' . "\n"
+    . '<html lang="hu">' . "\n"
+    . '<head>' . "\n"
+    . $base . "\n"
+    . $css . "\n"
+    . '</head>' . "\n"
+    . $html . "\n"
+    . '</html>';
 }
 
 
@@ -394,12 +397,83 @@ function prepareIframeDocument(
     $html = loadAndInlineHondaScripts($html, $jsDir, $type, $year);
     $html = addIframeHead($html);
 
-    if (!$isWiringDiagram) {
-        $html = addNormalIframeResizeScript($html);
-    } else {
-        $css = '<style>html,body{overflow:auto !important;} img{max-width:none !important;}</style>';
-        $html = preg_replace('#</head>#i', $css . "\n</head>", $html, 1);
-    }
+if (
+    $isWiringDiagram
+) {
+
+    /*
+     * Kapcsolási rajz:
+     * - görgethető
+     * - 2x nagyítás
+     * - a feliratok 5px-rel feljebb kerülnek
+     *   a 2x nagyítás miatt ez a képernyőn 10px.
+     */
+    $css = <<<'CSS'
+<style>
+html,
+body {
+    overflow: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+img {
+    max-width: none !important;
+}
+
+body {
+    transform: scale(2);
+    transform-origin: top left;
+    width: 50%;
+}
+</style>
+CSS;
+
+    $html =
+        preg_replace(
+            '#</head>#i',
+            $css . "\n</head>",
+            $html,
+            1
+        );
+
+} elseif (
+    $isZoom
+) {
+
+    /*
+     * ZOOM oldal:
+     * ne zsugorítsuk a tartalmat a viewporthoz,
+     * hanem engedjük a görgetést.
+     */
+    $css = <<<'CSS'
+<style>
+html,
+body {
+    overflow: auto !important;
+}
+
+img {
+    max-width: none !important;
+}
+</style>
+CSS;
+
+    $html =
+        preg_replace(
+            '#</head>#i',
+            $css . "\n</head>",
+            $html,
+            1
+        );
+
+} else {
+
+    $html =
+        addNormalIframeResizeScript(
+            $html
+        );
+}
 
     return trim($html);
 }
@@ -595,3 +669,4 @@ echo '<h3>Feldolgozás kész</h3>';
 echo '<p>Sikeres: ' . $processed . '</p>';
 echo '<p>Kihagyva: ' . $skipped . '</p>';
 echo '<p>Hibás: ' . $errors . '</p>';
+
