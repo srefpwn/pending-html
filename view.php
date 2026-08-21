@@ -41,7 +41,19 @@ $year = filter_input(
 $id = trim(
     (string)($_GET['id'] ?? '')
 );
+/*
+ * ZOOM nézet / rész meghatározása
+ *
+ * anc=1 → Első
+ * anc=2 → Hátsó
+ */
+$anc = trim(
+    (string)($_GET['anc'] ?? '')
+);
 
+if ($anc !== '1' && $anc !== '2') {
+    $anc = '';
+}
 
 /*
  * Alapvető ellenőrzés
@@ -327,6 +339,16 @@ $pageHtml = convertManualLinks(
         ? (int)$carId
         : null
 );
+/*
+ * ZOOM nézet
+ *
+ * anc=1 → első futómű
+ * anc=2 → hátsó futómű
+ */
+$anc = trim(
+    (string)($_GET['anc'] ?? '')
+);
+
 
 /*
  * Vissza link
