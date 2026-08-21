@@ -341,6 +341,43 @@ $pageHtml = convertManualLinks(
 );
 
 /*
+ * Aktuális autó azonosítójának hozzáadása
+ *
+ * A már létező saját /manual/view.php linkekhez
+ * hozzáadjuk az aktuális autó ID-ját.
+ */
+if ($carId !== false && $carId !== null) {
+
+    $pageHtml = preg_replace_callback(
+        '#/manual/view\.php\?[^"\'<>\s]+#i',
+        function ($match) use ($carId) {
+
+            $url = $match[0];
+
+            /*
+             * Ha már van car paraméter,
+             * nem adjuk hozzá újra.
+             */
+            if (
+                preg_match(
+                    '#(?:[?&])car=[^&]+#i',
+                    $url
+                )
+            ) {
+                return $url;
+            }
+
+            /*
+             * Aktuális autó ID hozzáadása.
+             */
+            return $url
+                . '&car='
+                . rawurlencode((string)$carId);
+        },
+        $pageHtml
+    );
+}
+/*
  * ZOOM nézet
  *
  * anc=1 → első
