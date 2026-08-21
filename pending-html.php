@@ -113,19 +113,25 @@ function convertManualLinks(
     $html = preg_replace_callback(
         '#javascript\s*:\s*PrtProc\s*\(\s*[\'\"]([^\'\"]*)[\'\"]\s*,\s*[\'\"]([^\'\"]+)[\'\"](?:\s*,\s*[\'\"]([^\'\"]*)[\'\"])?\s*\)\s*;?#i',
         function ($match) use ($type, $year, $carId) {
-            $targetId = trim($match[2]);
 
-            $url = '/manual/view.php'
-                . '?type=' . rawurlencode($type)
-                . '&year=' . rawurlencode((string)$year)
-                . '&id=' . rawurlencode($targetId);
+    $targetId = trim($match[2]);
+    $anc = isset($match[3]) ? trim($match[3]) : '';
 
-            if ($carId !== null) {
-                $url .= '&car=' . rawurlencode((string)$carId);
-            }
+    $url = '/manual/view.php'
+        . '?type=' . rawurlencode($type)
+        . '&year=' . rawurlencode((string)$year)
+        . '&id=' . rawurlencode($targetId);
 
-            return $url;
-        },
+    if ($anc !== '') {
+        $url .= '&anc=' . rawurlencode($anc);
+    }
+
+    if ($carId !== null) {
+        $url .= '&car=' . rawurlencode((string)$carId);
+    }
+
+    return $url;
+},
         $html
     );
 
