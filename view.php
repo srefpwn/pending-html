@@ -339,15 +339,18 @@ $pageHtml = convertManualLinks(
         ? (int)$carId
         : null
 );
+
 /*
  * ZOOM nézet
  *
- * anc=1 → első futómű
- * anc=2 → hátsó futómű
+ * anc=1 → első
+ * anc=2 → hátsó
  */
 $anc = trim(
     (string)($_GET['anc'] ?? '')
 );
+
+
 
 
 /*
