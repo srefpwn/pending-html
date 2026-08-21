@@ -350,7 +350,25 @@ $anc = trim(
     (string)($_GET['anc'] ?? '')
 );
 
+/*
+ * ZOOM nézet kiválasztása
+ *
+ * anc=1 → első ábra
+ * anc=2 → hátsó ábra
+ *
+ * A Honda eredeti JavaScriptje a #1 / #2
+ * hash alapján választja ki az imgId1 / imgId2
+ * tartalmat az iframe-en belül.
+ */
+if ($anc !== '' && ctype_digit($anc) && (int)$anc > 0) {
 
+    $pageHtml = preg_replace(
+        '#(<iframe\b[^>]*\bsrc\s*=\s*["\'][^"\']*-content\.html)(["\'])#i',
+        '$1#' . $anc . '$2',
+        $pageHtml,
+        1
+    );
+}
 
 
 /*
