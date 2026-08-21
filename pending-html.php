@@ -331,38 +331,8 @@ function addNormalIframeResizeScript(string $html): string
     }
 
     function fitContent() {
-        var body = document.body;
-        if (!body) return;
-
-        var viewportWidth = document.documentElement.clientWidth;
-        if (viewportWidth <= 0) return;
-
-        var candidates = document.querySelectorAll('[style*="width:"][style*="px"]');
-        var largestWidth = 0;
-
-        candidates.forEach(function (element) {
-            var style = window.getComputedStyle(element);
-            var width = parseFloat(style.width);
-
-            if (width > largestWidth) {
-                largestWidth = width;
-            }
-        });
-
-        if (largestWidth > viewportWidth && largestWidth > 0) {
-            var scale = viewportWidth / largestWidth;
-
-            body.style.transformOrigin = 'top left';
-            body.style.transform = 'scale(' + scale + ')';
-            body.style.width = largestWidth + 'px';
-        } else {
-            body.style.transform = '';
-            body.style.transformOrigin = '';
-            body.style.width = '';
-        }
-
-        sendHeight();
-    }
+    sendHeight();
+}
 
     function ready() {
         fitContent();
@@ -424,7 +394,24 @@ if ($isWiringDiagram) {
 
 $html = addIframeHead($html);
 if (!$isWiringDiagram && !$isZoom) {
+
+    $css = '<style>
+        #graphTd img {
+            max-width: 100% !important;
+            width: auto !important;
+            height: auto !important;
+        }
+    </style>';
+
+    $html = preg_replace(
+        '#</head>#i',
+        $css . "\n</head>",
+        $html,
+        1
+    );
+
     $html = addNormalIframeResizeScript($html);
+
 } elseif ($isWiringDiagram) {
     $css = '<style>html,body{overflow:auto !important;} img{max-width:none !important;}</style>';
     $html = preg_replace('#</head>#i', $css . "\n</head>", $html, 1);
