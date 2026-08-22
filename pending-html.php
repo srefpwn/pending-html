@@ -72,7 +72,6 @@ function convertImagePaths(string $html): string
     );
 }
 
-
 function convertJsImagePaths(string $js): string
 {
     $js = str_replace(
@@ -83,7 +82,6 @@ function convertJsImagePaths(string $js): string
 
     return $js;
 }
-
 
 function convertManualLinks(
     string $html,
@@ -453,8 +451,12 @@ $html = convertJmpLinks($html);
 $html = removeHondaButtons($html);
 $html = loadAndInlineHondaScripts($html, $jsDir, $type, $year);
 
-if ($isWiringDiagram || $isZoom) {
-    $html = moveWiringLabelsUp($html);
+if ($isWiringDiagram) {
+    $html = movePositionedLabelsUp($html, WIRING_LABEL_OFFSET);
+}
+
+if ($isZoom) {
+    $html = movePositionedLabelsUp($html, ZOOM_LABEL_OFFSET);
 }
 
 $html = addIframeHead($html);
@@ -469,17 +471,20 @@ if (!$isWiringDiagram && !$isZoom) {
 }
     return trim($html);
 }
-// Kapcsolási rajz feliratok függőleges eltolása pixelben.
+
+// Pozicionált feliratok függőleges eltolása pixelben.
 // Pozitív érték = felfelé mozgatás.
-
 const WIRING_LABEL_OFFSET = 5;
+const ZOOM_LABEL_OFFSET = 10;
 
-function moveWiringLabelsUp(string $html): string
-{
+function movePositionedLabelsUp(
+    string $html,
+    int $offset
+): string {
     return preg_replace_callback(
         '#(name=\\\\"PrtPId\\\\"[^>]*style=\\\\".*?\\btop\\s*:\\s*)(-?\d+(?:\.\d+)?)(px)#i',
-        function ($match) {
-            $top = (float)$match[2] - WIRING_LABEL_OFFSET;
+        function ($match) use ($offset) {
+            $top = (float)$match[2] - $offset;
 
             return $match[1] . $top . $match[3];
         },
@@ -678,4 +683,5 @@ echo '<h3>Feldolgozás kész</h3>';
 echo '<p>Sikeres: ' . $processed . '</p>';
 echo '<p>Kihagyva: ' . $skipped . '</p>';
 echo '<p>Hibás: ' . $errors . '</p>';
+
 
