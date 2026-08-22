@@ -307,9 +307,44 @@ CSS;
         . $html
         . '</html>';
 }
-function isZoomPage(string $filename): bool
+function isZoomPage(string $filename, string $html = ''): bool
 {
-    return strncasecmp($filename, 'ZOOM', 4) === 0;
+    /*
+     * Régi Zoom oldalak:
+     * a fájlnév ZOOM-mal kezdődik.
+     */
+    if (strncasecmp($filename, 'ZOOM', 4) === 0) {
+        return true;
+    }
+
+    /*
+     * Újabb Honda Zoom / Viewer oldalak:
+     * nem feltétlenül ZOOM... nevű fájlok,
+     * ezért a HTML szerkezete alapján is felismerjük őket.
+     */
+    $score = 0;
+
+    if (stripos($html, 'ViewerStyle.css') !== false) {
+        $score++;
+    }
+
+    if (stripos($html, 'gImageGroupList_') !== false) {
+        $score++;
+    }
+
+    if (stripos($html, '_prResizeImage') !== false) {
+        $score++;
+    }
+
+    if (stripos($html, 'jsResizeImage') !== false) {
+        $score++;
+    }
+
+    if (stripos($html, 'xmlns:v="urn:schemas-microsoft-com:vml"') !== false) {
+        $score++;
+    }
+
+    return $score >= 3;
 }
 
 function addNormalIframeResizeScript(string $html): string
@@ -418,7 +453,7 @@ $html = convertJmpLinks($html);
 $html = removeHondaButtons($html);
 $html = loadAndInlineHondaScripts($html, $jsDir, $type, $year);
 
-if ($isWiringDiagram) {
+if ($isWiringDiagram || $isZoom) {
     $html = moveWiringLabelsUp($html);
 }
 
@@ -559,7 +594,7 @@ foreach ($files as $file) {
     $title = extractTitle($html);
     $name = extractName($html);
    $isWiringDiagram = isWiringDiagram($name);
-$isZoom = isZoomPage($filename);
+$isZoom = isZoomPage($filename, $html);
 
 $fragment = prepareIframeDocument(
     $html,
@@ -643,3 +678,4 @@ echo '<h3>Feldolgozás kész</h3>';
 echo '<p>Sikeres: ' . $processed . '</p>';
 echo '<p>Kihagyva: ' . $skipped . '</p>';
 echo '<p>Hibás: ' . $errors . '</p>';
+
