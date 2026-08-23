@@ -313,11 +313,125 @@ function loadAndInlineHondaScripts(
         $html
     );
 }
+function fixHondaVmlTableCellSizes(string $html): string
+{
+    /*
+     * A régi Honda VML-grafikákat létrehozó document.write() scriptek
+     * bizonyos böngészőkben vizuálisan megjelennek, de a bennük lévő
+     * v:group mérete nem mindig vesz részt megfelelően a TD
+     * magasságának kiszámításában.
+     *
+     * Ezért a scriptet tartalmazó TD-nek explicit méretet adunk.
+     *
+     * A height értékhez 20 px biztonsági ráhagyást használunk.
+     */
+    const VML_TD_HEIGHT_EXTRA = 20;
 
+    return preg_replace_callback(
+        '#<td\b(?P<attrs>[^>]*)>'
+        . '(?:(?!<td\b|</td\b).)*?'
+        . '<script\b[^>]*>.*?'
+        . '<v:group\b[^>]*\bstyle\s*=\\(?P<quote>["\'])'
+        . '(?P<groupStyle>.*?)'
+        . '\\(?P=quote)'
+        . '#is',
+        function ($match) use (VML_TD_HEIGHT_EXTRA) {
+
+            $groupStyle = $match['groupStyle'];
+
+            /*
+             * A v:group saját width / height értéke.
+             */
+            if (!preg_match(
+                '#\bwidth\s*:\s*(\d+(?:\.\d+)?)px\b#i',
+                $groupStyle,
+                $widthMatch
+            )) {
+                return $match[0];
+            }
+
+            if (!preg_match(
+                '#\bheight\s*:\s*(\d+(?:\.\d+)?)px\b#i',
+                $groupStyle,
+                $heightMatch
+            )) {
+                return $match[0];
+            }
+
+            $width  = (float)$widthMatch[1];
+            $height = (float)$heightMatch[1] + VML_TD_HEIGHT_EXTRA;
+
+            if ($width <= 0 || $height <= 0) {
+                return $match[0];
+            }
+
+            $attrs = $match['attrs'];
+
+            /*
+             * Megnézzük, van-e már style attribútum a TD-n.
+             */
+            if (preg_match(
+                '#\bstyle\s*=\s*(["\'])(.*?)\1#is',
+                $attrs,
+                $styleMatch
+            )) {
+                $quote = $styleMatch[1];
+                $style = $styleMatch[2];
+
+                /*
+                 * A TD korábbi width / height értékeit eltávolítjuk,
+                 * hogy ne maradjon egymásnak ellentmondó CSS.
+                 */
+                $style = preg_replace(
+                    '#(?:^|;)\s*width\s*:\s*[^;]+;?#i',
+                    '',
+                    $style
+                );
+
+                $style = preg_replace(
+                    '#(?:^|;)\s*height\s*:\s*[^;]+;?#i',
+                    '',
+                    $style
+                );
+
+                $style = trim($style);
+
+                if ($style !== '' && substr($style, -1) !== ';') {
+                    $style .= ';';
+                }
+
+                $style .= ' width:' . rtrim(rtrim((string)$width, '0'), '.') . 'px;';
+                $style .= ' height:' . rtrim(rtrim((string)$height, '0'), '.') . 'px;';
+
+                $newAttrs = preg_replace(
+                    '#\bstyle\s*=\s*(["\']).*?\1#is',
+                    'style=' . $quote . $style . $quote,
+                    $attrs,
+                    1
+                );
+            } else {
+                $newAttrs =
+                    $attrs
+                    . ' style="width:'
+                    . rtrim(rtrim((string)$width, '0'), '.')
+                    . 'px;height:'
+                    . rtrim(rtrim((string)$height, '0'), '.')
+                    . 'px;"';
+            }
+
+            return '<td' . $newAttrs . '>'
+                . substr($match[0], strlen('<td' . $attrs . '>'));
+        },
+        $html
+    );
+}
 
 function addIframeHead(string $html): string
 {
     $base = '<base target="_top">';
+    
+    $viewerCss = '<link rel="stylesheet" href="/manual/css/ViewerStyle.css">';
+    $viewerCss = '<link rel="stylesheet" href="/manual/css/ESMCONTS.CSS">';
 
     $css = <<<'CSS'
 <style>
@@ -334,7 +448,7 @@ img {
 CSS;
 
     if (preg_match('#<head\b[^>]*>(.*?)</head>#is', $html, $match)) {
-        $newHead = $base . "\n" . $css . "\n" . $match[1];
+        $newHead = $base . "\n" . $viewerCss . "\n" . $css . "\n" . $match[1];
 
         return preg_replace(
             '#<head\b[^>]*>.*?</head>#is',
@@ -495,6 +609,8 @@ $html = convertJmpLinks($html);
 
 $html = removeHondaButtons($html);
 $html = loadAndInlineHondaScripts($html, $jsDir, $type, $year);
+
+$html = fixHondaVmlTableCellSizes($html);
 
 if ($isWiringDiagram) {
     $html = movePositionedLabelsUp($html, WIRING_LABEL_OFFSET);
