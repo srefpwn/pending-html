@@ -313,140 +313,102 @@ function loadAndInlineHondaScripts(
         $html
     );
 }
-
 function fixHondaVmlTableCellSizes(string $html): string
 {
- $vmlDebugCount = 0;
     /*
-     * A régi Honda VML-grafikákat létrehozó document.write() scriptek
-     * bizonyos böngészőkben vizuálisan megjelennek, de a bennük lévő
-     * v:group mérete nem mindig vesz részt megfelelően a TD
-     * magasságának kiszámításában.
+     * A VML grafikát tartalmazó ViewerTD elemekhez
+     * explicit width / height értéket adunk.
      *
-     * Ezért a VML-grafikát tartalmazó TD-nek explicit méretet adunk.
-     *
-     * A height értékhez 20 px biztonsági ráhagyást használunk.
+     * A VML magasságához 20 px ráhagyást használunk.
      */
     $VML_TD_HEIGHT_EXTRA = 20;
 
     /*
-     * Csak a ViewerTD nyitó tageket keressük meg.
+     * A script blokkokat maszkoljuk a kereséshez.
+     *
+     * A maszk pontosan ugyanakkora hosszúságú, mint az eredeti
+     * script, ezért az offsetek továbbra is az eredeti HTML-re
+     * mutatnak.
      */
-/*
- * A valódi HTML TD-ket keressük.
- *
- * A Honda HTML-ben a <script> blokkok JavaScript stringként
- * HTML tageket is tartalmazhatnak. Ezeket a keresésből
- * ideiglenesen maszkoljuk, de az eredeti $html változatlan marad.
- *
- * A maszk ugyanakkora hosszúságú, mint az eredeti script,
- * ezért az offsetek továbbra is pontosan az eredeti HTML-re mutatnak.
- */
-$scanHtml = preg_replace_callback(
-    '#<script\b[^>]*>.*?</script\s*>#is',
-    function ($match) {
-        return str_repeat(' ', strlen($match[0]));
-    },
-    $html
-);
+    $scanHtml = preg_replace_callback(
+        '#<script\b[^>]*>.*?</script\s*>#is',
+        function ($match) {
+            return str_repeat(' ', strlen($match[0]));
+        },
+        $html
+    );
 
-preg_match_all(
-    '#<td\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\bViewerTD\b[^"\']*\1[^>]*>#is',
-    $scanHtml,
-    $tdMatches,
-    PREG_OFFSET_CAPTURE
-);
+    if ($scanHtml === null) {
+        return $html;
+    }
+
+    /*
+     * Minden ViewerTD nyitó tagjét megkeressük.
+     */
+    preg_match_all(
+        '#<td\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\bViewerTD\b[^"\']*\1[^>]*>#is',
+        $scanHtml,
+        $tdMatches,
+        PREG_OFFSET_CAPTURE
+    );
 
     if (empty($tdMatches[0])) {
         return $html;
     }
 
-    $result = '';
-    $lastPosition = 0;
+    /*
+     * A módosításokat összegyűjtjük.
+     *
+     * Fontos: nem építjük újra az egész HTML-t.
+     * Csak a konkrét <td> nyitó tagjét fogjuk lecserélni.
+     */
+    $replacements = [];
 
     foreach ($tdMatches[0] as $tdMatch) {
 
         $tdOpenTag = $tdMatch[0];
         $tdStart   = $tdMatch[1];
-        
-        if ($tdStart < $lastPosition) {
-        continue;
-    }
-
-        /*
-         * A TD előtti rész változatlanul kerül át.
-         */
-        $result .= substr(
-            $html,
-            $lastPosition,
-            $tdStart - $lastPosition
-        );
-
-        /*
-         * A TD nyitó tag vége.
-         */
         $tdOpenEnd = $tdStart + strlen($tdOpenTag);
 
-/*
- * A hozzá tartozó </td> keresése.
- *
- * FONTOS:
- * A keresést a maszkolt HTML-ben végezzük, hogy a
- * JavaScript stringekben található HTML tagek ne zavarják meg
- * a TD határainak meghatározását.
- */
-$tdClose = stripos($scanHtml, '</td', $tdOpenEnd);
+        /*
+         * Megkeressük a TD lezárását a maszkolt HTML-ben.
+         */
+        $tdClose = stripos(
+            $scanHtml,
+            '</td',
+            $tdOpenEnd
+        );
 
-if ($tdClose === false) {
-    $result .= substr($html, $tdStart);
-    $lastPosition = strlen($html);
-    break;
-}
-
-$tdCloseEnd = strpos($scanHtml, '>', $tdClose);
-
-if ($tdCloseEnd === false) {
-    $result .= substr($html, $tdStart);
-    $lastPosition = strlen($html);
-    break;
-}
+        if ($tdClose === false) {
+            continue;
+        }
 
         /*
-         * A TD belső tartalma.
+         * A TD teljes belső tartalma az eredeti HTML-ből.
          */
         $content = substr(
             $html,
             $tdOpenEnd,
             $tdClose - $tdOpenEnd
         );
-        
 
         /*
-         * Ha nincs benne VML v:group, akkor változatlanul hagyjuk.
+         * Csak VML-t tartalmazó TD érdekel minket.
          */
-        $vmlStart = stripos($content, '<v:group');
+        $vmlStart = stripos(
+            $content,
+            '<v:group'
+        );
 
         if ($vmlStart === false) {
-
-            $result .= substr(
-                $html,
-                $tdStart,
-                $tdCloseEnd + 1 - $tdStart
-            );
-
-            $lastPosition = $tdCloseEnd + 1;
             continue;
         }
 
         /*
-         * A Honda HTML-ben a v:group egy JavaScript stringben van,
-         * például:
+         * A Honda VML-ben a style attribútum escaped quote-okkal
+         * szerepel:
          *
-         * write("<v:group ... style=\"position:relative;
-         * width:475px; height:144px;\" ...>");
-         *
-         * Ezért a style=\" kezdetet egyszerű stringkereséssel
-         * keressük meg.
+         * style=\"position:relative; width:475px; height:144px;\"
          */
         $styleStart = stripos(
             $content,
@@ -455,22 +417,11 @@ if ($tdCloseEnd === false) {
         );
 
         if ($styleStart === false) {
-
-            $result .= substr(
-                $html,
-                $tdStart,
-                $tdCloseEnd + 1 - $tdStart
-            );
-
-            $lastPosition = $tdCloseEnd + 1;
             continue;
         }
 
         $styleStart += strlen('style=\"');
 
-        /*
-         * A JavaScript stringben a style végét szintén \" jelzi.
-         */
         $styleEnd = strpos(
             $content,
             '\"',
@@ -478,14 +429,6 @@ if ($tdCloseEnd === false) {
         );
 
         if ($styleEnd === false) {
-
-            $result .= substr(
-                $html,
-                $tdStart,
-                $tdCloseEnd + 1 - $tdStart
-            );
-
-            $lastPosition = $tdCloseEnd + 1;
             continue;
         }
 
@@ -496,94 +439,58 @@ if ($tdCloseEnd === false) {
         );
 
         /*
-         * Width kiolvasása.
+         * Width.
          */
         if (!preg_match(
             '#\bwidth\s*:\s*(\d+(?:\.\d+)?)px\b#i',
             $groupStyle,
             $widthMatch
         )) {
-
-            $result .= substr(
-                $html,
-                $tdStart,
-                $tdCloseEnd + 1 - $tdStart
-            );
-
-            $lastPosition = $tdCloseEnd + 1;
             continue;
         }
 
         /*
-         * Height kiolvasása.
+         * Height.
          */
         if (!preg_match(
             '#\bheight\s*:\s*(\d+(?:\.\d+)?)px\b#i',
             $groupStyle,
             $heightMatch
         )) {
-
-            $result .= substr(
-                $html,
-                $tdStart,
-                $tdCloseEnd + 1 - $tdStart
-            );
-
-            $lastPosition = $tdCloseEnd + 1;
             continue;
         }
 
         $width  = (float)$widthMatch[1];
         $height = (float)$heightMatch[1] + $VML_TD_HEIGHT_EXTRA;
-        
-                if ($vmlDebugCount < 5) {
-            file_put_contents(
-                __DIR__ . '/vml-debug.txt',
-                "VML #{$vmlDebugCount}\n"
-                . "groupStyle: [" . $groupStyle . "]\n"
-                . "width: [" . $width . "]\n"
-                . "height: [" . $height . "]\n"
-                . "----------------\n",
-                FILE_APPEND
-            );
-
-            $vmlDebugCount++;
-        }
 
         if ($width <= 0 || $height <= 0) {
-
-            $result .= substr(
-                $html,
-                $tdStart,
-                $tdCloseEnd + 1 - $tdStart
-            );
-
-            $lastPosition = $tdCloseEnd + 1;
             continue;
         }
 
+        $widthValue = rtrim(
+            rtrim((string)$width, '0'),
+            '.'
+        );
+
+        $heightValue = rtrim(
+            rtrim((string)$height, '0'),
+            '.'
+        );
+
         /*
-         * A TD eredeti style attribútumát módosítjuk.
+         * Van már style attribútum?
          */
         if (preg_match(
             '#\bstyle\s*=\s*(["\'])(.*?)\1#is',
             $tdOpenTag,
             $styleMatch
         )) {
-        file_put_contents(
-    __DIR__ . '/vml-debug.txt',
-    "STYLE TD:\n"
-    . $tdOpenTag
-    . "\n"
-    . "----------------\n",
-    FILE_APPEND
-);
 
             $quote = $styleMatch[1];
             $style = $styleMatch[2];
 
             /*
-             * Esetleges korábbi width / height eltávolítása.
+             * Korábbi width / height eltávolítása.
              */
             $style = preg_replace(
                 '#(?:^|;)\s*width\s*:\s*[^;]+;?#i',
@@ -603,21 +510,11 @@ if ($tdCloseEnd === false) {
                 $style .= ';';
             }
 
-            $style .= ' width:'
-                . rtrim(rtrim((string)$width, '0'), '.')
-                . 'px;';
+            $style .=
+                ' width:' . $widthValue . 'px;';
 
-            $style .= ' height:'
-                . rtrim(rtrim((string)$height, '0'), '.')
-                . 'px;';
-                
-                file_put_contents(
-    __DIR__ . '/vml-debug.txt',
-    "FINAL STYLE:\n"
-    . $style
-    . "\n----------------\n",
-    FILE_APPEND
-);
+            $style .=
+                ' height:' . $heightValue . 'px;';
 
             $newTdOpenTag = preg_replace(
                 '#\bstyle\s*=\s*(["\']).*?\1#is',
@@ -626,73 +523,59 @@ if ($tdCloseEnd === false) {
                 1
             );
 
-file_put_contents(
-    __DIR__ . '/vml-debug.txt',
-    "ORIGINAL TD:\n"
-    . $tdOpenTag
-    . "\n"
-    . "NEW TD:\n"
-    . $newTdOpenTag
-    . "\n"
-    . "VML CONTENT MARKER:\n"
-    . substr($content, $vmlStart, 180)
-    . "\n"
-    . "================\n",
-    FILE_APPEND
-);
-
         } else {
 
+            /*
+             * Nincs style attribútum.
+             */
             $newTdOpenTag =
                 substr($tdOpenTag, 0, -1)
                 . ' style="width:'
-                . rtrim(rtrim((string)$width, '0'), '.')
+                . $widthValue
                 . 'px;height:'
-                . rtrim(rtrim((string)$height, '0'), '.')
+                . $heightValue
                 . 'px;">';
-                
-                file_put_contents(
-    __DIR__ . '/vml-debug.txt',
-    "NEW TD - NO STYLE:\n"
-    . $newTdOpenTag
-    . "\n----------------\n",
-    FILE_APPEND
-);
         }
 
         /*
-         * Az új TD nyitó tag.
+         * Biztonsági ellenőrzés.
          */
-        $result .= $newTdOpenTag;
+        if (
+            !is_string($newTdOpenTag) ||
+            $newTdOpenTag === $tdOpenTag
+        ) {
+            continue;
+        }
 
         /*
-         * A TD belső tartalma teljesen változatlan marad.
+         * Csak ezt az egy nyitó TD taget cseréljük.
          */
-        $result .= $content;
-
-        /*
-         * Az eredeti </td> változatlan marad.
-         */
-        $result .= substr(
-            $html,
-            $tdClose,
-            $tdCloseEnd + 1 - $tdClose
-        );
-
-        $lastPosition = $tdCloseEnd + 1;
+        $replacements[] = [
+            'start' => $tdStart,
+            'length' => strlen($tdOpenTag),
+            'replacement' => $newTdOpenTag
+        ];
     }
 
     /*
-     * A HTML hátralévő része.
+     * Hátulról előre végrehajtjuk a cseréket.
+     *
+     * Így az egyik csere sem módosítja a következő TD
+     * pozícióját.
      */
-    if ($lastPosition < strlen($html)) {
-        $result .= substr($html, $lastPosition);
+    for ($i = count($replacements) - 1; $i >= 0; $i--) {
+
+        $replacement = $replacements[$i];
+
+        $html = substr_replace(
+            $html,
+            $replacement['replacement'],
+            $replacement['start'],
+            $replacement['length']
+        );
     }
-file_put_contents(
-    __DIR__ . '/vml-result-check.html',
-    $result
-);
-    return $result;
+
+    return $html;
 }
 
 function addIframeHead(string $html): string
@@ -924,7 +807,7 @@ file_put_contents(
     $html
 );
 
-/*
+
 if ($isWiringDiagram) {
     $html = movePositionedLabelsUp($html, WIRING_LABEL_OFFSET);
 }
@@ -932,7 +815,7 @@ if ($isWiringDiagram) {
 if ($isZoom) {
     $html = movePositionedLabelsUp($html, ZOOM_LABEL_OFFSET);
 }
-*/
+
 
 /*
 $html = addIframeHead($html);
