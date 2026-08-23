@@ -332,12 +332,30 @@ function fixHondaVmlTableCellSizes(string $html): string
     /*
      * Csak a ViewerTD nyitó tageket keressük meg.
      */
-    preg_match_all(
-        '#<td\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\bViewerTD\b[^"\']*\1[^>]*>#is',
-        $html,
-        $tdMatches,
-        PREG_OFFSET_CAPTURE
-    );
+/*
+ * A valódi HTML TD-ket keressük.
+ *
+ * A Honda HTML-ben a <script> blokkok JavaScript stringként
+ * HTML tageket is tartalmazhatnak. Ezeket a keresésből
+ * ideiglenesen maszkoljuk, de az eredeti $html változatlan marad.
+ *
+ * A maszk ugyanakkora hosszúságú, mint az eredeti script,
+ * ezért az offsetek továbbra is pontosan az eredeti HTML-re mutatnak.
+ */
+$scanHtml = preg_replace_callback(
+    '#<script\b[^>]*>.*?</script\s*>#is',
+    function ($match) {
+        return str_repeat(' ', strlen($match[0]));
+    },
+    $html
+);
+
+preg_match_all(
+    '#<td\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\bViewerTD\b[^"\']*\1[^>]*>#is',
+    $scanHtml,
+    $tdMatches,
+    PREG_OFFSET_CAPTURE
+);
 
     if (empty($tdMatches[0])) {
         return $html;
@@ -607,6 +625,9 @@ file_put_contents(
     . "NEW TD:\n"
     . $newTdOpenTag
     . "\n"
+    . "VML CONTENT MARKER:\n"
+    . substr($content, $vmlStart, 180)
+    . "\n"
     . "================\n",
     FILE_APPEND
 );
@@ -848,6 +869,22 @@ $html = loadAndInlineHondaScripts($html, $jsDir, $type, $year);
 
 $html = fixHondaVmlTableCellSizes($html);
 
+$test = preg_match(
+    '#<td\b(?=[^>]*class\s*=\s*(["\'])[^"\']*\bViewerTD\b[^"\']*\1)(?=[^>]*colspan\s*=\s*(["\'])5\2)[^>]*width\s*:\s*475px[^>]*height\s*:\s*164px[^>]*>#is',
+    $html,
+    $testMatch
+);
+
+file_put_contents(
+    __DIR__ . '/vml-debug.txt',
+    "AFTER FIX - TARGET 475x164: "
+    . ($test ? "MEGTALÁLHATÓ" : "NEM TALÁLHATÓ")
+    . "\n"
+    . ($test ? $testMatch[0] : '')
+    . "\n================\n",
+    FILE_APPEND
+);
+
 file_put_contents(
     __DIR__ . '/after-vml.html',
     $html
@@ -866,7 +903,6 @@ if ($isZoom) {
 /*
 $html = addIframeHead($html);
 */
-
 if (!$isWiringDiagram && !$isZoom) {
     $html = addNormalIframeResizeScript($html);
 } elseif ($isWiringDiagram) {
