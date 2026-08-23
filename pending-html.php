@@ -387,24 +387,29 @@ preg_match_all(
          */
         $tdOpenEnd = $tdStart + strlen($tdOpenTag);
 
-        /*
-         * A hozzá tartozó </td> keresése.
-         */
-        $tdClose = stripos($html, '</td', $tdOpenEnd);
+/*
+ * A hozzá tartozó </td> keresése.
+ *
+ * FONTOS:
+ * A keresést a maszkolt HTML-ben végezzük, hogy a
+ * JavaScript stringekben található HTML tagek ne zavarják meg
+ * a TD határainak meghatározását.
+ */
+$tdClose = stripos($scanHtml, '</td', $tdOpenEnd);
 
-        if ($tdClose === false) {
-            $result .= substr($html, $tdStart);
-            $lastPosition = strlen($html);
-            break;
-        }
+if ($tdClose === false) {
+    $result .= substr($html, $tdStart);
+    $lastPosition = strlen($html);
+    break;
+}
 
-        $tdCloseEnd = strpos($html, '>', $tdClose);
+$tdCloseEnd = strpos($scanHtml, '>', $tdClose);
 
-        if ($tdCloseEnd === false) {
-            $result .= substr($html, $tdStart);
-            $lastPosition = strlen($html);
-            break;
-        }
+if ($tdCloseEnd === false) {
+    $result .= substr($html, $tdStart);
+    $lastPosition = strlen($html);
+    break;
+}
 
         /*
          * A TD belső tartalma.
@@ -683,7 +688,10 @@ file_put_contents(
     if ($lastPosition < strlen($html)) {
         $result .= substr($html, $lastPosition);
     }
-
+file_put_contents(
+    __DIR__ . '/vml-result-check.html',
+    $result
+);
     return $result;
 }
 
@@ -872,6 +880,28 @@ $html = removeHondaButtons($html);
 $html = loadAndInlineHondaScripts($html, $jsDir, $type, $year);
 
 $html = fixHondaVmlTableCellSizes($html);
+
+if (stripos($fragment, 'colspan="5"') !== false) {
+
+    $pos = stripos(
+        $fragment,
+        '<td class="ViewerTD" colspan="5"'
+    );
+
+    if ($pos !== false) {
+
+        $end = stripos($fragment, '>', $pos);
+
+        file_put_contents(
+            __DIR__ . '/test/vml-debug.txt',
+            "FILE: " . $filename . "\n"
+            . "AFTER prepareIframeDocument:\n"
+            . substr($fragment, $pos, $end - $pos + 1)
+            . "\n================\n",
+            FILE_APPEND
+        );
+    }
+}
 
 $test = preg_match(
     '#<td\b(?=[^>]*class\s*=\s*(["\'])[^"\']*\bViewerTD\b[^"\']*\1)(?=[^>]*colspan\s*=\s*(["\'])5\2)[^>]*width\s*:\s*475px[^>]*height\s*:\s*164px[^>]*>#is',
