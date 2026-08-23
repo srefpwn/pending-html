@@ -582,8 +582,6 @@ function addIframeHead(string $html): string
 {
     $base = '<base target="_top">';
     
-    $viewerCss = '<link rel="stylesheet" href="/manual/css/ViewerStyle.css">';
-    $viewerCss = '<link rel="stylesheet" href="/manual/css/ESMCONTS.CSS">';
 
     $css = <<<'CSS'
 <style>
@@ -764,48 +762,8 @@ $html = loadAndInlineHondaScripts($html, $jsDir, $type, $year);
 
 $html = fixHondaVmlTableCellSizes($html);
 
-if (stripos($fragment, 'colspan="5"') !== false) {
 
-    $pos = stripos(
-        $fragment,
-        '<td class="ViewerTD" colspan="5"'
-    );
 
-    if ($pos !== false) {
-
-        $end = stripos($fragment, '>', $pos);
-
-        file_put_contents(
-            __DIR__ . '/test/vml-debug.txt',
-            "FILE: " . $filename . "\n"
-            . "AFTER prepareIframeDocument:\n"
-            . substr($fragment, $pos, $end - $pos + 1)
-            . "\n================\n",
-            FILE_APPEND
-        );
-    }
-}
-
-$test = preg_match(
-    '#<td\b(?=[^>]*class\s*=\s*(["\'])[^"\']*\bViewerTD\b[^"\']*\1)(?=[^>]*colspan\s*=\s*(["\'])5\2)[^>]*width\s*:\s*475px[^>]*height\s*:\s*164px[^>]*>#is',
-    $html,
-    $testMatch
-);
-
-file_put_contents(
-    __DIR__ . '/vml-debug.txt',
-    "AFTER FIX - TARGET 475x164: "
-    . ($test ? "MEGTALÁLHATÓ" : "NEM TALÁLHATÓ")
-    . "\n"
-    . ($test ? $testMatch[0] : '')
-    . "\n================\n",
-    FILE_APPEND
-);
-
-file_put_contents(
-    __DIR__ . '/after-vml.html',
-    $html
-);
 
 
 if ($isWiringDiagram) {
