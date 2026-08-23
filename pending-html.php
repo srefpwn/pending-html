@@ -89,18 +89,40 @@ function convertManualLinks(
     int $year,
     ?int $carId = null
 ): string {
-    $html = preg_replace_callback(
-        '#javascript\s*:\s*CtsProc\s*\(\s*[\'\"]([^\'\"]*)[\'\"]\s*,\s*[\'\"]([^\'\"]+)[\'\"]\s*,\s*[\'\"]([^\'\"]*)[\'\"]\s*\)\s*;?#i',
-        function ($match) use ($type, $year, $carId) {
-            $targetId = trim($match[2]);
 
-            $url = '/manual/view.php'
+    /*
+     * CtsProc linkek átalakítása
+     */
+    $html = preg_replace_callback(
+        '#javascript\s*:\s*CtsProc\s*\(\s*[\'"]([^\'"]*)[\'"]\s*,\s*[\'"]([^\'"]+)[\'"]\s*,\s*[\'"]([^\'"]*)[\'"]\s*\)\s*;?#i',
+        function ($match) use ($type, $year, $carId) {
+
+            $targetId = trim($match[2]);
+            $anc      = trim($match[3]);
+
+            $url =
+                '/manual/view.php'
                 . '?type=' . rawurlencode($type)
                 . '&year=' . rawurlencode((string)$year)
                 . '&id=' . rawurlencode($targetId);
 
+            /*
+             * Ha van Anc paraméter,
+             * továbbadjuk anc-ként a view.php számára.
+             */
+            if ($anc !== '') {
+                $url .=
+                    '&anc='
+                    . rawurlencode($anc);
+            }
+
+            /*
+             * Aktuális autó.
+             */
             if ($carId !== null) {
-                $url .= '&car=' . rawurlencode((string)$carId);
+                $url .=
+                    '&car='
+                    . rawurlencode((string)$carId);
             }
 
             return $url;
@@ -108,18 +130,42 @@ function convertManualLinks(
         $html
     );
 
-    $html = preg_replace_callback(
-        '#javascript\s*:\s*PrtProc\s*\(\s*[\'\"]([^\'\"]*)[\'\"]\s*,\s*[\'\"]([^\'\"]+)[\'\"](?:\s*,\s*[\'\"]([^\'\"]*)[\'\"])?\s*\)\s*;?#i',
-        function ($match) use ($type, $year, $carId) {
-            $targetId = trim($match[2]);
 
-            $url = '/manual/view.php'
+    /*
+     * PrtProc linkek átalakítása
+     */
+    $html = preg_replace_callback(
+        '#javascript\s*:\s*PrtProc\s*\(\s*[\'"]([^\'"]*)[\'"]\s*,\s*[\'"]([^\'"]+)[\'"](?:\s*,\s*[\'"]([^\'"]*)[\'"])?\s*\)\s*;?#i',
+        function ($match) use ($type, $year, $carId) {
+
+            $targetId = trim($match[2]);
+            $anc      = isset($match[3])
+                ? trim($match[3])
+                : '';
+
+            $url =
+                '/manual/view.php'
                 . '?type=' . rawurlencode($type)
                 . '&year=' . rawurlencode((string)$year)
                 . '&id=' . rawurlencode($targetId);
 
+            /*
+             * Ha van Anc paraméter,
+             * továbbadjuk anc-ként.
+             */
+            if ($anc !== '') {
+                $url .=
+                    '&anc='
+                    . rawurlencode($anc);
+            }
+
+            /*
+             * Aktuális autó.
+             */
             if ($carId !== null) {
-                $url .= '&car=' . rawurlencode((string)$carId);
+                $url .=
+                    '&car='
+                    . rawurlencode((string)$carId);
             }
 
             return $url;
@@ -129,7 +175,6 @@ function convertManualLinks(
 
     return $html;
 }
-
 
 
 function convertJmpLinks(string $html): string
@@ -683,5 +728,3 @@ echo '<h3>Feldolgozás kész</h3>';
 echo '<p>Sikeres: ' . $processed . '</p>';
 echo '<p>Kihagyva: ' . $skipped . '</p>';
 echo '<p>Hibás: ' . $errors . '</p>';
-
-
