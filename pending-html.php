@@ -321,109 +321,255 @@ function fixHondaVmlTableCellSizes(string $html): string
      * v:group mérete nem mindig vesz részt megfelelően a TD
      * magasságának kiszámításában.
      *
-     * Ezért a scriptet tartalmazó TD-nek explicit méretet adunk.
+     * Ezért a VML-grafikát tartalmazó TD-nek explicit méretet adunk.
      *
      * A height értékhez 20 px biztonsági ráhagyást használunk.
      */
-    const VML_TD_HEIGHT_EXTRA = 20;
+    $VML_TD_HEIGHT_EXTRA = 20;
 
-    return preg_replace_callback(
-        '#<td\b(?P<attrs>[^>]*)>'
-        . '(?:(?!<td\b|</td\b).)*?'
-        . '<script\b[^>]*>.*?'
-        . '<v:group\b[^>]*\bstyle\s*=\\(?P<quote>["\'])'
-        . '(?P<groupStyle>.*?)'
-        . '\\(?P=quote)'
-        . '#is',
-        function ($match) use (VML_TD_HEIGHT_EXTRA) {
-
-            $groupStyle = $match['groupStyle'];
-
-            /*
-             * A v:group saját width / height értéke.
-             */
-            if (!preg_match(
-                '#\bwidth\s*:\s*(\d+(?:\.\d+)?)px\b#i',
-                $groupStyle,
-                $widthMatch
-            )) {
-                return $match[0];
-            }
-
-            if (!preg_match(
-                '#\bheight\s*:\s*(\d+(?:\.\d+)?)px\b#i',
-                $groupStyle,
-                $heightMatch
-            )) {
-                return $match[0];
-            }
-
-            $width  = (float)$widthMatch[1];
-            $height = (float)$heightMatch[1] + VML_TD_HEIGHT_EXTRA;
-
-            if ($width <= 0 || $height <= 0) {
-                return $match[0];
-            }
-
-            $attrs = $match['attrs'];
-
-            /*
-             * Megnézzük, van-e már style attribútum a TD-n.
-             */
-            if (preg_match(
-                '#\bstyle\s*=\s*(["\'])(.*?)\1#is',
-                $attrs,
-                $styleMatch
-            )) {
-                $quote = $styleMatch[1];
-                $style = $styleMatch[2];
-
-                /*
-                 * A TD korábbi width / height értékeit eltávolítjuk,
-                 * hogy ne maradjon egymásnak ellentmondó CSS.
-                 */
-                $style = preg_replace(
-                    '#(?:^|;)\s*width\s*:\s*[^;]+;?#i',
-                    '',
-                    $style
-                );
-
-                $style = preg_replace(
-                    '#(?:^|;)\s*height\s*:\s*[^;]+;?#i',
-                    '',
-                    $style
-                );
-
-                $style = trim($style);
-
-                if ($style !== '' && substr($style, -1) !== ';') {
-                    $style .= ';';
-                }
-
-                $style .= ' width:' . rtrim(rtrim((string)$width, '0'), '.') . 'px;';
-                $style .= ' height:' . rtrim(rtrim((string)$height, '0'), '.') . 'px;';
-
-                $newAttrs = preg_replace(
-                    '#\bstyle\s*=\s*(["\']).*?\1#is',
-                    'style=' . $quote . $style . $quote,
-                    $attrs,
-                    1
-                );
-            } else {
-                $newAttrs =
-                    $attrs
-                    . ' style="width:'
-                    . rtrim(rtrim((string)$width, '0'), '.')
-                    . 'px;height:'
-                    . rtrim(rtrim((string)$height, '0'), '.')
-                    . 'px;"';
-            }
-
-            return '<td' . $newAttrs . '>'
-                . substr($match[0], strlen('<td' . $attrs . '>'));
-        },
-        $html
+    /*
+     * Először csak a ViewerTD nyitó tageket keressük meg.
+     */
+    preg_match_all(
+        '#<td\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\bViewerTD\b[^"\']*\1[^>]*>#is',
+        $html,
+        $tdMatches,
+        PREG_OFFSET_CAPTURE
     );
+
+    if (empty($tdMatches[0])) {
+        return $html;
+    }
+
+    $result = '';
+    $lastPosition = 0;
+
+    foreach ($tdMatches[0] as $tdMatch) {
+
+        $tdOpenTag = $tdMatch[0];
+        $tdStart   = $tdMatch[1];
+
+        /*
+         * A TD előtti rész változatlanul kerül át.
+         */
+        $result .= substr(
+            $html,
+            $lastPosition,
+            $tdStart - $lastPosition
+        );
+
+        /*
+         * A nyitó TD tag vége.
+         */
+        $tdOpenEnd = $tdStart + strlen($tdOpenTag);
+
+        /*
+         * A hozzá tartozó </td> keresése.
+         */
+        $tdClose = stripos($html, '</td', $tdOpenEnd);
+
+        if ($tdClose === false) {
+            /*
+             * Hibás / hiányos HTML esetén ne módosítsunk semmit.
+             */
+            $result .= substr($html, $tdStart);
+            $lastPosition = strlen($html);
+            break;
+        }
+
+        $tdCloseEnd = strpos($html, '>', $tdClose);
+
+        if ($tdCloseEnd === false) {
+            $result .= substr($html, $tdStart);
+            $lastPosition = strlen($html);
+            break;
+        }
+
+        /*
+         * A TD tartalma.
+         */
+        $content = substr(
+            $html,
+            $tdOpenEnd,
+            $tdClose - $tdOpenEnd
+        );
+
+        /*
+         * Ha nincs benne v:group, akkor a TD teljesen változatlan.
+         */
+        if (stripos($content, '<v:group') === false) {
+
+            $result .= substr(
+                $html,
+                $tdStart,
+                $tdCloseEnd + 1 - $tdStart
+            );
+
+            $lastPosition = $tdCloseEnd + 1;
+            continue;
+        }
+
+        /*
+         * Megkeressük a v:group style attribútumát.
+         *
+         * A Honda HTML-ben ez JavaScript stringben van:
+         *
+         * style=\"position:relative; width:475px; height:144px;\"
+         */
+        if (!preg_match(
+            '#<v:group\b[^>]*\bstyle\s*=\s*\\?["\'](.*?)\\?["\']#is',
+            $content,
+            $groupMatch
+        )) {
+            $result .= substr(
+                $html,
+                $tdStart,
+                $tdCloseEnd + 1 - $tdStart
+            );
+
+            $lastPosition = $tdCloseEnd + 1;
+            continue;
+        }
+
+        $groupStyle = $groupMatch[1];
+
+        /*
+         * Width.
+         */
+        if (!preg_match(
+            '#\bwidth\s*:\s*(\d+(?:\.\d+)?)px\b#i',
+            $groupStyle,
+            $widthMatch
+        )) {
+            $result .= substr(
+                $html,
+                $tdStart,
+                $tdCloseEnd + 1 - $tdStart
+            );
+
+            $lastPosition = $tdCloseEnd + 1;
+            continue;
+        }
+
+        /*
+         * Height.
+         */
+        if (!preg_match(
+            '#\bheight\s*:\s*(\d+(?:\.\d+)?)px\b#i',
+            $groupStyle,
+            $heightMatch
+        )) {
+            $result .= substr(
+                $html,
+                $tdStart,
+                $tdCloseEnd + 1 - $tdStart
+            );
+
+            $lastPosition = $tdCloseEnd + 1;
+            continue;
+        }
+
+        $width  = (float)$widthMatch[1];
+        $height = (float)$heightMatch[1] + $VML_TD_HEIGHT_EXTRA;
+
+        if ($width <= 0 || $height <= 0) {
+            $result .= substr(
+                $html,
+                $tdStart,
+                $tdCloseEnd + 1 - $tdStart
+            );
+
+            $lastPosition = $tdCloseEnd + 1;
+            continue;
+        }
+
+        /*
+         * A TD eredeti style attribútumát módosítjuk.
+         */
+        if (preg_match(
+            '#\bstyle\s*=\s*(["\'])(.*?)\1#is',
+            $tdOpenTag,
+            $styleMatch
+        )) {
+            $quote = $styleMatch[1];
+            $style = $styleMatch[2];
+
+            /*
+             * Esetleges korábbi width / height eltávolítása.
+             */
+            $style = preg_replace(
+                '#(?:^|;)\s*width\s*:\s*[^;]+;?#i',
+                '',
+                $style
+            );
+
+            $style = preg_replace(
+                '#(?:^|;)\s*height\s*:\s*[^;]+;?#i',
+                '',
+                $style
+            );
+
+            $style = trim($style);
+
+            if ($style !== '' && substr($style, -1) !== ';') {
+                $style .= ';';
+            }
+
+            $style .= ' width:'
+                . rtrim(rtrim((string)$width, '0'), '.')
+                . 'px;';
+
+            $style .= ' height:'
+                . rtrim(rtrim((string)$height, '0'), '.')
+                . 'px;';
+
+            $newTdOpenTag = preg_replace(
+                '#\bstyle\s*=\s*(["\']).*?\1#is',
+                'style=' . $quote . $style . $quote,
+                $tdOpenTag,
+                1
+            );
+        } else {
+
+            $newTdOpenTag =
+                substr($tdOpenTag, 0, -1)
+                . ' style="width:'
+                . rtrim(rtrim((string)$width, '0'), '.')
+                . 'px;height:'
+                . rtrim(rtrim((string)$height, '0'), '.')
+                . 'px;">';
+        }
+
+        /*
+         * Az új TD nyitó tag.
+         */
+        $result .= $newTdOpenTag;
+
+        /*
+         * A TD teljes belseje változatlan.
+         */
+        $result .= $content;
+
+        /*
+         * Az eredeti </td> változatlan.
+         */
+        $result .= substr(
+            $html,
+            $tdClose,
+            $tdCloseEnd + 1 - $tdClose
+        );
+
+        $lastPosition = $tdCloseEnd + 1;
+    }
+
+    /*
+     * A HTML hátralévő része.
+     */
+    if ($lastPosition < strlen($html)) {
+        $result .= substr($html, $lastPosition);
+    }
+
+    return $result;
 }
 
 function addIframeHead(string $html): string
