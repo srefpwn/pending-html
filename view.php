@@ -1094,6 +1094,7 @@ padding-left:10px;
 				</td>
 			</tr>
 		</table>
+		<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/bottom.php'; ?>
 		</td>
 	</tr>
 </table>
