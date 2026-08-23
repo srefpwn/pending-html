@@ -313,6 +313,7 @@ function loadAndInlineHondaScripts(
         $html
     );
 }
+
 function fixHondaVmlTableCellSizes(string $html): string
 {
     /*
@@ -328,7 +329,7 @@ function fixHondaVmlTableCellSizes(string $html): string
     $VML_TD_HEIGHT_EXTRA = 20;
 
     /*
-     * Először csak a ViewerTD nyitó tageket keressük meg.
+     * Csak a ViewerTD nyitó tageket keressük meg.
      */
     preg_match_all(
         '#<td\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\bViewerTD\b[^"\']*\1[^>]*>#is',
@@ -359,7 +360,7 @@ function fixHondaVmlTableCellSizes(string $html): string
         );
 
         /*
-         * A nyitó TD tag vége.
+         * A TD nyitó tag vége.
          */
         $tdOpenEnd = $tdStart + strlen($tdOpenTag);
 
@@ -369,9 +370,6 @@ function fixHondaVmlTableCellSizes(string $html): string
         $tdClose = stripos($html, '</td', $tdOpenEnd);
 
         if ($tdClose === false) {
-            /*
-             * Hibás / hiányos HTML esetén ne módosítsunk semmit.
-             */
             $result .= substr($html, $tdStart);
             $lastPosition = strlen($html);
             break;
@@ -386,7 +384,7 @@ function fixHondaVmlTableCellSizes(string $html): string
         }
 
         /*
-         * A TD tartalma.
+         * A TD belső tartalma.
          */
         $content = substr(
             $html,
@@ -395,9 +393,11 @@ function fixHondaVmlTableCellSizes(string $html): string
         );
 
         /*
-         * Ha nincs benne v:group, akkor a TD teljesen változatlan.
+         * Ha nincs benne VML v:group, akkor változatlanul hagyjuk.
          */
-        if (stripos($content, '<v:group') === false) {
+        $vmlStart = stripos($content, '<v:group');
+
+        if ($vmlStart === false) {
 
             $result .= substr(
                 $html,
@@ -410,77 +410,71 @@ function fixHondaVmlTableCellSizes(string $html): string
         }
 
         /*
-         * Megkeressük a v:group style attribútumát.
+         * A Honda HTML-ben a v:group egy JavaScript stringben van,
+         * például:
          *
-         * A Honda HTML-ben ez JavaScript stringben van:
+         * write("<v:group ... style=\"position:relative;
+         * width:475px; height:144px;\" ...>");
          *
-         * style=\"position:relative; width:475px; height:144px;\"
+         * Ezért a style=\" kezdetet egyszerű stringkereséssel
+         * keressük meg.
          */
-$vmlStart = stripos($content, '<v:group');
+        $styleStart = stripos(
+            $content,
+            'style=\"',
+            $vmlStart
+        );
 
-if ($vmlStart === false) {
-    $result .= substr(
-        $html,
-        $tdStart,
-        $tdCloseEnd + 1 - $tdStart
-    );
+        if ($styleStart === false) {
 
-    $lastPosition = $tdCloseEnd + 1;
-    continue;
-}
+            $result .= substr(
+                $html,
+                $tdStart,
+                $tdCloseEnd + 1 - $tdStart
+            );
 
-$styleStart = stripos(
-    $content,
-    'style=\"',
-    $vmlStart
-);
+            $lastPosition = $tdCloseEnd + 1;
+            continue;
+        }
 
-if ($styleStart === false) {
-    $result .= substr(
-        $html,
-        $tdStart,
-        $tdCloseEnd + 1 - $tdStart
-    );
-
-    $lastPosition = $tdCloseEnd + 1;
-    continue;
-}
-
-$styleStart += strlen('style=\"');
-
-$styleEnd = strpos(
-    $content,
-    '\"',
-    $styleStart
-);
-
-if ($styleEnd === false) {
-    $result .= substr(
-        $html,
-        $tdStart,
-        $tdCloseEnd + 1 - $tdStart
-    );
-
-    $lastPosition = $tdCloseEnd + 1;
-    continue;
-}
-
-$groupStyle = substr(
-    $content,
-    $styleStart,
-    $styleEnd - $styleStart
-);
-
-        $groupStyle = $groupMatch[1];
+        $styleStart += strlen('style=\"');
 
         /*
-         * Width.
+         * A JavaScript stringben a style végét szintén \" jelzi.
+         */
+        $styleEnd = strpos(
+            $content,
+            '\"',
+            $styleStart
+        );
+
+        if ($styleEnd === false) {
+
+            $result .= substr(
+                $html,
+                $tdStart,
+                $tdCloseEnd + 1 - $tdStart
+            );
+
+            $lastPosition = $tdCloseEnd + 1;
+            continue;
+        }
+
+        $groupStyle = substr(
+            $content,
+            $styleStart,
+            $styleEnd - $styleStart
+        );
+
+        /*
+         * Width kiolvasása.
          */
         if (!preg_match(
             '#\bwidth\s*:\s*(\d+(?:\.\d+)?)px\b#i',
             $groupStyle,
             $widthMatch
         )) {
+
             $result .= substr(
                 $html,
                 $tdStart,
@@ -492,13 +486,14 @@ $groupStyle = substr(
         }
 
         /*
-         * Height.
+         * Height kiolvasása.
          */
         if (!preg_match(
             '#\bheight\s*:\s*(\d+(?:\.\d+)?)px\b#i',
             $groupStyle,
             $heightMatch
         )) {
+
             $result .= substr(
                 $html,
                 $tdStart,
@@ -513,6 +508,7 @@ $groupStyle = substr(
         $height = (float)$heightMatch[1] + $VML_TD_HEIGHT_EXTRA;
 
         if ($width <= 0 || $height <= 0) {
+
             $result .= substr(
                 $html,
                 $tdStart,
@@ -531,6 +527,7 @@ $groupStyle = substr(
             $tdOpenTag,
             $styleMatch
         )) {
+
             $quote = $styleMatch[1];
             $style = $styleMatch[2];
 
@@ -569,6 +566,7 @@ $groupStyle = substr(
                 $tdOpenTag,
                 1
             );
+
         } else {
 
             $newTdOpenTag =
@@ -586,12 +584,12 @@ $groupStyle = substr(
         $result .= $newTdOpenTag;
 
         /*
-         * A TD teljes belseje változatlan.
+         * A TD belső tartalma teljesen változatlan marad.
          */
         $result .= $content;
 
         /*
-         * Az eredeti </td> változatlan.
+         * Az eredeti </td> változatlan marad.
          */
         $result .= substr(
             $html,
@@ -1030,3 +1028,4 @@ echo '<h3>Feldolgozás kész</h3>';
 echo '<p>Sikeres: ' . $processed . '</p>';
 echo '<p>Kihagyva: ' . $skipped . '</p>';
 echo '<p>Hibás: ' . $errors . '</p>';
+
