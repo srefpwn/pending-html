@@ -81,7 +81,8 @@ if ($id === '') {
  */
 
 $allowedTypes = [
-    'cn1'
+    'cn1',
+    'cl9'
 ];
 
 if (!in_array($type, $allowedTypes, true)) {
