@@ -416,20 +416,60 @@ function fixHondaVmlTableCellSizes(string $html): string
          *
          * style=\"position:relative; width:475px; height:144px;\"
          */
-        if (!preg_match(
-            '#<v:group\b[^>]*\bstyle\s*=\s*\\?["\'](.*?)\\?["\']#is',
-            $content,
-            $groupMatch
-        )) {
-            $result .= substr(
-                $html,
-                $tdStart,
-                $tdCloseEnd + 1 - $tdStart
-            );
+$vmlStart = stripos($content, '<v:group');
 
-            $lastPosition = $tdCloseEnd + 1;
-            continue;
-        }
+if ($vmlStart === false) {
+    $result .= substr(
+        $html,
+        $tdStart,
+        $tdCloseEnd + 1 - $tdStart
+    );
+
+    $lastPosition = $tdCloseEnd + 1;
+    continue;
+}
+
+$styleStart = stripos(
+    $content,
+    'style=\"',
+    $vmlStart
+);
+
+if ($styleStart === false) {
+    $result .= substr(
+        $html,
+        $tdStart,
+        $tdCloseEnd + 1 - $tdStart
+    );
+
+    $lastPosition = $tdCloseEnd + 1;
+    continue;
+}
+
+$styleStart += strlen('style=\"');
+
+$styleEnd = strpos(
+    $content,
+    '\"',
+    $styleStart
+);
+
+if ($styleEnd === false) {
+    $result .= substr(
+        $html,
+        $tdStart,
+        $tdCloseEnd + 1 - $tdStart
+    );
+
+    $lastPosition = $tdCloseEnd + 1;
+    continue;
+}
+
+$groupStyle = substr(
+    $content,
+    $styleStart,
+    $styleEnd - $styleStart
+);
 
         $groupStyle = $groupMatch[1];
 
