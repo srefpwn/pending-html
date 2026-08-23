@@ -598,11 +598,16 @@ function fixHondaVmlTableCellSizes(string $html): string
                 $tdOpenTag,
                 1
             );
-            file_put_contents(
+
+file_put_contents(
     __DIR__ . '/vml-debug.txt',
-    "NEW TD:\n"
+    "ORIGINAL TD:\n"
+    . $tdOpenTag
+    . "\n"
+    . "NEW TD:\n"
     . $newTdOpenTag
-    . "\n----------------\n",
+    . "\n"
+    . "================\n",
     FILE_APPEND
 );
 
@@ -843,6 +848,12 @@ $html = loadAndInlineHondaScripts($html, $jsDir, $type, $year);
 
 $html = fixHondaVmlTableCellSizes($html);
 
+file_put_contents(
+    __DIR__ . '/after-vml.html',
+    $html
+);
+
+/*
 if ($isWiringDiagram) {
     $html = movePositionedLabelsUp($html, WIRING_LABEL_OFFSET);
 }
@@ -850,8 +861,12 @@ if ($isWiringDiagram) {
 if ($isZoom) {
     $html = movePositionedLabelsUp($html, ZOOM_LABEL_OFFSET);
 }
+*/
 
+/*
 $html = addIframeHead($html);
+*/
+
 if (!$isWiringDiagram && !$isZoom) {
     $html = addNormalIframeResizeScript($html);
 } elseif ($isWiringDiagram) {
@@ -1001,7 +1016,23 @@ $fragment = prepareIframeDocument(
     $isWiringDiagram,
     $isZoom
 );
+if (stripos($fragment, '<td class="ViewerTD" colspan="5"') !== false) {
 
+    $pos = stripos(
+        $fragment,
+        '<td class="ViewerTD" colspan="5"'
+    );
+
+    $end = stripos($fragment, '>', $pos);
+
+    file_put_contents(
+        __DIR__ . '/vml-debug.txt',
+        "AFTER prepareIframeDocument:\n"
+        . substr($fragment, $pos, $end - $pos + 1)
+        . "\n================\n",
+        FILE_APPEND
+    );
+}
     if ($fragment === '') {
         $errors++;
         echo '<p>❌ Üres HTML: ' . htmlspecialchars($filename) . '</p>';
@@ -1075,4 +1106,3 @@ echo '<h3>Feldolgozás kész</h3>';
 echo '<p>Sikeres: ' . $processed . '</p>';
 echo '<p>Kihagyva: ' . $skipped . '</p>';
 echo '<p>Hibás: ' . $errors . '</p>';
-
