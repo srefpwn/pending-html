@@ -316,6 +316,7 @@ function loadAndInlineHondaScripts(
 
 function fixHondaVmlTableCellSizes(string $html): string
 {
+ $vmlDebugCount = 0;
     /*
      * A régi Honda VML-grafikákat létrehozó document.write() scriptek
      * bizonyos böngészőkben vizuálisan megjelennek, de a bennük lévő
@@ -391,6 +392,7 @@ function fixHondaVmlTableCellSizes(string $html): string
             $tdOpenEnd,
             $tdClose - $tdOpenEnd
         );
+        
 
         /*
          * Ha nincs benne VML v:group, akkor változatlanul hagyjuk.
@@ -506,6 +508,20 @@ function fixHondaVmlTableCellSizes(string $html): string
 
         $width  = (float)$widthMatch[1];
         $height = (float)$heightMatch[1] + $VML_TD_HEIGHT_EXTRA;
+        
+                if ($vmlDebugCount < 5) {
+            file_put_contents(
+                __DIR__ . '/vml-debug.txt',
+                "VML #{$vmlDebugCount}\n"
+                . "groupStyle: [" . $groupStyle . "]\n"
+                . "width: [" . $width . "]\n"
+                . "height: [" . $height . "]\n"
+                . "----------------\n",
+                FILE_APPEND
+            );
+
+            $vmlDebugCount++;
+        }
 
         if ($width <= 0 || $height <= 0) {
 
@@ -527,6 +543,14 @@ function fixHondaVmlTableCellSizes(string $html): string
             $tdOpenTag,
             $styleMatch
         )) {
+        file_put_contents(
+    __DIR__ . '/vml-debug.txt',
+    "STYLE TD:\n"
+    . $tdOpenTag
+    . "\n"
+    . "----------------\n",
+    FILE_APPEND
+);
 
             $quote = $styleMatch[1];
             $style = $styleMatch[2];
@@ -559,6 +583,14 @@ function fixHondaVmlTableCellSizes(string $html): string
             $style .= ' height:'
                 . rtrim(rtrim((string)$height, '0'), '.')
                 . 'px;';
+                
+                file_put_contents(
+    __DIR__ . '/vml-debug.txt',
+    "FINAL STYLE:\n"
+    . $style
+    . "\n----------------\n",
+    FILE_APPEND
+);
 
             $newTdOpenTag = preg_replace(
                 '#\bstyle\s*=\s*(["\']).*?\1#is',
@@ -566,6 +598,13 @@ function fixHondaVmlTableCellSizes(string $html): string
                 $tdOpenTag,
                 1
             );
+            file_put_contents(
+    __DIR__ . '/vml-debug.txt',
+    "NEW TD:\n"
+    . $newTdOpenTag
+    . "\n----------------\n",
+    FILE_APPEND
+);
 
         } else {
 
@@ -576,6 +615,14 @@ function fixHondaVmlTableCellSizes(string $html): string
                 . 'px;height:'
                 . rtrim(rtrim((string)$height, '0'), '.')
                 . 'px;">';
+                
+                file_put_contents(
+    __DIR__ . '/vml-debug.txt',
+    "NEW TD - NO STYLE:\n"
+    . $newTdOpenTag
+    . "\n----------------\n",
+    FILE_APPEND
+);
         }
 
         /*
