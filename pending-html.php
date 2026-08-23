@@ -368,6 +368,10 @@ preg_match_all(
 
         $tdOpenTag = $tdMatch[0];
         $tdStart   = $tdMatch[1];
+        
+        if ($tdStart < $lastPosition) {
+        continue;
+    }
 
         /*
          * A TD előtti rész változatlanul kerül át.
