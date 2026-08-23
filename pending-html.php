@@ -817,9 +817,9 @@ if ($isZoom) {
 }
 
 
-/*
+
 $html = addIframeHead($html);
-*/
+
 if (!$isWiringDiagram && !$isZoom) {
     $html = addNormalIframeResizeScript($html);
 } elseif ($isWiringDiagram) {
@@ -1059,3 +1059,4 @@ echo '<h3>Feldolgozás kész</h3>';
 echo '<p>Sikeres: ' . $processed . '</p>';
 echo '<p>Kihagyva: ' . $skipped . '</p>';
 echo '<p>Hibás: ' . $errors . '</p>';
+
