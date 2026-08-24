@@ -677,16 +677,8 @@ function fixHondaVmlContainerSizes(string $html): string
             if ($width <= 0 || $height <= 0) {
                 continue;
             }
-
-            $widthValue = rtrim(
-                rtrim((string)$width, '0'),
-                '.'
-            );
-
-            $heightValue = rtrim(
-                rtrim((string)$height, '0'),
-                '.'
-            );
+$widthValue = (string)$width;
+$heightValue = (string)$height;
 
             /*
              * A cél DIV a blokk elején található:
@@ -987,13 +979,48 @@ function createNormalIframe(string $id, bool $isZoom = false): string
     $script = <<<'JS'
 <script>
 (function () {
+
+    var frame = document.getElementById('honda-iframe');
+    if (!frame) return;
+
+    /*
+     * Az iframe eredeti magassága.
+     *
+     * Ez lesz az alsó határ.
+     * Az iframe ennél kisebb soha nem lesz.
+     */
+    var maxHeight = frame.offsetHeight || 200;
+
+    function applyHeight(height) {
+
+        height = Math.ceil(parseFloat(height));
+
+        if (!height || height <= 0) {
+            return;
+        }
+
+        /*
+         * Az iframe csak növekedhet.
+         *
+         * Ha az új érték kisebb vagy egyenlő,
+         * semmit nem csinálunk.
+         */
+        if (height > maxHeight) {
+            maxHeight = height;
+            frame.style.height = maxHeight + 'px';
+        }
+    }
+
     function resize(frame) {
+
         try {
+
             var doc = frame.contentDocument;
             if (!doc) return;
 
             var body = doc.body;
             var html = doc.documentElement;
+
             if (!body || !html) return;
 
             var height = Math.max(
@@ -1003,43 +1030,55 @@ function createNormalIframe(string $id, bool $isZoom = false): string
                 html.offsetHeight
             );
 
-            if (height > 0) {
-                frame.style.height = Math.ceil(height) + 'px';
-            }
+            applyHeight(height);
+
         } catch (e) {}
     }
 
-    var frame = document.getElementById('honda-iframe');
-    if (!frame) return;
-
     frame.addEventListener('load', function () {
+
         resize(frame);
-        setTimeout(function () { resize(frame); }, 100);
-        setTimeout(function () { resize(frame); }, 500);
+
+        setTimeout(function () {
+            resize(frame);
+        }, 100);
+
+        setTimeout(function () {
+            resize(frame);
+        }, 500);
+
     });
 
     window.addEventListener('message', function (event) {
-        if (event.source !== frame.contentWindow) return;
-        if (!event.data || event.data.type !== 'honda-iframe-height') return;
 
-        var height = parseInt(event.data.height, 10);
-        if (height > 0) {
-            frame.style.height = height + 'px';
+        if (event.source !== frame.contentWindow) {
+            return;
         }
+
+        if (
+            !event.data ||
+            event.data.type !== 'honda-iframe-height'
+        ) {
+            return;
+        }
+
+        applyHeight(event.data.height);
+
     });
 
     window.addEventListener('resize', function () {
         resize(frame);
     });
+
 })();
 </script>
 JS;
 
     return '<div class="manual-content-iframe" style="width:100%;margin:0;padding:0;overflow:hidden;">'
-. '<iframe id="honda-iframe" src="/manual/html/'
-. rawurlencode($contentFile)
-. '" style="display:block;width:100%;height:' . ($isZoom ? 'calc(100vh - 100px)' : '200px') . ';border:0;margin:0;padding:0;background:#cccccc;overflow:auto;" frameborder="0" scrolling="' . ($isZoom ? 'yes' : 'no') . '" loading="eager"></iframe>'
-       . ($isZoom ? '' : $script)
+        . '<iframe id="honda-iframe" src="/manual/html/'
+        . rawurlencode($contentFile)
+        . '" style="display:block;width:100%;height:' . ($isZoom ? 'calc(100vh - 100px)' : '200px') . ';border:0;margin:0;padding:0;background:#cccccc;overflow:auto;" frameborder="0" scrolling="' . ($isZoom ? 'yes' : 'no') . '" loading="eager"></iframe>'
+        . ($isZoom ? '' : $script)
         . '</div>';
 }
 
