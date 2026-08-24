@@ -200,7 +200,10 @@ if ($carConfig === null) {
 
 $carName = trim((string)($car['name'] ?? ''));
 $vin = (string)($car['vin'] ?? '');
+$brand = (string)($car['brand'] ?? '');
+$model = (string)($car['model'] ?? '');
 
+$carOptions = $car_catalog[$brand]['models'][$model]['options'] ?? [];
 ?>
                                                             <tr>
                                                                 <td style="padding:0px;background-color:#cccccc;">
@@ -240,7 +243,7 @@ $vin = (string)($car['vin'] ?? '');
                                                                             		<span class="epc-text2"><b>Kivitel: </b></span>
                                                                             		</td>
                                                                             		<td style="height:auto;padding:10px;text-align:right;">
-                                                                            		<span class="epc-text2"><?= htmlspecialchars($car_options['body'][$car['body']] ?? '') ?></span>
+                                                                            		<span class="epc-text2"><?= htmlspecialchars($carOptions['body'][$car['body']] ?? '') ?></span>
                                                                             		</td>
                                                                             	</tr>
                                                                             	<tr>
@@ -248,7 +251,7 @@ $vin = (string)($car['vin'] ?? '');
                                                                             		<span class="epc-text2"><b>Motor: </b></span>
                                                                             		</td>
                                                                             		<td style="height:auto;padding:10px;text-align:right;" class="car-list">
-                                                                            		<span class="epc-text2"><?= htmlspecialchars($car_options['engine'][$car['engine']] ?? '') ?></span>
+                                                                            		<span class="epc-text2"><?= htmlspecialchars($carOptions['engine'][$car['engine']] ?? '') ?></span>
                                                                             		</td>
                                                                             	</tr>
                                                                             	<tr>
@@ -256,7 +259,7 @@ $vin = (string)($car['vin'] ?? '');
                                                                             		<span class="epc-text2"><b>Felszereltség: </b></span>
                                                                             		</td>
                                                                             		<td style="height:auto;padding:10px;text-align:right;">
-                                                                            		<span class="epc-text2"><?= htmlspecialchars($car_options['trim'][$car['trim']] ?? '') ?></span>
+                                                                            		<span class="epc-text2"><?= htmlspecialchars($carOptions['trim'][$car['trim']] ?? '') ?></span>
                                                                             		</td>
                                                                             	</tr>
                                                                             	<tr>
@@ -264,7 +267,7 @@ $vin = (string)($car['vin'] ?? '');
                                                                             		<span class="epc-text2"><b>Szín: </b></span>
                                                                             		</td>
                                                                             		<td style="height:auto;padding:10px;text-align:right;" class="car-list">
-                                                                            		<span class="epc-text2"><?= htmlspecialchars($car_options['color'][$car['color']] ?? '') ?></span>
+                                                                            		<span class="epc-text2"><?= htmlspecialchars($carOptions['color'][$car['color']] ?? '') ?> - <?= htmlspecialchars($car['color'] ?? '') ?></span>
                                                                             		</td>
                                                                             	</tr>
                                                                             </table>
