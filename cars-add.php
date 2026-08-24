@@ -44,32 +44,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         /*
          * Adatok
          */
-        $vin = $_POST['vin'] ?? '';
-        $name = $_POST['name'] ?? '';
+$vin = $_POST['vin'] ?? '';
+$name = $_POST['name'] ?? '';
 
-        $productionYear = $_POST['production_year'] ?? '';
-        $productionMonth = $_POST['production_month'] ?? '';
-        $body = $_POST['body'] ?? '';
-        $engine = $_POST['engine'] ?? '';
-        $trim = $_POST['trim'] ?? '';
-        $color = $_POST['color'] ?? '';
-        $colorCode = $_POST['color_code'] ?? '';
+$brand = $_POST['brand'] ?? '';
+$model = $_POST['model'] ?? '';
+
+$productionYear = $_POST['production_year'] ?? '';
+$body = $_POST['body'] ?? '';
+$engine = $_POST['engine'] ?? '';
+$trim = $_POST['trim'] ?? '';
+$color = $_POST['color'] ?? '';
 
 
         /*
          * Autó hozzáadása
          */
         $result = addUserCar(
-            $vin,
-            $name,
-            $productionYear,
-            $productionMonth,
-            $body,
-            $engine,
-            $trim,
-            $color,
-            $colorCode
-        );
+    $vin,
+    $name,
+    $brand,
+    $model,
+    $productionYear,
+    $body,
+    $engine,
+    $trim,
+    $color
+);
 
 
         /*
