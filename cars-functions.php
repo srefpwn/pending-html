@@ -230,7 +230,6 @@ function addUserCar(
     string $color = ''
 ): array
 {
-    global $car_catalog;
 
     if (!isset($_SESSION['user_id'])) {
         return [
@@ -278,105 +277,17 @@ function addUserCar(
             'message' => 'Az alvázszámnak 17 karakterből kell állnia.'
         ];
     }
+/*
+ * VIN ellenőrzése a támogatott konfigurációk között
+ */
+global $vin_configs;
 
-    /*
-     * Márka ellenőrzése
-     */
-    if ($brand === '' || !isset($car_catalog[$brand])) {
-        return [
-            'success' => false,
-            'message' => 'A kiválasztott márka nem található a katalógusban.'
-        ];
-    }
-
-    /*
-     * Modell ellenőrzése
-     */
-    $modelConfig = $car_catalog[$brand]['models'][$model] ?? null;
-
-    if (!is_array($modelConfig)) {
-        return [
-            'success' => false,
-            'message' => 'A kiválasztott modell nem található a katalógusban.'
-        ];
-    }
-
-    /*
-     * VIN alapján a katalógusmodell meghatározása
-     */
-    $vinModel = findCatalogVinModel($vin);
-
-    if ($vinModel === null) {
-        return [
-            'success' => false,
-            'message' => 'A megadott alvázszám alapján nem sikerült azonosítani a járművet.'
-        ];
-    }
-
-    /*
-     * VIN és kézzel kiválasztott márka/modell egyezésének ellenőrzése
-     */
-    if (
-        $vinModel['brand'] !== $brand ||
-        $vinModel['model'] !== $model
-    ) {
-        return [
-            'success' => false,
-            'message' => 'A megadott alvázszám nem egyezik a kiválasztott márkával és modellel.'
-        ];
-    }
-
-    /*
-     * VIN adatok dekódolása
-     */
-    $vinValues = decodeCatalogVin($vin, $vinModel['config']);
-
-    /*
-     * VIN által meghatározott gyártási év ellenőrzése
-     */
-    if (
-        isset($vinValues['production_year']) &&
-        $productionYear !== $vinValues['production_year']
-    ) {
-        return [
-            'success' => false,
-            'message' => 'A gyártási év nem egyezik a VIN alapján meghatározott évvel.'
-        ];
-    }
-
-    /*
-     * VIN által meghatározott karosszéria ellenőrzése
-     */
-    if (
-        isset($vinValues['body']) &&
-        $body !== $vinValues['body']
-    ) {
-        return [
-            'success' => false,
-            'message' => 'A karosszériatípus nem egyezik a VIN alapján meghatározott értékkel.'
-        ];
-    }
-
-    /*
-     * VIN által meghatározott motor ellenőrzése
-     */
-    if (
-        isset($vinValues['engine']) &&
-        $engine !== $vinValues['engine']
-    ) {
-        return [
-            'success' => false,
-            'message' => 'A motortípus nem egyezik a VIN alapján meghatározott értékkel.'
-        ];
-    }
-
-    /*
-     * A felszereltséget szándékosan nem ellenőrizzük,
-     * mert ezt a felhasználó módosíthatja.
-     *
-     * A színt szintén nem ellenőrizzük,
-     * mert a jelenlegi VIN-rendszer nem határozza meg.
-     */
+if (!isset($vin_configs[$vin])) {
+    return [
+        'success' => false,
+        'message' => 'A megadott alvázszám nem található a támogatott járművek között.'
+    ];
+}
 
     /*
      * Felhasználói adatok betöltése
