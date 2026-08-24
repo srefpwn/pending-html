@@ -102,6 +102,7 @@ function normalizeVin(string $vin): string
  */
 function findCatalogVinModel(string $vin): ?array
 {
+    global $vin_configs;
     global $car_catalog;
 
     $vin = normalizeVin($vin);
@@ -110,7 +111,24 @@ function findCatalogVinModel(string $vin): ?array
         return null;
     }
 
+    /*
+     * 1. A VIN-nek szerepelnie kell a támogatott VIN-ek között.
+     */
+    if (!isset($vin_configs[$vin])) {
+        return null;
+    }
+
+    /*
+     * 2. A támogatott VIN-hez tartozó konfiguráció.
+     */
+    $vinConfig = $vin_configs[$vin];
+
+    /*
+     * 3. Megkeressük a katalógusban azt a modellt,
+     *    amelynek VIN szabályai illenek erre a VIN-re.
+     */
     foreach ($car_catalog as $brandKey => $brandConfig) {
+
         foreach (($brandConfig['models'] ?? []) as $modelKey => $modelConfig) {
 
             $rules = $modelConfig['vin']['rules'] ?? [];
@@ -122,6 +140,7 @@ function findCatalogVinModel(string $vin): ?array
             $matched = true;
 
             foreach ($rules as $rule) {
+
                 $position = (int)($rule['position'] ?? 0) - 1;
                 $length = (int)($rule['length'] ?? 0);
 
@@ -133,23 +152,11 @@ function findCatalogVinModel(string $vin): ?array
 
                 $allowedValues = $rule['values'] ?? [];
 
-                if (!array_key_exists($value, $allowedValues)) {
-                    $matched = false;
-                    break;
-                }
-
                 /*
-                 * Ha a szabály modell vagy márka értéket határoz meg,
-                 * ellenőrizzük, hogy valóban ehhez a katalóguselemhez tartozik.
+                 * Ha a VIN adott része nincs a szabályban,
+                 * akkor ez nem ehhez a modellhez tartozik.
                  */
-                $target = $rule['target'] ?? '';
-
-                if ($target === 'brand' && $allowedValues[$value] !== $brandKey) {
-                    $matched = false;
-                    break;
-                }
-
-                if ($target === 'model' && $allowedValues[$value] !== $modelKey) {
+                if (!array_key_exists($value, $allowedValues)) {
                     $matched = false;
                     break;
                 }
@@ -159,7 +166,8 @@ function findCatalogVinModel(string $vin): ?array
                 return [
                     'brand' => $brandKey,
                     'model' => $modelKey,
-                    'config' => $modelConfig
+                    'config' => $modelConfig,
+                    'vin_config' => $vinConfig
                 ];
             }
         }
