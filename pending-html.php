@@ -590,6 +590,10 @@ html, body {
     padding: 0 !important;
     background: #cccccc;
 }
+A:link {  COLOR: #000;}
+A:active {  COLOR: #000;}
+A:visited { COLOR: #000;}
+A:hover { COLOR: #bb271a; TEXT-DECORATION: underline;}
 
 img {
     max-width: none;
