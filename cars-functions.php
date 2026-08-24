@@ -97,9 +97,12 @@ function normalizeVin(string $vin): string
 /*
  * VIN keresése a konfigurációk között
  */
-function getVinConfig(string $vin): ?array
+/*
+ * VIN alapján katalógusmodell keresése
+ */
+function findCatalogVinModel(string $vin): ?array
 {
-    global $vin_configs;
+    global $car_catalog;
 
     $vin = normalizeVin($vin);
 
@@ -107,13 +110,102 @@ function getVinConfig(string $vin): ?array
         return null;
     }
 
-    if (!isset($vin_configs[$vin])) {
-        return null;
+    foreach ($car_catalog as $brandKey => $brandConfig) {
+        foreach (($brandConfig['models'] ?? []) as $modelKey => $modelConfig) {
+
+            $rules = $modelConfig['vin']['rules'] ?? [];
+
+            if (!is_array($rules) || empty($rules)) {
+                continue;
+            }
+
+            $matched = true;
+
+            foreach ($rules as $rule) {
+                $position = (int)($rule['position'] ?? 0) - 1;
+                $length = (int)($rule['length'] ?? 0);
+
+                if ($position < 0 || $length <= 0) {
+                    continue;
+                }
+
+                $value = substr($vin, $position, $length);
+
+                $allowedValues = $rule['values'] ?? [];
+
+                if (!array_key_exists($value, $allowedValues)) {
+                    $matched = false;
+                    break;
+                }
+
+                /*
+                 * Ha a szabály modell vagy márka értéket határoz meg,
+                 * ellenőrizzük, hogy valóban ehhez a katalóguselemhez tartozik.
+                 */
+                $target = $rule['target'] ?? '';
+
+                if ($target === 'brand' && $allowedValues[$value] !== $brandKey) {
+                    $matched = false;
+                    break;
+                }
+
+                if ($target === 'model' && $allowedValues[$value] !== $modelKey) {
+                    $matched = false;
+                    break;
+                }
+            }
+
+            if ($matched) {
+                return [
+                    'brand' => $brandKey,
+                    'model' => $modelKey,
+                    'config' => $modelConfig
+                ];
+            }
+        }
     }
 
-    return $vin_configs[$vin];
+    return null;
 }
+/*
+ * VIN adatainak dekódolása katalógus szabályok alapján
+ */
+function decodeCatalogVin(string $vin, array $modelConfig): array
+{
+    $vin = normalizeVin($vin);
+    $vinValues = [];
 
+    $rules = $modelConfig['vin']['rules'] ?? [];
+
+    if (!is_array($rules)) {
+        return $vinValues;
+    }
+
+    foreach ($rules as $rule) {
+        $position = (int)($rule['position'] ?? 0) - 1;
+        $length = (int)($rule['length'] ?? 0);
+
+        if ($position < 0 || $length <= 0) {
+            continue;
+        }
+
+        $value = substr($vin, $position, $length);
+
+        $result = $rule['values'][$value] ?? null;
+
+        if ($result === null) {
+            continue;
+        }
+
+        $target = $rule['target'] ?? '';
+
+        if ($target !== '') {
+            $vinValues[$target] = $result;
+        }
+    }
+
+    return $vinValues;
+}
 
 /*
  * Autó hozzáadása
@@ -121,15 +213,17 @@ function getVinConfig(string $vin): ?array
 function addUserCar(
     string $vin,
     string $name = '',
+    string $brand = '',
+    string $model = '',
     string $productionYear = '',
-    string $productionMonth = '',
     string $body = '',
     string $engine = '',
     string $trim = '',
-    string $color = '',
-    string $colorCode = ''
+    string $color = ''
 ): array
 {
+    global $car_catalog;
+
     if (!isset($_SESSION['user_id'])) {
         return [
             'success' => false,
@@ -137,39 +231,148 @@ function addUserCar(
         ];
     }
 
-$vin = normalizeVin($vin);
-
-$name = trim($name);
-
-if (mb_strlen($name, 'UTF-8') > 50) {
-    return [
-        'success' => false,
-        'message' => 'Az autó neve legfeljebb 50 karakter lehet.'
-    ];
-}
-
-/*
- * VIN ellenőrzése
- */
-if ($vin === '') {
-    return [
-        'success' => false,
-        'message' => 'Az alvázszám megadása kötelező.'
-    ];
-}
+    $vin = normalizeVin($vin);
+    $name = trim($name);
+    $brand = trim($brand);
+    $model = trim($model);
+    $productionYear = trim($productionYear);
+    $body = trim($body);
+    $engine = trim($engine);
+    $trim = trim($trim);
+    $color = trim($color);
 
     /*
-     * VIN konfiguráció keresése
+     * Autó neve
      */
-    $config = getVinConfig($vin);
-
-    if ($config === null) {
+    if (mb_strlen($name, 'UTF-8') > 50) {
         return [
             'success' => false,
-            'message' => 'A megadott alvázszámhoz nem található konfiguráció.'
+            'message' => 'Az autó neve legfeljebb 50 karakter lehet.'
         ];
     }
 
+    /*
+     * VIN ellenőrzése
+     */
+    if ($vin === '') {
+        return [
+            'success' => false,
+            'message' => 'Az alvázszám megadása kötelező.'
+        ];
+    }
+
+    /*
+     * VIN hosszának ellenőrzése
+     */
+    if (strlen($vin) !== 17) {
+        return [
+            'success' => false,
+            'message' => 'Az alvázszámnak 17 karakterből kell állnia.'
+        ];
+    }
+
+    /*
+     * Márka ellenőrzése
+     */
+    if ($brand === '' || !isset($car_catalog[$brand])) {
+        return [
+            'success' => false,
+            'message' => 'A kiválasztott márka nem található a katalógusban.'
+        ];
+    }
+
+    /*
+     * Modell ellenőrzése
+     */
+    $modelConfig = $car_catalog[$brand]['models'][$model] ?? null;
+
+    if (!is_array($modelConfig)) {
+        return [
+            'success' => false,
+            'message' => 'A kiválasztott modell nem található a katalógusban.'
+        ];
+    }
+
+    /*
+     * VIN alapján a katalógusmodell meghatározása
+     */
+    $vinModel = findCatalogVinModel($vin);
+
+    if ($vinModel === null) {
+        return [
+            'success' => false,
+            'message' => 'A megadott alvázszám alapján nem sikerült azonosítani a járművet.'
+        ];
+    }
+
+    /*
+     * VIN és kézzel kiválasztott márka/modell egyezésének ellenőrzése
+     */
+    if (
+        $vinModel['brand'] !== $brand ||
+        $vinModel['model'] !== $model
+    ) {
+        return [
+            'success' => false,
+            'message' => 'A megadott alvázszám nem egyezik a kiválasztott márkával és modellel.'
+        ];
+    }
+
+    /*
+     * VIN adatok dekódolása
+     */
+    $vinValues = decodeCatalogVin($vin, $vinModel['config']);
+
+    /*
+     * VIN által meghatározott gyártási év ellenőrzése
+     */
+    if (
+        isset($vinValues['production_year']) &&
+        $productionYear !== $vinValues['production_year']
+    ) {
+        return [
+            'success' => false,
+            'message' => 'A gyártási év nem egyezik a VIN alapján meghatározott évvel.'
+        ];
+    }
+
+    /*
+     * VIN által meghatározott karosszéria ellenőrzése
+     */
+    if (
+        isset($vinValues['body']) &&
+        $body !== $vinValues['body']
+    ) {
+        return [
+            'success' => false,
+            'message' => 'A karosszériatípus nem egyezik a VIN alapján meghatározott értékkel.'
+        ];
+    }
+
+    /*
+     * VIN által meghatározott motor ellenőrzése
+     */
+    if (
+        isset($vinValues['engine']) &&
+        $engine !== $vinValues['engine']
+    ) {
+        return [
+            'success' => false,
+            'message' => 'A motortípus nem egyezik a VIN alapján meghatározott értékkel.'
+        ];
+    }
+
+    /*
+     * A felszereltséget szándékosan nem ellenőrizzük,
+     * mert ezt a felhasználó módosíthatja.
+     *
+     * A színt szintén nem ellenőrizzük,
+     * mert a jelenlegi VIN-rendszer nem határozza meg.
+     */
+
+    /*
+     * Felhasználói adatok betöltése
+     */
     $userId = (string)$_SESSION['user_id'];
 
     $data = loadUserCarsData();
@@ -179,11 +382,9 @@ if ($vin === '') {
     }
 
     /*
-     * Ellenőrizzük, hogy ezt az autót
-     * nem adta-e már hozzá a felhasználó.
+     * Duplikált VIN ellenőrzése
      */
     foreach ($data[$userId] as $car) {
-
         if (
             isset($car['vin']) &&
             normalizeVin($car['vin']) === $vin
@@ -201,7 +402,6 @@ if ($vin === '') {
     $nextId = 1;
 
     foreach ($data[$userId] as $car) {
-
         if (
             isset($car['id']) &&
             is_numeric($car['id'])
@@ -216,18 +416,18 @@ if ($vin === '') {
     /*
      * Új autó
      */
-$data[$userId][] = [
-    'id' => $nextId,
-    'name' => $name,
-    'vin' => $vin,
-    'production_year' => $productionYear,
-    'production_month' => $productionMonth,
-    'body' => $body,
-    'engine' => $engine,
-    'trim' => $trim,
-    'color' => $color,
-    'color_code' => $colorCode
-];
+    $data[$userId][] = [
+        'id' => $nextId,
+        'name' => $name,
+        'vin' => $vin,
+        'brand' => $brand,
+        'model' => $model,
+        'production_year' => $productionYear,
+        'body' => $body,
+        'engine' => $engine,
+        'trim' => $trim,
+        'color' => $color
+    ];
 
     /*
      * Mentés
