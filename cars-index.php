@@ -213,7 +213,7 @@ $carOptions = $car_catalog[$brand]['models'][$model]['options'] ?? [];
                                                                     		</td>
                                                                     	</tr>
                                                                     </table>
-                                                                    <table width="100%" class="text-center table-border">
+                                                                    <table width="100%" height="232" class="text-center table-border">
                                                                         <tr>
                                                                             <td style="width:352px;text-align:center; padding-top:20px;padding-bottom:20px;">
                                                                             <?php if (!empty($carConfig['preview'])): ?>
@@ -272,25 +272,32 @@ $carOptions = $car_catalog[$brand]['models'][$model]['options'] ?? [];
                                                                             	</tr>
                                                                             </table>
                                                                             </td>
-                                                                            <td style="width:140px; padding:20px;">
-                                                                            <table class="table-border text-right">
+                                                                            <td style="width:140px; padding:20px; height:100%;">
+                                                                            <table class="table-border text-right textv-top" style="height:100%;">
                                                                             	<tr>
-                                                                            		<td style="height:30px;"><a href="/service/?car=<?= (int)$car['id'] ?><?= $navigationParams ?>"><button style="width:140px" type="submit">Szervizkönyv</button></a>
+                                                                            		<td class="textv-top" style="vertical-align:top;">
+                                                                            		<table class="table-border">
+                                                                            			<tr>
+                                                                            				<td style="height:30px;"><a href="/service/?car=<?= (int)$car['id'] ?><?= $navigationParams ?>"><button style="width:140px" type="submit">Szervizkönyv</button></a>
+                                                                            				</td>
+                                                                            			</tr>
+                                                                            			<?php if (isCarEpcEnabled($carConfig)): ?>
+                                                                            			<tr>
+                                                                            				<td style="height:30px;"><a href="/epc/?page=<?= urlencode($carConfig['epc_page']) ?>&car=<?= (int)$car['id'] ?>&from_cars=<?= urlencode('/cars/') ?><?= $navigationParams ?>"><button style="width:140px" type="submit">EPC megnyitása</button></a>
+                                                                            				</td>
+                                                                            			</tr>
+                                                                            			<?php endif; ?>
+                                                                            			<?php if (isCarManualEnabled($carConfig)): ?>
+                                                                            			<tr>
+                                                                            				<td style="height:30px;"><a href="/manual/?type=<?= urlencode($carConfig['manual_type']) ?>&year=<?= htmlspecialchars($car['production_year']) ?>&car=<?= (int)$car['id'] ?>&from_cars=<?= urlencode('/cars/') ?><?= $navigationParams ?>"><button style="width:140px" type="submit">Szerviz Kézikönyv</button></a>
+                                                                            				</td>
+                                                                            			</tr>
+                                                                            			<?php endif; ?>
+                                                                            		</table>
                                                                             		</td>
                                                                             	</tr>
                                                                             	<tr>
-                                                                            		<td style="height:30px;"><a href="/epc/?page=<?= urlencode($carConfig['epc_page']) ?>&car=<?= (int)$car['id'] ?>&from_cars=<?= urlencode('/cars/') ?><?= $navigationParams ?>"><button style="width:140px" type="submit">EPC megnyitása</button></a>
-                                                                            		</td>
-                                                                            	</tr>
-                                                                            	<tr>
-                                                                            		<td style="height:30px;"><a href="/manual/?type=<?= urlencode($carConfig['manual_type']) ?>&year=<?= htmlspecialchars($car['production_year']) ?>&car=<?= (int)$car['id'] ?>&from_cars=<?= urlencode('/cars/') ?><?= $navigationParams ?>"><button style="width:140px" type="submit">Szerviz Kézikönyv</button>
-</a>
-                                                                            		</td>
-                                                                            	</tr>
-                                                                            </table>
-                                                                            <table class="table-border text-right">
-                                                                            	<tr>
-                                                                            		<td style="height:82px;" class="textv-bottom">
+                                                                            		<td class="textv-bottom" style="vertical-align:bottom;">
                                                                             		<form method="post" onsubmit="return confirm('Biztosan törölni szeretnéd ezt az autót?');">
 																					<input type="hidden" name="action" value="delete">
 																					<input type="hidden" name="car_id" value="<?= (int)$car['id'] ?>">
