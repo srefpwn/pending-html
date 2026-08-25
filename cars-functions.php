@@ -128,50 +128,66 @@ function findCatalogVinModel(string $vin): ?array
      *    amelynek VIN szabályai illenek erre a VIN-re.
      */
     foreach ($car_catalog as $brandKey => $brandConfig) {
+    foreach (($brandConfig['models'] ?? []) as $modelKey => $modelConfig) {
 
-        foreach (($brandConfig['models'] ?? []) as $modelKey => $modelConfig) {
+        /*
+         * A VIN konfigurációból már tudjuk,
+         * melyik szériát kell használni.
+         */
+        $series = $vinConfig['series'] ?? '';
 
-            $rules = $modelConfig['vin']['rules'] ?? [];
+        if (
+            $series === '' ||
+            !isset($modelConfig['series'][$series])
+        ) {
+            continue;
+        }
 
-            if (!is_array($rules) || empty($rules)) {
+        /*
+         * A kiválasztott széria konfigurációja.
+         */
+        $seriesConfig = $modelConfig['series'][$series];
+
+        $rules = $seriesConfig['vin']['rules'] ?? [];
+
+        if (!is_array($rules) || empty($rules)) {
+            continue;
+        }
+
+        $matched = true;
+
+        foreach ($rules as $rule) {
+            $position = (int)($rule['position'] ?? 0) - 1;
+            $length = (int)($rule['length'] ?? 0);
+
+            if ($position < 0 || $length <= 0) {
                 continue;
             }
 
-            $matched = true;
+            $value = substr($vin, $position, $length);
 
-            foreach ($rules as $rule) {
+            $allowedValues = $rule['values'] ?? [];
 
-                $position = (int)($rule['position'] ?? 0) - 1;
-                $length = (int)($rule['length'] ?? 0);
-
-                if ($position < 0 || $length <= 0) {
-                    continue;
-                }
-
-                $value = substr($vin, $position, $length);
-
-                $allowedValues = $rule['values'] ?? [];
-
-                /*
-                 * Ha a VIN adott része nincs a szabályban,
-                 * akkor ez nem ehhez a modellhez tartozik.
-                 */
-                if (!array_key_exists($value, $allowedValues)) {
-                    $matched = false;
-                    break;
-                }
-            }
-
-            if ($matched) {
-                return [
-                    'brand' => $brandKey,
-                    'model' => $modelKey,
-                    'config' => $modelConfig,
-                    'vin_config' => $vinConfig
-                ];
+            /*
+             * Ha a VIN adott része nincs a szabályban,
+             * akkor ez nem ehhez a modellhez tartozik.
+             */
+            if (!array_key_exists($value, $allowedValues)) {
+                $matched = false;
+                break;
             }
         }
+
+        if ($matched) {
+            return [
+                'brand' => $brandKey,
+                'model' => $modelKey,
+                'config' => $seriesConfig,
+                'vin_config' => $vinConfig
+            ];
+        }
     }
+}
 
     return null;
 }
@@ -359,6 +375,7 @@ if (!isset($vin_configs[$vin])) {
         'vin' => $vin,
         'brand' => $brand,
         'model' => $model,
+		'series' => $vin_configs[$vin]['series'] ?? '',
         'production_year' => $productionYear,
         'body' => $body,
         'engine' => $engine,
