@@ -46,10 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          */
 $vin = $_POST['vin'] ?? '';
 $name = $_POST['name'] ?? '';
-
 $brand = $_POST['brand'] ?? '';
 $model = $_POST['model'] ?? '';
-
+$series = $_POST['series'] ?? '';
 $productionYear = $_POST['production_year'] ?? '';
 $body = $_POST['body'] ?? '';
 $engine = $_POST['engine'] ?? '';
@@ -65,6 +64,7 @@ $color = $_POST['color'] ?? '';
     $name,
     $brand,
     $model,
+    $series,
     $productionYear,
     $body,
     $engine,
@@ -163,6 +163,7 @@ $modelConfig = $brandModels[$selectedModel] ?? null;
                                                         <td style="padding:20px;text-align:center;">
                                                     	<form method="post">
                                                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
+                                                        <input type="hidden" name="series" id="seriesInput" value="">
 														<table align="center" class="table-border" width="100%">
 															<tr>
 																<td style="background-color:#bb271a;color:#ffffff;width:400px;text-align:center;" class="p10">Adatok
@@ -224,13 +225,8 @@ $modelConfig = $brandModels[$selectedModel] ?? null;
 																<td width="50%" class="row-even p5">
 																<span class="select-wrapper2">
 																<select name="production_year" required>
-																	<option value="">- Válasszon -</option>
-																<?php foreach (($modelConfig['years'] ?? []) as $yearValue => $yearLabel): ?>
-                                                               		<option value="<?= htmlspecialchars($yearValue) ?>">
-   																	<?= htmlspecialchars($yearLabel) ?>
-																	</option>
-            													<?php endforeach; ?>
-                                                                </select>
+    																<option value="">- Válasszon -</option>
+																</select>
                                                                 </span>
 																</td>
 															</tr>
@@ -342,6 +338,11 @@ const colorSelect = document.querySelector('select[name="color"]');
 const vinInput = document.querySelector('input[name="vin"]');
 let vinLockedFields = new Set();
 
+const seriesInput = document.querySelector('input[name="series"]');
+
+let activeSeries = '';
+let yearSeriesMap = {};
+
 function populateSelect(select, options) {
     select.innerHTML = '';
 
@@ -364,15 +365,59 @@ function populateSelect(select, options) {
         select.appendChild(option);
     });
 }
+function populateYearSelect(seriesConfig) {
+    yearSelect.innerHTML = '';
+    yearSeriesMap = {};
+    activeSeries = '';
+    seriesInput.value = '';
 
-function loadModelConfig() {
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = '- Válasszon -';
+    yearSelect.appendChild(placeholder);
+
+    Object.entries(seriesConfig || {}).forEach(([seriesKey, seriesData]) => {
+
+        const years = seriesData?.years || {};
+
+        if (Object.keys(years).length === 0) {
+            return;
+        }
+
+        const group = document.createElement('optgroup');
+        group.label = seriesData.name || seriesKey;
+
+        Object.entries(years).forEach(([yearValue, yearLabel]) => {
+
+            const option = document.createElement('option');
+
+            option.value = yearValue;
+            option.textContent = yearLabel;
+
+            yearSeriesMap[yearValue] = seriesKey;
+
+            group.appendChild(option);
+        });
+
+        yearSelect.appendChild(group);
+    });
+}
+yearSelect.addEventListener('change', function () {
+
+    const year = this.value;
+
+    activeSeries = yearSeriesMap[year] || '';
+    seriesInput.value = activeSeries;
+});
+
+function loadModelConfig(values = {}) {
     const brand = brandSelect.value;
     const model = modelSelect.value;
 
     const modelConfig = carCatalog[brand]?.models?.[model];
 
     if (!modelConfig) {
-        populateSelect(yearSelect, {});
+        populateYearSelect({});
         populateSelect(bodySelect, {});
         populateSelect(engineSelect, {});
         populateSelect(trimSelect, {});
@@ -380,11 +425,54 @@ function loadModelConfig() {
         return;
     }
 
-    populateSelect(yearSelect, modelConfig.years);
-    populateSelect(bodySelect, modelConfig.options?.body);
-    populateSelect(engineSelect, modelConfig.options?.engine);
-    populateSelect(trimSelect, modelConfig.options?.trim);
-    populateSelect(colorSelect, modelConfig.options?.color);
+    /*
+     * Évjáratok szériák szerint
+     */
+    populateYearSelect(modelConfig.series || {});
+
+    /*
+     * Típus kiválasztásakor nincs automatikus évjárat.
+     * A többi mező sem töltődik ki addig,
+     * amíg nincs kiválasztva évjárat.
+     */
+    populateSelect(bodySelect, {});
+    populateSelect(engineSelect, {});
+    populateSelect(trimSelect, {});
+    populateSelect(colorSelect, {});
+
+    if (values.production_year) {
+        yearSelect.value = values.production_year;
+
+        activeSeries =
+            yearSeriesMap[values.production_year] || '';
+
+        seriesInput.value = activeSeries;
+
+        const seriesConfig =
+            modelConfig.series?.[activeSeries];
+
+        if (seriesConfig) {
+            populateSelect(
+                bodySelect,
+                seriesConfig.options?.body
+            );
+
+            populateSelect(
+                engineSelect,
+                seriesConfig.options?.engine
+            );
+
+            populateSelect(
+                trimSelect,
+                seriesConfig.options?.trim
+            );
+
+            populateSelect(
+                colorSelect,
+                seriesConfig.options?.color
+            );
+        }
+    }
 }
 function lockSelect(select, value) {
     if (!select) {
