@@ -408,6 +408,43 @@ yearSelect.addEventListener('change', function () {
 
     activeSeries = yearSeriesMap[year] || '';
     seriesInput.value = activeSeries;
+
+    const brand = brandSelect.value;
+    const model = modelSelect.value;
+
+    const modelConfig =
+        carCatalog[brand]?.models?.[model];
+
+    const seriesConfig =
+        modelConfig?.series?.[activeSeries];
+
+    if (!seriesConfig) {
+        populateSelect(bodySelect, {});
+        populateSelect(engineSelect, {});
+        populateSelect(trimSelect, {});
+        populateSelect(colorSelect, {});
+        return;
+    }
+
+    populateSelect(
+        bodySelect,
+        seriesConfig.options?.body
+    );
+
+    populateSelect(
+        engineSelect,
+        seriesConfig.options?.engine
+    );
+
+    populateSelect(
+        trimSelect,
+        seriesConfig.options?.trim
+    );
+
+    populateSelect(
+        colorSelect,
+        seriesConfig.options?.color
+    );
 });
 
 function loadModelConfig(values = {}) {
@@ -605,7 +642,7 @@ function loadModelConfig(values = {}) {
     const modelConfig = carCatalog[brand]?.models?.[model];
 
     if (!modelConfig) {
-        populateSelect(yearSelect, {});
+        populateYearSelect({});
         populateSelect(bodySelect, {});
         populateSelect(engineSelect, {});
         populateSelect(trimSelect, {});
@@ -613,14 +650,61 @@ function loadModelConfig(values = {}) {
         return;
     }
 
-    populateSelect(yearSelect, modelConfig.years);
-    populateSelect(bodySelect, modelConfig.options?.body);
-    populateSelect(engineSelect, modelConfig.options?.engine);
-    populateSelect(trimSelect, modelConfig.options?.trim);
-    populateSelect(colorSelect, modelConfig.options?.color);
+    /*
+     * Évjáratok szériák szerint
+     */
+    populateYearSelect(modelConfig.series || {});
 
+    /*
+     * Típus kiválasztásakor még nincs évjárat,
+     * ezért a többi mező üres marad.
+     */
+    populateSelect(bodySelect, {});
+    populateSelect(engineSelect, {});
+    populateSelect(trimSelect, {});
+    populateSelect(colorSelect, {});
+
+    activeSeries = '';
+    seriesInput.value = '';
+
+    /*
+     * Ha már van konkrét évjárat,
+     * meghatározzuk hozzá a szériát.
+     */
     if (values.production_year) {
+
         yearSelect.value = values.production_year;
+
+        activeSeries =
+            yearSeriesMap[values.production_year] || '';
+
+        seriesInput.value = activeSeries;
+
+        const seriesConfig =
+            modelConfig.series?.[activeSeries];
+
+        if (seriesConfig) {
+
+            populateSelect(
+                bodySelect,
+                seriesConfig.options?.body
+            );
+
+            populateSelect(
+                engineSelect,
+                seriesConfig.options?.engine
+            );
+
+            populateSelect(
+                trimSelect,
+                seriesConfig.options?.trim
+            );
+
+            populateSelect(
+                colorSelect,
+                seriesConfig.options?.color
+            );
+        }
     }
 
     if (values.body) {
@@ -638,8 +722,7 @@ function loadModelConfig(values = {}) {
     if (values.color) {
         colorSelect.value = values.color;
     }
-}
-loadModelConfig();
+}loadModelConfig();
 function findVinModel(vin) {
     for (const [brandKey, brandConfig] of Object.entries(carCatalog)) {
 
