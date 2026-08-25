@@ -436,3 +436,19 @@ function getCarConfig(array $car): ?array
 
     return $vin_configs[$vin] ?? null;
 }
+
+/*
+ * EPC elérhetőségének ellenőrzése
+ */
+function isCarEpcEnabled(array $carConfig): bool
+{
+    return (string)($carConfig['epc_enable'] ?? '0') === '1';
+}
+
+/*
+ * Szerviz kézikönyv elérhetőségének ellenőrzése
+ */
+function isCarManualEnabled(array $carConfig): bool
+{
+    return (string)($carConfig['manual_enable'] ?? '0') === '1';
+}
