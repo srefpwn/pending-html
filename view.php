@@ -150,14 +150,18 @@ $vin = (string)(
 $epcPage = null;
 $epcPartNumbers = [];
 
+$epcEnabled = false;
+
 if (
     $vin !== '' &&
     isset($vin_configs[$vin])
 ) {
-
     $epcPage =
         $vin_configs[$vin]['epc_page']
         ?? null;
+
+    $epcEnabled =
+        (int)($vin_configs[$vin]['epc_enable'] ?? 0) === 1;
 }
 
 
@@ -165,6 +169,7 @@ if (
  * EPC JSON betöltése
  */
 if (
+    $epcEnabled &&
     $epcPage !== null &&
     isset($configs[$epcPage]['epc_json'])
 ) {
