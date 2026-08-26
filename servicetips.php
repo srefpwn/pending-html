@@ -98,12 +98,144 @@ $vin = (string)(
  * Service Tips JSON a VIN konfigurációból érkezik.
  */
 
-$vinConfig = $vin_configs[$vin] ?? null;
-
 $serviceTipsEnabled =
     (int)($vinConfig['servicetips_enable'] ?? 0) === 1;
 
 $serviceTipsData = null;
+
+$vinConfig = $vin_configs[$vin] ?? null;
+
+if (
+    is_array($vinConfig) &&
+    (int)($vinConfig['servicetips_enable'] ?? 0) === 1
+) {
+
+    $series = trim(
+        (string)($vinConfig['series'] ?? '')
+    );
+
+    $modelCode = trim(
+        (string)($vinConfig['model_code'] ?? '')
+    );
+
+    if ($series !== '' && $modelCode !== '') {
+
+        $jsonFile =
+            $_SERVER['DOCUMENT_ROOT']
+            . '/data/service/servicetips/honda/accord/'
+            . $series
+            . '/'
+            . strtolower($modelCode)
+            . '.json';
+
+        if (is_file($jsonFile)) {
+
+            $json = file_get_contents($jsonFile);
+
+            if ($json !== false) {
+
+                $decoded = json_decode(
+                    $json,
+                    true
+                );
+
+                if (
+                    is_array($decoded) &&
+                    isset($decoded['topics']) &&
+                    is_array($decoded['topics']) &&
+                    count($decoded['topics']) > 0
+                ) {
+                    $serviceTipsData = $decoded;
+                }
+            }
+        }
+    }
+}
+
+
+/*
+ * EPC konfiguráció meghatározása VIN alapján
+ */
+
+$epcPage = null;
+$epcPartNumbers = [];
+$epcEnabled = false;
+
+if (
+    $vin !== '' &&
+    isset($vin_configs[$vin])
+) {
+
+    $epcPage =
+        $vin_configs[$vin]['epc_page']
+        ?? null;
+
+    $epcEnabled =
+        (int)($vin_configs[$vin]['epc_enable'] ?? 0) === 1;
+}
+
+/*
+ * EPC JSON betöltése
+ *
+ * Csak akkor töltjük be, ha az adott autónál
+ * az EPC használata engedélyezett.
+ */
+
+if (
+    $epcEnabled &&
+    $epcPage !== null &&
+    isset($configs[$epcPage]['epc_json'])
+) {
+
+    $epcJsonFile =
+        $configs[$epcPage]['epc_json'];
+
+    if (is_file($epcJsonFile)) {
+
+        $epcJson =
+            file_get_contents($epcJsonFile);
+
+        if ($epcJson !== false) {
+
+            $epcData =
+                json_decode(
+                    $epcJson,
+                    true
+                );
+
+            /*
+             * Cikkszámok kigyűjtése
+             */
+
+            if (is_array($epcData)) {
+
+                foreach ($epcData as $category) {
+
+                    if (
+                        !isset($category['parts']) ||
+                        !is_array($category['parts'])
+                    ) {
+                        continue;
+                    }
+
+                    foreach ($category['parts'] as $part) {
+
+                        if (
+                            isset($part['part_number']) &&
+                            $part['part_number'] !== ''
+                        ) {
+
+                            $epcPartNumbers[
+                                (string)$part['part_number']
+                            ] = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 if ($serviceTipsEnabled) {
 
@@ -188,7 +320,7 @@ if ($serviceTipsEnabled) {
                                                     <tr>
                                                         <td style="padding:0px;text-align:center;">
                                                         <span class="epc-title">
-                                                        <?php if ($carName !== ''): ?><?= htmlspecialchars($carName) ?> - <?php endif; ?><?= htmlspecialchars($vin) ?> - Szerviz információk - Szervizkönyv
+                                                        <?php if ($carName !== ''): ?><?= htmlspecialchars($carName) ?> - <?php endif; ?><?= htmlspecialchars($vin) ?><?php if ($serviceTipsData === null): ?> - A kiválasztott típushoz és modellhez nem áll rendelkezésre Szerviz információ. <?php endif; ?> - Szerviz információk - Szervizkönyv
 														</span>
 														</td>
 													</tr>
@@ -267,7 +399,30 @@ if ($serviceTipsEnabled) {
                             <td
                                 class="epc-text <?= $rowClass ?> p5 text-right pr10"
                             >
-                                <?= htmlspecialchars($value) ?>
+                            
+<?php if (($item['type'] ?? 'text') === 'part_number'): ?>
+
+    <?php if (
+        $epcEnabled &&
+        isset($epcPartNumbers[$value])
+    ): ?>
+
+        <a href="/epc/search.php?type=<?= urlencode($epcPage) ?>&part_number=<?= urlencode($value) ?><?= $navigationParams ?>">
+            <?= htmlspecialchars($value) ?>
+        </a>
+
+    <?php else: ?>
+
+        <?= htmlspecialchars($value) ?>
+
+    <?php endif; ?>
+
+<?php else: ?>
+
+    <?= htmlspecialchars($value) ?>
+
+<?php endif; ?>
+
                             </td>
 
                         </tr>
