@@ -98,12 +98,13 @@ $vin = (string)(
  * Service Tips JSON a VIN konfigurációból érkezik.
  */
 
+$vinConfig = $vin_configs[$vin] ?? null;
+
 $serviceTipsEnabled =
+    is_array($vinConfig) &&
     (int)($vinConfig['servicetips_enable'] ?? 0) === 1;
 
 $serviceTipsData = null;
-
-$vinConfig = $vin_configs[$vin] ?? null;
 
 if (
     is_array($vinConfig) &&
@@ -237,49 +238,6 @@ if (
 }
 
 
-if ($serviceTipsEnabled) {
-
-    $series = trim(
-        (string)($vinConfig['series'] ?? '')
-    );
-
-    $modelCode = trim(
-        (string)($vinConfig['model_code'] ?? '')
-    );
-
-    if ($series !== '' && $modelCode !== '') {
-
-        $jsonFile =
-            $_SERVER['DOCUMENT_ROOT']
-            . '/data/service/servicetips/honda/accord/'
-            . $series
-            . '/'
-            . strtolower($modelCode)
-            . '.json';
-
-        if (is_file($jsonFile)) {
-
-            $json = file_get_contents($jsonFile);
-
-            if ($json !== false) {
-
-                $decoded = json_decode(
-                    $json,
-                    true
-                );
-
-                if (
-                    is_array($decoded) &&
-                    isset($decoded['topics']) &&
-                    is_array($decoded['topics'])
-                ) {
-                    $serviceTipsData = $decoded;
-                }
-            }
-        }
-    }
-}
-
 ?>
 
 <html>
@@ -312,7 +270,7 @@ if ($serviceTipsEnabled) {
                         <table style="width:100%;">
                             <tr>
                                 <td>
-                                    <table align="left" width="100%" class="table-border">
+                                    <table align="left" width="100%" class="table-border" style="min-height:250px">
                                         <tr>
                                             <td class="textv-top">
                                                 <table align="center" class="table-border" width="100%">
@@ -320,10 +278,19 @@ if ($serviceTipsEnabled) {
                                                     <tr>
                                                         <td style="padding:0px;text-align:center;">
                                                         <span class="epc-title">
-                                                        <?php if ($carName !== ''): ?><?= htmlspecialchars($carName) ?> - <?php endif; ?><?= htmlspecialchars($vin) ?><?php if ($serviceTipsData === null): ?> - A kiválasztott típushoz és modellhez nem áll rendelkezésre Szerviz információ. <?php endif; ?> - Szerviz információk - Szervizkönyv
+                                                        <?php if ($carName !== ''): ?><?= htmlspecialchars($carName) ?> - <?php endif; ?><?= htmlspecialchars($vin) ?> - Szerviz információk - Szervizkönyv
 														</span>
 														</td>
 													</tr>
+													<?php if ($serviceTipsData === null): ?>
+                                                    <tr>
+                                                        <td style="padding:50px;text-align:center;">
+                                                        <span class="epc-title2">
+                                                        A kiválasztott autóhoz nem áll rendelkezésre Szerviz információ.
+														</span>
+														</td>
+													</tr>
+													<?php endif; ?>
 <?php if ($serviceTipsData !== null): ?>
 
     <?php foreach ($serviceTipsData['topics'] as $topic): ?>
