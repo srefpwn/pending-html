@@ -91,7 +91,62 @@ $vin = (string)(
     $car['vin'] ?? ''
 );
 
+/*
+ * Service Tips konfiguráció
+ *
+ * A funkció engedélyezése és a modellhez tartozó
+ * Service Tips JSON a VIN konfigurációból érkezik.
+ */
 
+$vinConfig = $vin_configs[$vin] ?? null;
+
+$serviceTipsEnabled =
+    (int)($vinConfig['servicetips_enable'] ?? 0) === 1;
+
+$serviceTipsData = null;
+
+if ($serviceTipsEnabled) {
+
+    $series = trim(
+        (string)($vinConfig['series'] ?? '')
+    );
+
+    $modelCode = trim(
+        (string)($vinConfig['model_code'] ?? '')
+    );
+
+    if ($series !== '' && $modelCode !== '') {
+
+        $jsonFile =
+            $_SERVER['DOCUMENT_ROOT']
+            . '/data/service/servicetips/honda/accord/'
+            . $series
+            . '/'
+            . strtolower($modelCode)
+            . '.json';
+
+        if (is_file($jsonFile)) {
+
+            $json = file_get_contents($jsonFile);
+
+            if ($json !== false) {
+
+                $decoded = json_decode(
+                    $json,
+                    true
+                );
+
+                if (
+                    is_array($decoded) &&
+                    isset($decoded['topics']) &&
+                    is_array($decoded['topics'])
+                ) {
+                    $serviceTipsData = $decoded;
+                }
+            }
+        }
+    }
+}
 
 ?>
 
@@ -137,251 +192,96 @@ $vin = (string)(
 														</span>
 														</td>
 													</tr>
-													<tr>
-														<td style=" padding:20px; text-align:center;">
-														<table align="center" class="table-border" style="width:100%;">
-															<tr>
-																<td style="background-color:#bb271a;color:#ffffff;width:100%;text-align:center;" class="p10">Motorolaj Adatok
-																</td>
-															</tr>
-														</table>
-														<table align="center" style="text-align:left;border-spacing:0px;padding-bottom:20px; width:100%;" class="table-border">
-															<tr>
-																<td width="400" class="epc-text row-even p5 pl10">Csere intervallum:
-																</td>
-																<td width="400" class="epc-text row-even p5 text-right pr10">maximum: 20.000 km vagy 12 hónap
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-odd p5 pl10">Típusa:
-																</td>
-																<td class="epc-text row-odd p5 text-right pr10">0W30 A5/B5
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-even p5 pl10">Mennyiség (összes):
-																</td>
-																<td class="epc-text row-even p5 text-right pr10">6,5 liter
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-odd p5 pl10">Mennyiség (csere):
-																</td>
-																<td class="epc-text row-odd p5 text-right pr10">5,5 liter
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-even p5 pl10">Mennyiség (szűrő):
-																</td>
-																<td class="epc-text row-even p5 text-right pr10">0,2 liter
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-odd p5 pl10">Szűrő cikkszáma:
-																</td>
-																<td class="epc-text row-odd p5 text-right pr10">15430-RBD-E02
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-even p5 pl10">Leeresztő csavar:
-																</td>
-																<td class="epc-text row-even p5 text-right pr10">39 NM
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-odd p5 pl10">Alátét mérete:
-																</td>
-																<td class="epc-text row-odd p5 text-right pr10">14 mm
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-even p5 pl10">Alátét cikkszáma:
-																</td>
-																<td class="epc-text row-even p5 text-right pr10">94109-14000
-																</td>
-															</tr>
-														</table>
-														</td>
-													</tr>
-													<tr>
-														<td style=" padding:20px;padding-top:0px; text-align:center;">
-														<table align="center" class="table-border" style="width:100%;">
-															<tr>
-																<td style="background-color:#bb271a;color:#ffffff;width:100%;text-align:center;" class="p10">Üzemanyagszűrő Adatok
-																</td>
-															</tr>
-														</table>
-														<table align="center" style="text-align:left;border-spacing:0px;padding-bottom:20px; width:100%;" class="table-border">
-															<tr>
-																<td width="400" class="epc-text row-even p5 pl10">Csere intervallum:
-																</td>
-																<td width="400" class="epc-text row-even p5 text-right pr10">maximum: 40.000 km
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-odd p5 pl10">Szűrő cikkszáma:
-																</td>
-																<td class="epc-text row-odd p5 text-right pr10">16901-RMA-E00
-																</td>
-															</tr>
-														</table>
-														</td>
-													</tr>
-													<tr>
-														<td style=" padding:20px;padding-top:0px; text-align:center;">
-														<table align="center" class="table-border" style="width:100%;">
-															<tr>
-																<td style="background-color:#bb271a;color:#ffffff;width:100%;text-align:center;" class="p10">Levegőszűrő Adatok
-																</td>
-															</tr>
-														</table>
-														<table align="center" style="text-align:left;border-spacing:0px;padding-bottom:20px; width:100%;" class="table-border">
-															<tr>
-																<td width="400" class="epc-text row-even p5 pl10">Csere intervallum:
-																</td>
-																<td width="400" class="epc-text row-even p5 text-right pr10">40.000 km
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-odd p5 pl10">Szűrő cikkszáma:
-																</td>
-																<td class="epc-text row-odd p5 text-right pr10">17220-RBD-E00
-																</td>
-															</tr>
-														</table>
-														</td>
-													</tr>
-													<tr>
-														<td style=" padding:20px;padding-top:0px; text-align:center;">
-														<table align="center" class="table-border" style="width:100%;">
-															<tr>
-																<td style="background-color:#bb271a;color:#ffffff;width:100%;text-align:center;" class="p10">Váltóolaj Adatok
-																</td>
-															</tr>
-														</table>
-														<table align="center" style="text-align:left;border-spacing:0px;padding-bottom:20px; width:100%;" class="table-border">
-															<tr>
-																<td width="400" class="epc-text row-even p5 pl10">Csere intervallum:
-																</td>
-																<td width="400" class="epc-text row-even p5 text-right pr10">120.000 km vagy 96 hónap
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-odd p5 pl10">Típus:
-																</td>
-																<td class="epc-text row-odd p5 text-right pr10">Honda MTF-3
-																</td>
-															</tr><tr>
-																<td width="400" class="epc-text row-even p5 pl10">összesen:
-																</td>
-																<td width="400" class="epc-text row-even p5 text-right pr10">2,5 liter
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-odd p5 pl10">Csere:
-																</td>
-																<td class="epc-text row-odd p5 text-right pr10">2,2 liter
-																</td>
-															</tr>
-														</table>
-														</td>
-													</tr>
-													<tr>
-														<td style=" padding:20px;padding-top:0px; text-align:center;">
-														<table align="center" class="table-border" style="width:100%;">
-															<tr>
-																<td style="background-color:#bb271a;color:#ffffff;width:100%;text-align:center;" class="p10">Hűtőfolyadék Adatok
-																</td>
-															</tr>
-														</table>
-														<table align="center" style="text-align:left;border-spacing:0px;padding-bottom:20px; width:100%;" class="table-border">
-															<tr>
-																<td width="400" class="epc-text row-even p5 pl10">Csere intervallum:
-																</td>
-																<td width="400" class="epc-text row-even p5 text-right pr10">először: 100.000 km majd 60.000 km
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-odd p5 pl10">Típus:
-																</td>
-																<td class="epc-text row-odd p5 text-right pr10">Honda Type 2 ALL SEASON COOLANT
-																</td>
-															</tr>
-															<tr>
-																<td width="400" class="epc-text row-even p5 pl10">összesen:
-																</td>
-																<td width="400" class="epc-text row-even p5 text-right pr10">8 liter
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-odd p5 pl10">Csere:
-																</td>
-																<td class="epc-text row-odd p5 text-right pr10">6,8 liter
-																</td>
-															</tr>
-														</table>
-														</td>
-													</tr>
-													<tr>
-														<td style=" padding:20px;padding-top:0px; text-align:center;">
-														<table align="center" class="table-border" style="width:100%;">
-															<tr>
-																<td style="background-color:#bb271a;color:#ffffff;width:100%;text-align:center;" class="p10">Fékfolyadék Adatok
-																</td>
-															</tr>
-														</table>
-														<table align="center" style="text-align:left;border-spacing:0px;padding-bottom:20px; width:100%;" class="table-border">
-															<tr>
-																<td width="400" class="epc-text row-even p5 pl10">Csere intervallum:
-																</td>
-																<td width="400" class="epc-text row-even p5 text-right pr10">36 havonta
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-odd p5 pl10">Típus:
-																</td>
-																<td class="epc-text row-odd p5 text-right pr10">Honda BF DOT4
-																</td>
-															</tr>
-														</table>
-														</td>
-													</tr>
-													<tr>
-														<td style=" padding:20px;padding-top:0px; text-align:center;">
-														<table align="center" class="table-border" style="width:100%;">
-															<tr>
-																<td style="background-color:#bb271a;color:#ffffff;width:100%;text-align:center;" class="p10">Szervófolyadék Adatok
-																</td>
-															</tr>
-														</table>
-														<table align="center" style="text-align:left;border-spacing:0px;padding-bottom:20px; width:100%;" class="table-border">
-															<tr>
-																<td width="400" class="epc-text row-even p5 pl10">Csere intervallum:
-																</td>
-																<td width="400" class="epc-text row-even p5 text-right pr10">először 100.000 km majd 50.000 km
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-odd p5 pl10">Típus:
-																</td>
-																<td class="epc-text row-odd p5 text-right pr10">Honda PSF-S
-																</td>
-															</tr>
-															<tr>
-																<td width="400" class="epc-text row-even p5 pl10">Összesen:
-																</td>
-																<td width="400" class="epc-text row-even p5 text-right pr10">1.1 liter
-																</td>
-															</tr>
-															<tr>
-																<td class="pr5 epc-text row-odd p5 pl10">Csere:
-																</td>
-																<td class="epc-text row-odd p5 text-right pr10">0,9 liter
-																</td>
-															</tr>
-														</table>
-														</td>
-													</tr>
+<?php if ($serviceTipsData !== null): ?>
+
+    <?php foreach ($serviceTipsData['topics'] as $topic): ?>
+
+        <?php
+        $topicTitle = trim(
+            (string)($topic['title'] ?? '')
+        );
+
+        $items = $topic['items'] ?? [];
+
+        if (
+            $topicTitle === '' ||
+            !is_array($items)
+        ) {
+            continue;
+        }
+        ?>
+
+        <tr>
+            <td style="padding:20px;padding-bottom:0px;text-align:center;">
+
+                <table
+                    align="center"
+                    class="table-border"
+                    style="width:100%;"
+                >
+                    <tr>
+                        <td
+                            style="background-color:#bb271a;color:#ffffff;width:100%;text-align:center;"
+                            class="p10"
+                        >
+                            <?= htmlspecialchars($topicTitle) ?>
+                        </td>
+                    </tr>
+                </table>
+
+                <table
+                    align="center"
+                    style="text-align:left;border-spacing:0px;padding-bottom:20px;width:100%;"
+                    class="table-border"
+                >
+
+                    <?php foreach ($items as $index => $item): ?>
+
+                        <?php
+                        $label = trim(
+                            (string)($item['label'] ?? '')
+                        );
+
+                        $value = trim(
+                            (string)($item['value'] ?? '')
+                        );
+
+                        if ($label === '') {
+                            continue;
+                        }
+
+                        $rowClass =
+                            ($index % 2 === 0)
+                            ? 'row-even'
+                            : 'row-odd';
+                        ?>
+
+                        <tr>
+
+                            <td
+                                class="pr5 epc-text <?= $rowClass ?> p5 pl10"
+                            >
+                                <?= htmlspecialchars($label) ?>:
+                            </td>
+
+                            <td
+                                class="epc-text <?= $rowClass ?> p5 text-right pr10"
+                            >
+                                <?= htmlspecialchars($value) ?>
+                            </td>
+
+                        </tr>
+
+                    <?php endforeach; ?>
+
+                </table>
+
+            </td>
+        </tr>
+
+    <?php endforeach; ?>
+
+<?php endif; ?>
 												</table>
 												</td>
 											</tr>
