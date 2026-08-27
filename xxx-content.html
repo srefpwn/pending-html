@@ -1,0 +1,1068 @@
+<html lang="hu" xmlns:v="urn:schemas-microsoft-com:vml">
+<head><base target="_top">
+
+<style>
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #cccccc;
+}
+A:link {  COLOR: #000;}
+A:active {  COLOR: #000;}
+A:visited { COLOR: #000;}
+A:hover { COLOR: #bb271a; TEXT-DECORATION: underline;}
+
+img {
+    max-width: none;
+}
+</style>
+
+<meta name="author" content="HONDA MOTOR Co.,Ltd.">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>(
+SEA5E000000000K0041BAHT00
+)</title>
+<script>
+<!--
+var bufCookie = new Array;
+var strKey,strVal;
+var nPos=0;
+var strPara = location.href.split("?")[1];
+if((typeof(strPara) == "undefined") || (strPara == null)){
+	bufCookie = document.cookie.split(";");
+	while (nPos < bufCookie.length) {
+		strKey = bufCookie[nPos].split("=")[0];
+		strVal = bufCookie[nPos].split("=")[1];
+		if(strKey == "CurrentYearType"){
+			strPara = strVal;
+			break;
+		}
+		nPos++;
+	}
+}
+if((typeof(strPara) != "undefined") && (strPara != null)){
+	document.title = strPara + document.title;
+	document.cookie = "CurrentYearType="+strPara+";";
+	var strUrl = location.href.split("?")[0];
+	if(strUrl != location.href) {
+		location.replace(strUrl);
+	}
+}
+function CtsProc(Type,Key,Anc) {
+	var  strData;
+	strData = Anc
+	if((typeof(strPara) != "undefined") && (strPara != null)){
+		strData += '?'+strPara
+	}
+	if(Type == '0') {
+		parent.Cts(Key,strData);
+	}
+	else if(Type == '1') {
+		parent.parent.Cts(Key,strData);
+	}
+	else if(Type == '2') {
+		opener.top.Cts(Key,strData);
+	}
+	else {
+		parent.Cts(Key,strData);
+	}
+}
+
+function PrtProc(Type,Key,Anc) {
+	var  strData;
+	strData = Anc
+	if((typeof(strPara) != "undefined") && (strPara != null)){
+		strData += '?'+strPara
+	}
+	if(Type == '0') {
+		parent.Prt(Key,strData);
+	}
+	else if(Type == '1') {
+		parent.parent.Prt(Key,strData);
+	}
+	else if(Type == '2') {
+		opener.top.Prt(Key,strData);
+	}
+	else {
+		parent.Prt(Key,strData);
+	}
+}
+-->
+</script>
+<link href="../css/ViewerStyle.css" rel="stylesheet">
+<style>
+	v\:*	{ behavior: url(#default#VML); }
+	.drag	{ position: relative; cursor:   hand; }
+</style>
+</head>
+<script>
+<!--
+var load_flag = false;
+function onLoadProc() {
+	parent.Old(this);
+	load_flag = true;
+}
+-->
+</script>
+
+<script>
+var z,x,y;
+var gImageGroupList_	= new Array;
+var gIdx_		= 0;
+var gHrList_		= new Array;
+var gHrIdx_		= 0;
+var gHrSpanList_	= new Array;
+var gHrSpanIdx_		= 0;
+var hrObject;
+var hrSpanObject;
+var imgDivObject;
+var imgDivCount 	= 0;
+var printPageCount;
+var printCurrentPos;
+function _prHrGroupStruct(hr_obj,span_obj,start_idx,end_idx,img_ctrl_obj) {
+	this.obj		= hr_obj;
+	this.span		= span_obj;
+	this.start_idx		= start_idx;
+	this.end_idx		= end_idx;
+	this.img_ctrl		= img_ctrl_obj;
+}
+function _prImageGroupStruct(group_size,rect_size,img_size,p_tag,tp_obj,bl_obj,ul_obj) {
+	this.group		= group_size;
+	this.rect		= rect_size;
+	this.img		= img_size;
+	this.p			= p_tag;
+	this.tp			= tp_obj;
+	this.bl			= bl_obj;
+	this.ul			= ul_obj;
+}
+function _prSizeStruct(newObj,newWidth,newHeight) {
+	this.obj		= newObj;
+	this.width		= newWidth;
+	this.height		= newHeight;
+}
+function _prPTagStruct(newObj,newLeft,newTop,newFontSize) {
+	this.obj		= newObj;
+	this.left		= newLeft;
+	this.top		= newTop;
+	this.fontsize	= newFontSize;
+}
+function _prLineTagStruct(newObj,newFromx,newFromy, newTox, newToy) {
+	this.obj			= newObj;
+	this.fromx		= newFromx;
+	this.fromy		= newFromy;
+	this.tox		= newTox;
+	this.toy		= newToy;
+}
+function _prTPTagStruct(newObj,newFontSize) {
+	this.obj		= newObj;
+	this.fontsize	= newFontSize;
+}
+function _prInitImageInfo(rate) {
+	var endFlag = false;
+	gDefaultRate_ = rate;
+	gIdx_ = 0;
+	var save_i;
+	var idName;
+	var groupObject;
+	var jj,jjj;
+	var p_cnt,tp_cnt,bl_cnt,ul_cnt;
+	var str_len;
+	gHrIdx_ = 0;
+	hrObject = null;
+	hrSpanObject = null;
+
+	for(jj=0;jj<document.all.length;) {
+		hrObject = null;
+		hrSpanObject = null;
+		for(;jj<document.all.length;jj++) {
+			if(document.all(jj).id != null) {
+				str_len = document.all(jj).id.length;
+				if((str_len >= 7) && (document.all(jj).id.substr(0,7) == "hrDivId")) {
+					hrSpanObject = document.all(jj);
+				}
+				else if((str_len >= 4) && (document.all(jj).id.substr(0,4) == "hrId")) {
+					hrObject = document.all(jj);
+				}
+			}
+			if((hrObject != null) && (hrSpanObject != null)) {
+				gHrList_[gHrIdx_++] = new _prHrGroupStruct (
+									hrObject,
+									hrSpanObject,
+									-1,-1,null
+									);
+				break;
+			}
+		}
+		imgDivObject = null;
+		for(;jj<document.all.length;jj++) {
+			if(document.all(jj).id != null) {
+				str_len = document.all(jj).id.length;
+				if((str_len >= 7) && (document.all(jj).id.substr(0,7) == "hrDivId")) {
+					gHrList_[gHrIdx_-1].img_ctrl = imgDivObject;
+					break;
+				}
+				else if((str_len >= 9) && (document.all(jj).id.substr(0,9) == "prePageId")) {
+					if(imgDivObject == null) {
+						imgDivObject = new Array;
+						imgDivCount = 0;
+					}
+					imgDivObject[imgDivCount] = new Array;
+					imgDivObject[imgDivCount].pre = document.all(jj);
+				}
+				else if((str_len >= 10) && (document.all(jj).id.substr(0,10) == "postPageId")) {
+					imgDivObject[imgDivCount].post = document.all(jj);
+					imgDivCount++;
+				}
+			}
+		}
+	}
+	if(imgDivObject != null) {
+		gHrList_[gHrIdx_-1].img_ctrl = imgDivObject;
+	}
+
+	jj = 0;
+	gHrIdx_ = -1;
+	while(jj < document.all.length) {
+		groupObject = null;
+		for(;jj<document.all.length;) {
+			idName = "";
+			if((document.all(jj).name != null) &&
+			   (document.all(jj).name.length >= 8)) {
+				idName = document.all(jj).name.substr(0,8);
+			}
+			if(idName == "PrtGrpId") {
+				groupObject = document.all(jj);
+				jj++;
+				break;
+			}
+			if(document.all(jj).id != null) {
+				str_len = document.all(jj).id.length;
+					if((str_len >= 7) && (document.all(jj).id.substr(0,7) == "hrDivId")) {
+						gHrIdx_++;
+						gHrList_[gHrIdx_].start_idx = gIdx_;
+					}
+			}
+			jj++;
+		}
+		if(groupObject == null)  break;
+
+		var groupWidth	= _prRemoveUnit(groupObject.style.width);
+		var groupHeight	= _prRemoveUnit(groupObject.style.height);
+		var rectObject	= null;
+		for(;jj<document.all.length;) {
+			idName = "";
+			if((document.all(jj).name != null) &&
+			   (document.all(jj).name.length >= 9)) {
+				idName = document.all(jj).name.substr(0,9);
+			}
+			if(idName == "PrtRectId") {
+				rectObject = document.all(jj);
+				jj++;
+				break;
+			}
+			jj++;
+		}
+		var rectWidth	= null;
+		var rectHeight	= null;
+		if(rectObject != null) {
+			rectWidth	= _prRemoveUnit(rectObject.style.width);
+			rectHeight	= _prRemoveUnit(rectObject.style.height);
+		}
+		var imgObject = null;
+		for(;jj<document.all.length;) {
+			idName = "";
+			if((document.all(jj).name != null) &&
+			   (document.all(jj).name.length >= 8)) {
+				idName = document.all(jj).name.substr(0,8);
+			}
+			if(idName == "PrtImgId") {
+				imgObject = document.all(jj);
+				jj++;
+				break;
+			}
+			jj++;
+		}
+		var imgWidth	= null;
+		var imgHeight	= null;
+		if(imgObject != null){
+			imgWidth	= _prRemoveUnit(imgObject.style.width);
+			imgHeight	= _prRemoveUnit(imgObject.style.height);
+		}
+		var pObject = null;
+		var pTag = null;
+		p_cnt = 0;
+		for(jjj=jj;jjj<document.all.length;jjj++) {
+			idName = "";
+			if((document.all(jjj).name != null) &&
+			   (document.all(jjj).name.length >= 6)) {
+				idName = document.all(jjj).name.substr(0,6);
+			}
+			if(idName == "PrtPId") {
+				pTag = document.all(jjj);
+				if(pObject == null){
+					pObject		= new Array();
+				}
+				pObject[p_cnt++] = new _prPTagStruct(
+									pTag,
+									_prRemoveUnit(pTag.style.left),
+									_prRemoveUnit(pTag.style.top),
+									_prRemoveUnit(pTag.style.fontSize)
+								);
+			}
+			else {
+				idName = "";
+				if((document.all(jjj).name != null) &&
+				   (document.all(jjj).name.length >= 8)) {
+					idName = document.all(jjj).name.substr(0,8);
+				}
+				if(idName == "PrtGrpId") {
+					break;
+				}
+			}
+		}
+		var tpObject = null;
+		var tpTag = null;
+		tp_cnt = 0;
+		for(jjj=jj;jjj<document.all.length;jjj++) {
+			idName = "";
+			if((document.all(jjj).name != null) &&
+			   (document.all(jjj).name.length >= 7)) {
+				idName = document.all(jjj).name.substr(0,7);
+			}
+			if(idName == "PrtTpId") {
+				tpTag = document.all(jjj);
+				if(tpObject == null){
+					tpObject		= new Array();
+				}
+				tpObject[tp_cnt++] = new _prTPTagStruct(
+									tpTag,
+									_prRemoveUnit(tpTag.style.fontSize)
+								);
+			}
+			else {
+				idName = "";
+				if((document.all(jjj).name != null) &&
+				   (document.all(jjj).name.length >= 8)) {
+					idName = document.all(jjj).name.substr(0,8);
+				}
+				if(idName == "PrtGrpId") {
+					break;
+				}
+			}
+		}
+		var blObject	= null;
+		var baseline = null;
+		bl_cnt = 0;
+		for(jjj=jj;jjj<document.all.length;jjj++) {
+			idName = "";
+			if((document.all(jjj).name != null) &&
+			   (document.all(jjj).name.length >= 6)) {
+				idName = document.all(jjj).name.substr(0,6);
+			}
+			if(idName == "prt_bl") {
+				baseline = document.all(jjj);
+				if(blObject == null){
+					blObject		= new Array();
+				}
+				blObject[bl_cnt++] = new _prLineTagStruct(
+									baseline,
+									(baseline.from+'').substring(0,(baseline.from+'').indexOf(",")),
+									(baseline.from+'').substring((baseline.from+'').indexOf(",")+1,(baseline.from+'').length),
+									(baseline.to+'').substring(0,(baseline.to+'').indexOf(",")),
+									(baseline.to+'').substring((baseline.to+'').indexOf(",")+1, (baseline.to+'').length)
+								);
+			}
+			else {
+				idName = "";
+				if((document.all(jjj).name != null) &&
+				   (document.all(jjj).name.length >= 8)) {
+					idName = document.all(jjj).name.substr(0,8);
+				}
+				if(idName == "PrtGrpId") {
+					break;
+				}
+			}
+		}
+		var ulObject	= null;
+		var underline = null;
+		ul_cnt = 0;
+		for(jjj=jj;jjj<document.all.length;jjj++) {
+			idName = "";
+			if((document.all(jjj).name != null) &&
+			   (document.all(jjj).name.length >= 6)) {
+				idName = document.all(jjj).name.substr(0,6);
+			}
+			if(idName == "prt_ul") {
+				underline = document.all(jjj);
+				if(ulObject == null){
+					ulObject		= new Array();
+				}
+				ulObject[ul_cnt++] = new _prLineTagStruct(
+									underline,
+									(underline.from+'').substring(0,(underline.from+'').indexOf(",",0)),
+									(underline.from+'').substring((underline.from+'').indexOf(",")+1,(underline.from+'').length),
+									(underline.to+'').substring(0,(underline.to+'').indexOf(",")),
+									(underline.to+'').substring((underline.to+'').indexOf(",")+1, (underline.to+'').length)
+								);
+			}
+			else {
+				idName = "";
+				if((document.all(jjj).name != null) &&
+				   (document.all(jjj).name.length >= 8)) {
+					idName = document.all(jjj).name.substr(0,8);
+				}
+				if(idName == "PrtGrpId") {
+					break;
+				}
+			}
+		}
+		gImageGroupList_[gIdx_] = new _prImageGroupStruct (
+			new _prSizeStruct(groupObject,groupWidth,groupHeight),
+			new _prSizeStruct(rectObject,rectWidth,rectHeight),
+			new _prSizeStruct(imgObject,imgWidth,imgHeight),
+			pObject,
+			tpObject,
+			blObject,
+			ulObject
+		);
+		gHrList_[gHrIdx_].end_idx = gIdx_;
+		gIdx_++;
+		i = save_i;
+	}
+	return ;
+}
+function _prResizeImage(rate) {
+	var  hei = 0;
+	for(var i=0; i<gImageGroupList_.length; i++){
+		if(gImageGroupList_[i].group != null){
+			var obj = gImageGroupList_[i].group;
+			obj.obj.style.width = (obj.width * rate) + 'px';
+			obj.obj.style.height = (obj.height * rate) + 'px';
+			obj.obj.coordsize = (obj.width * rate) + ',' + (obj.height * rate);
+			hei = obj.height * rate
+		}
+		if(gImageGroupList_[i].rect != null){
+			var obj = gImageGroupList_[i].rect;
+			obj.obj.style.width = (obj.width * rate) + 'px';
+			obj.obj.style.height = (obj.height * rate) + 'px';
+		}
+		if(gImageGroupList_[i].img != null){
+			var obj = gImageGroupList_[i].img;
+			obj.obj.style.width = (obj.width * rate) + 'px';
+			obj.obj.style.height = (obj.height * rate) + 'px';
+		}
+		if(gImageGroupList_[i].p != null){
+			var obj = gImageGroupList_[i].p;
+			for(var j=0; j<obj.length; j++){
+				var p = obj[j];
+				if(p.left != ""){
+					p.obj.style.left		= (p.left * rate) + 'px';
+				}
+				if(p.top != ""){
+					p.obj.style.top			= (p.top * rate) + 'px';
+				}
+				if(p.fontsize != ""){
+					p.obj.style.fontSize	= (p.fontsize * rate) + 'pt';
+				}
+			}
+		}
+		if(gImageGroupList_[i].tp != null){
+			var obj = gImageGroupList_[i].tp;
+			for(var j=0; j<obj.length; j++){
+				var tp = obj[j];
+				if(tp.fontsize != ""){
+					if(tp.fontsize*rate < 5.5){
+						tp.obj.style.fontSize	= '5.5pt';
+					}
+					else{
+						tp.obj.style.fontSize	= (tp.fontsize * rate) + 'pt';
+					}
+				}
+			}
+		}
+		if(gImageGroupList_[i].bl != null){
+			var obj = gImageGroupList_[i].bl;
+			for(var j=0; j<obj.length; j++){
+				var bl = obj[j];
+				var fromx,tox;
+				if(bl.fromx != ""){
+					fromx = bl.fromx * rate;
+					bl.obj.from	= fromx + "," + (bl.fromy * rate);
+				}
+				if(bl.tox != ""){
+					tox = bl.tox * rate;
+					if((0 >=tox-fromx) && (fromx-tox) < 1) {
+						tox = tox-1;
+					}
+					if((0 <= tox-fromx) && (tox-fromx) < 1) {
+						tox = tox+1;
+					}
+					bl.obj.to	= tox + "," + (bl.toy * rate);
+				}
+			}
+		}
+		if(gImageGroupList_[i].ul != null){
+			var obj = gImageGroupList_[i].ul;
+			for(var j=0; j<obj.length; j++){
+				var ul = obj[j];
+				if(ul.fromx != ""){
+					ul.obj.from	= (ul.fromx * rate) + "," + (ul.fromy * rate);
+				}
+				if(ul.tox != ""){
+					ul.obj.to	= (ul.tox * rate) + "," + (ul.toy * rate);
+				}
+			}
+		}
+	}
+	return hei;
+}
+function _prRemoveUnit(src){
+	var dst = src.substring(0,src.length-2);
+	return dst;
+}
+var   totalImg = 1;
+var   dispNum=1;
+function ChangeImageDisplay(disp_flag){
+	var strDisp,strPrt;
+
+	if(disp_flag == true) {
+		strDisp = "none";
+		strPrt = "block";
+	}
+	else {
+		strDisp = "block";
+		strPrt = "none";
+	}
+	for(idx=0;idx<document.all.length;idx++) {
+		idName = "";
+		if((document.all(idx).id != null) &&
+		   (document.all(idx).id.length >= 9)) {
+			idName = document.all(idx).id.substr(0,9);
+			if(idName == "imgDispId") {
+				dispElement = document.all(idx);
+				if(dispElement != null) {
+					dispElement.style.display = strDisp;
+				}
+			}
+		}
+	}
+	for(idx=0;idx<document.all.length;idx++) {
+		idName = "";
+		if((document.all(idx).id != null) &&
+		   (document.all(idx).id.length >= 8)) {
+			idName = document.all(idx).id.substr(0,8);
+			if(idName == "imgPrtId") {
+				prtElement = document.all(idx);
+				if(prtElement != null) {
+					prtElement.style.display = strPrt;
+				}
+			}
+		}
+	}
+	var imgIdElement,idNum;
+	for(idx=0;idx<document.all.length;idx++) {
+		idName = "";
+		if((document.all(idx).id != null) &&
+		   (document.all(idx).id.length >= 6)) {
+			idName = document.all(idx).id.substr(0,5);
+			idNum = document.all(idx).id.substr(5,document.all(idx).id.length-5);
+			if((idName == "imgId") && (idNum != 1)) {
+				imgIdElement = document.all(idx);
+				if(imgIdElement != null) {
+					imgIdElement.style.display = strPrt;
+				}
+			}
+		}
+	}
+}
+function MultiPageProcess(hr_idx,start_pos,end_pos){
+	var imgCtrlObj;
+	var img_idx;
+	var imgObject;
+	var img_pos;
+
+	if(end_pos-printCurrentPos > pageHeight) {
+		if(start_pos-printCurrentPos > pageHeight*3/4) {
+			hrDivObj = gHrList_[hr_idx-1].span;
+			hrDivObj.style.display = "block";
+			printPageCount++;
+			printCurrentPos = start_pos;
+		}
+		else {
+			imgCtrlObj = gHrList_[hr_idx-1].img_ctrl;
+			if(imgCtrlObj != null) {
+				img_idx = gHrList_[hr_idx-1].start_idx;
+				if(img_idx >= 0) {
+					imgObject = gImageGroupList_[img_idx].group;
+					img_pos = imgObject.obj.offsetTop + imgObject.obj.offsetHeight;
+					if(img_pos-printCurrentPos > pageHeight) {
+						if(imgObject.width >= 950) {
+							imgCtrlObj[imgCtrlObj.length-1].pre.style.display = "block";
+							printPageCount++;
+							printCurrentPos = imgObject.obj.offsetTop;
+						}
+						else {
+							hrDivObj = gHrList_[hr_idx-1].span;
+							hrDivObj.style.display = "block";
+							printPageCount++;
+							printCurrentPos = start_pos;
+						}
+					}
+				}
+				for(var kk=1;kk<imgCtrlObj.length;kk++) {
+					imgObject = gImageGroupList_[img_idx+kk].group;
+					img_pos = imgObject.obj.offsetTop + imgObject.obj.offsetHeight;
+					if(img_pos - printCurrentPos > pageHeight) {
+						if(imgObject.obj.offsetTop - printCurrentPos > pageHeight) {
+							imgCtrlObj[kk-1].post.style.display = "block";
+							var postObj = gImageGroupList_[img_idx+kk-1].group;
+							printCurrentPos = postObj.obj.offsetTop + postObj.obj.offsetHeight;
+						}
+						else {
+							imgCtrlObj[kk].pre.style.display = "block";
+							printCurrentPos = imgObject.obj.offsetTop;
+						}
+						printPageCount++;
+					}
+				}
+				if(end_pos-printCurrentPos > pageHeight) {
+					if(imgCtrlObj.length > 0) {
+						imgObject = gImageGroupList_[img_idx+imgCtrlObj.length-1].group;
+						if(imgObject.width >= 950) {
+							img_pos = imgObject.obj.offsetTop + imgObject.obj.offsetHeight;
+							imgCtrlObj[imgCtrlObj.length-1].post.style.display = "block";
+							printPageCount++;
+							printCurrentPos = img_pos;
+						}
+						else {
+							printPageCount++;
+							printCurrentPos += pageHeight;
+						}
+					}
+				}
+			}
+		}
+	}
+	while(end_pos-printCurrentPos > pageHeight) {
+		printPageCount++;
+		printCurrentPos += pageHeight;
+	}
+}
+var  pobj;
+function Apf()
+{
+	if(load_flag == false) {
+		return;
+	}
+	var  ppp;
+	var  strClick;
+	var  menuObj = parent.window.MENU;
+	if(menuObj == null) {
+		menuObj = parent.window.SM_HISTORY;
+	}
+	if(menuObj != null) {
+		for(ppp=0;ppp<menuObj.document.all.length;ppp++) {
+			pobj = menuObj.document.all(ppp);
+			if(pobj.onclick != null) {
+				var str = pobj.src.split("print.png");
+				if(str.length > 1) {
+					pobj.style.cursor = 'wait';
+					break;
+				}
+			}
+		}
+	}
+
+	setTimeout('StandardPrint()',100);
+
+
+	setTimeout("ChangeHeadCursor('hand')",100);
+}
+function ChangeCursor(type)
+{
+	document.body.style.cursor = type;
+}
+function ChangeHeadCursor(type)
+{
+	pobj.style.cursor = type;
+}
+function StandardPrint()
+{
+	_prInitImageInfo(100);
+	if(gIdx_ > 0) {
+		var  img_hei = _prResizeImage(67/100);
+		var  idx;
+		var dispId,dispElement;
+		var prtId,prtElement;
+		var orgWid,orgHei;
+
+		orgWid = parent.document.body.offsetWidth + 8;
+		orgHei = parent.document.body.offsetHeight + 58;
+
+		ChangeImageDisplay(true);
+
+		var  hrObj,hrDivObj,nextHrObj;
+		var  pos_dis;
+		var   obj_len;
+
+		printPageCount = 1;
+		printCurrentPos = 0;
+
+		parent.resizeBy(pageWidth-orgWid,0);
+
+		hrObj = gHrList_[0].obj;
+		for(idx=1;idx<gHrList_.length;idx++) {
+			nextHrObj = gHrList_[idx].obj;
+			obj_len = nextHrObj.offsetTop - hrObj.offsetTop;
+			if(obj_len > pageHeight*1/2) {
+				MultiPageProcess(idx,hrObj.offsetTop,nextHrObj.offsetTop);
+			}
+			else {
+				pos_dis = nextHrObj.offsetTop - printCurrentPos;
+				if(pos_dis > pageHeight) {
+					hrDivObj = gHrList_[idx-1].span;
+					hrDivObj.style.display = "block";
+					printPageCount++;
+					printCurrentPos = hrObj.offsetTop;
+					pos_dis = nextHrObj.offsetTop - printCurrentPos;
+					while(pos_dis > pageHeight) {
+						printPageCount++;
+						printCurrentPos += pageHeight;
+						pos_dis = nextHrObj.offsetTop - printCurrentPos;
+					}
+				}
+			}
+			hrObj = nextHrObj;
+		}
+		var totalHei = document.body.scrollHeight;
+		if(totalHei - hrObj.offsetTop > pageHeight*1/2) {
+			MultiPageProcess(idx,hrObj.offsetTop,totalHei);
+		}
+		else {
+			pos_dis = totalHei - printCurrentPos;
+			if(pos_dis > pageHeight) {
+				hrDivObj = gHrList_[idx-1].span;
+				hrDivObj.style.display = "block";
+				printPageCount++;
+			}
+		}
+		if(printPageCount > 1) {
+			var strConf = "" + printPageCount + " oldalt kíván nyomtatni?";
+			var res = confirm(strConf);
+			if(res == true) {
+				window.focus();
+				window.print();
+			}
+		}
+		else {
+			window.focus();
+			window.print();
+		}
+
+		ChangeImageDisplay(false);
+
+		parent.resizeBy(orgWid-pageWidth,0);
+		_prResizeImage(100/100);
+		window.scrollTo(0,0);
+	}
+	else {
+		window.focus();
+		window.print();
+	}
+}
+
+</script>
+<body onload="javascript:onLoadProc()" style="font-family:sans-serif;">
+<div xmlns:v="urn:schemas-microsoft-com:vml">
+<div class="top_title">
+Emelési és alátámasztási pontok
+</div>
+<div>
+</div>
+<span style="display:none" id="hrDivId">
+<div style="page-break-after:always">
+</div>
+</span>
+<hr width="100%" size="2" id="hrId" color="gray">
+<table width="100%" class="Viewer">
+<tr>
+<td width="80%" class="ViewerTD" id="textTd" valign="top">
+<div>
+MEGJEGYZÉS: Ha a gépjármű hátulsó részéből nehéz alkatrészeket szerel ki, például a felfüggesztést vagy az üzemanyag-tartályt, akkor először rögzítse a gépjármű elejét magas alátámasztó bakokkal. Ha jelentős súlyt szerel ki a gépjármű hátuljából, a súlypont megváltozhat, és a gépjármű előrebillenhet az emelőn.
+</div>
+<a name="iG01">
+</a>
+<div class="servinfosub_title">
+<b>
+Keretes emelő
+</b>
+</div>
+<a name="i010">
+</a>
+<ol>
+<li value="1">
+<div>
+Helyezze az emelőhasábokat (A) vagy alátámasztó bakokat a gépjármű első (B) és hátsó (C) alátámasztási pontjaihoz.
+</div>
+</li>
+</ol>
+<a name="i020">
+</a>
+<ol>
+<li value="2">
+<div>
+Emelje fel az emelőt néhány centiméterrel, és a óvatosan rázza meg a gépjárművet, hogy meggyőződjön a szilárd alátámasztásról.
+</div>
+</li>
+</ol>
+<a name="i030">
+</a>
+<ol>
+<li value="3">
+<div>
+Emelje fel az emelőt teljes magasságra, és ellenőrizze az emelési pontok szilárd érintkezését az emelőhasábokkal.
+</div>
+</li>
+</ol>
+</td>
+<td width="20%" class="ViewerTD" id="graphTd" valign="top" style="width:475px;height:501px;">
+<div>
+<span style="display:block" id="imgDispId">
+<a href="/manual/view.php?type=cn1&year=2006&id=ZOOM000000000000017&anc=1">
+<img src="/images/manual/honda/accord/series_7/SEA5E000000000K0041BAHD01.PNG">
+</a>
+</span>
+<span style="display:none" id="imgPrtId">
+<span style="display:none" id="prePageId">
+<div style="page-break-after:always;">
+</div>
+</span>
+<script>
+with(document) {
+write("<v:group id=\"group1\"  name=\"PrtGrpId\" class=\"drag\" style=\"position:relative; width:475px; height:481px;\" coordsize=\"475,481\">");
+write("<v:rect id=\"rect1\" name=\"PrtRectId\"class=\"drag\"  style=\"width:475px;height:481px;\">");
+write("<img id=\"img1\" name=\"PrtImgId\" src=\"/images/manual/honda/accord/series_7/SEA5E000000000K0041BAHD01.PNG\" border=\"1\" class=\"drag\" style=\"position:absolute;left:0px;top:0px;width:475px;height:481px;border-color:#ffffff\">");
+write("<p id=\"p1_1\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:223px;top:452px;font-weight:normal;font-size:8.71pt;\">");
+write("<nobr><b>A<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_2\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:409px;top:408px;font-weight:normal;font-size:8.71pt;\">");
+write("<nobr><b>C<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_3\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:38px;top:415px;font-weight:normal;font-size:8.71pt;\">");
+write("<nobr><b>B<br></b></nobr>");
+write("</p>");
+write("</v:rect>");
+write("</v:group>");
+}
+</script>
+<span style="display:none" id="postPageId">
+<div style="page-break-after:always;">
+</div>
+</span>
+</span>
+</div>
+</td>
+</tr>
+</table>
+<span style="display:none" id="hrDivId">
+<div style="page-break-after:always">
+</div>
+</span>
+<hr width="100%" size="2" id="hrId" color="gray">
+<table width="100%" class="Viewer">
+<tr>
+<td width="80%" class="ViewerTD" id="textTd" valign="top">
+<a name="iG02">
+</a>
+<div class="servinfosub_title">
+<b>
+Alátámasztó bakok
+</b>
+</div>
+<div>
+A gépjármű alátámasztó bakokra helyezéséhez ugyanazokat az alátámasztási pontokat használja, mint a keretes emelőnél. Mindig használjon alátámasztó bakokat, amikor csak kocsiemelővel alátámasztott gépjárművön vagy alatta dolgozik.
+</div>
+</td>
+<td width="20%" class="ViewerTD" id="graphTd" valign="top">
+</td>
+</tr>
+</table>
+<span style="display:none" id="hrDivId">
+<div style="page-break-after:always">
+</div>
+</span>
+<hr width="100%" size="2" id="hrId" color="gray">
+<table width="100%" class="Viewer">
+<tr>
+<td width="80%" class="ViewerTD" id="textTd" valign="top">
+<a name="iG03">
+</a>
+<div class="servinfosub_title">
+<b>
+Krokodilemelő
+</b>
+</div>
+<a name="i210">
+</a>
+<ol>
+<li value="1">
+<div>
+ Amikor a gépjármű elejét emeli fel, húzza be a rögzítőféket. Amikor felemeli a gépjármű farát, a kézi sebességváltót tegye hátramenetbe, az automata sebességváltót pedig P (parkolás) helyzetbe.
+</div>
+</li>
+</ol>
+<a name="i220">
+</a>
+<ol>
+<li value="2">
+<div>
+Támassza ki azokat a kerekeket, amelyeket nem emel fel.
+</div>
+</li>
+</ol>
+<a name="i230">
+</a>
+<ol>
+<li value="3">
+<div>
+Helyezze a krokodilemelőt az első emelő alátámasztási pont (A) vagy a hátsó emelő alátámasztási pont (B) alá, igazítsa be az alátámasztási pontot az emelő felfekvő felületének közepére (C), és annyira emelje fel a gépjárművet, hogy az alátámasztó bakok aláférjenek.
+</div>
+</li>
+</ol>
+<a name="i240">
+</a>
+<ol>
+<li value="4">
+<div>
+Helyezze a alátámasztó bakokat az alátámasztási pontok alá, és állítsa be őket úgy, hogy a gépjármű vízszintesen álljon.
+</div>
+</li>
+</ol>
+<a name="i250">
+</a>
+<ol>
+<li value="5">
+<div>
+Engedje le a gépjárművet a bakokra.
+</div>
+</li>
+</ol>
+</td>
+<td width="20%" class="ViewerTD" id="graphTd" valign="top" style="width:475px;height:469px;">
+<div>
+<span style="display:block" id="imgDispId">
+<a href="/manual/view.php?type=cn1&year=2006&id=ZOOM000000000000019&anc=1">
+<img src="/images/manual/honda/accord/series_7/SEA5E000000000K0041BAHD02.PNG">
+</a>
+</span>
+<span style="display:none" id="imgPrtId">
+<span style="display:none" id="prePageId">
+<div style="page-break-after:always;">
+</div>
+</span>
+<script>
+with(document) {
+write("<v:group id=\"group1\"  name=\"PrtGrpId\" class=\"drag\" style=\"position:relative; width:475px; height:449px;\" coordsize=\"475,449\">");
+write("<v:rect id=\"rect1\" name=\"PrtRectId\"class=\"drag\"  style=\"width:475px;height:449px;\">");
+write("<img id=\"img1\" name=\"PrtImgId\" src=\"/images/manual/honda/accord/series_7/SEA5E000000000K0041BAHD02.PNG\" border=\"1\" class=\"drag\" style=\"position:absolute;left:0px;top:0px;width:475px;height:449px;border-color:#ffffff\">");
+write("<p id=\"p1_1\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:211px;top:418px;font-weight:normal;font-size:8.72pt;\">");
+write("<nobr><b>C<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_2\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:205px;top:272px;font-weight:normal;font-size:8.72pt;\">");
+write("<nobr><b>B<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_3\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:208px;top:211px;font-weight:normal;font-size:8.72pt;\">");
+write("<nobr><b>C<br></b></nobr>");
+write("</p>");
+write("<p id=\"p1_4\" name=\"PrtPId\" class=\"drag\" style=\"position:absolute;left:208px;top:70px;font-weight:normal;font-size:8.72pt;\">");
+write("<nobr><b>A<br></b></nobr>");
+write("</p>");
+write("</v:rect>");
+write("</v:group>");
+}
+</script>
+<span style="display:none" id="postPageId">
+<div style="page-break-after:always;">
+</div>
+</span>
+</span>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<script>
+(function () {
+    function sendHeight() {
+        var body = document.body;
+        if (!body) return;
+
+        var rect = body.getBoundingClientRect();
+        var height = Math.ceil(rect.height);
+
+        window.parent.postMessage({
+            type: 'honda-iframe-height',
+            height: height
+        }, '*');
+    }
+
+    function fitContent() {
+        var body = document.body;
+        if (!body) return;
+
+        var viewportWidth = document.documentElement.clientWidth;
+        if (viewportWidth <= 0) return;
+
+        var candidates = document.querySelectorAll('[style*="width:"][style*="px"]');
+        var largestWidth = 0;
+
+        candidates.forEach(function (element) {
+            var style = window.getComputedStyle(element);
+            var width = parseFloat(style.width);
+
+            if (width > largestWidth) {
+                largestWidth = width;
+            }
+        });
+
+        if (largestWidth > viewportWidth && largestWidth > 0) {
+            var scale = viewportWidth / largestWidth;
+
+            body.style.transformOrigin = 'top left';
+            body.style.transform = 'scale(' + scale + ')';
+            body.style.width = largestWidth + 'px';
+        } else {
+            body.style.transform = '';
+            body.style.transformOrigin = '';
+            body.style.width = '';
+        }
+
+        sendHeight();
+    }
+
+    function ready() {
+        fitContent();
+        setTimeout(fitContent, 100);
+        setTimeout(fitContent, 500);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', ready);
+    } else {
+        ready();
+    }
+
+    window.addEventListener('load', fitContent);
+    window.addEventListener('resize', fitContent);
+
+    if (typeof ResizeObserver !== 'undefined') {
+        var observer = new ResizeObserver(fitContent);
+        if (document.documentElement) observer.observe(document.documentElement);
+        if (document.body) observer.observe(document.body);
+    }
+})();
+</script>
+</body>
+</html>
