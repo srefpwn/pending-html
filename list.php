@@ -5,17 +5,232 @@ if (!defined('APP_INIT')) {
     header('Location: /index.php');
     exit;
 }
-require_once __DIR__ . '/config.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/cars/functions.php';
+require_once __DIR__ . '/functions.php';
 
-/**
- * Melyik lista legyen?
+/*
+ * Manual típusa és évjárata
  *
- * ?page=cn  -> CN
- * ?page=clr -> CLR
+ * Példa:
+ * /manual/?type=cn1&year=2006
  */
-$page = strtolower($_GET['page'] ?? '');
-$type = $page;
+
+$type = strtolower(
+    trim((string)($_GET['type'] ?? ''))
+);
+
+$year = filter_input(
+    INPUT_GET,
+    'year',
+    FILTER_VALIDATE_INT
+);
+
+
+/*
+ * Alapadatok ellenőrzése
+ */
+
+if (
+    $type === '' ||
+    $year === false ||
+    $year === null ||
+    $year <= 0
+) {
+    echo '<p>Érvénytelen manual lista.</p>';
+    return;
+}
+
+
+/*
+ * Manual lista JSON útvonala
+ */
+
+$book = strtolower(
+    trim((string)($_GET['book'] ?? 'manual'))
+);
+
+if (!in_array($book, ['manual', 'body'], true)) {
+    $book = 'manual';
+}
+
+$listaFile = getManualListFile($type, $year, $book);
+
+/*
+ * JSON fájl ellenőrzése
+ */
+
+if (!is_file($listaFile)) {
+    echo '<p>A kiválasztott manual lista nem található.</p>';
+    return;
+}
+
+
+/*
+ * JSON betöltése
+ */
+
+$manualData = json_decode(
+    file_get_contents($listaFile),
+    true
+);
+
+
+/*
+ * JSON ellenőrzése
+ */
+
+if (
+    !is_array($manualData) ||
+    !isset($manualData['categories']) ||
+    !is_array($manualData['categories']) ||
+    count($manualData['categories']) === 0
+) {
+    echo '<p>A manual lista betöltése sikertelen.</p>';
+    return;
+}
+
+
+/*
+ * Összes kategória
+ */
+
+$categories = $manualData['categories'];
+
+/*
+ * Keresés
+ */
+$search = trim((string)($_GET['search'] ?? ''));
+$isSearch = ($search !== '');
+
+$searchResults = [];
+/*
+ * Kategória kiválasztása
+ *
+ * Ha nincs megadva:
+ * az első kategória lesz az aktív.
+ */
+
+$selectedCategoryId = filter_input(
+    INPUT_GET,
+    'category',
+    FILTER_VALIDATE_INT
+);
+
+
+/*
+ * Ha nincs érvényes category,
+ * akkor az első kategória ID-ját használjuk.
+ */
+
+if (!$isSearch && (
+    $selectedCategoryId === false ||
+    $selectedCategoryId === null
+)) {
+    $selectedCategoryId =
+        (int)($categories[0]['id'] ?? 0);
+}
+
+/*
+ * Kiválasztott kategória keresése
+ */
+
+$selectedCategory = null;
+
+foreach ($categories as $category) {
+
+    $categoryId =
+        (int)($category['id'] ?? 0);
+
+    if ($categoryId === $selectedCategoryId) {
+
+        $selectedCategory = $category;
+
+        break;
+    }
+}
+
+
+/*
+ * Ha a megadott kategória nem létezik,
+ * visszaesünk az első kategóriára.
+ */
+
+if (!$isSearch && $selectedCategory === null) {
+
+    $selectedCategory =
+        $categories[0];
+
+    $selectedCategoryId =
+        (int)($selectedCategory['id'] ?? 0);
+}
+
+/*
+ * A kiválasztott kategória témái
+ */
+
+$pages = [];
+
+if (!$isSearch) {
+
+    $pages =
+        $selectedCategory['pages'] ?? [];
+
+    if (!is_array($pages)) {
+        $pages = [];
+    }
+
+} else {
+
+    /*
+     * Keresés az összes kategória összes oldalában.
+     */
+    foreach ($categories as $category) {
+
+        $categoryId =
+            (int)($category['id'] ?? 0);
+
+        $categoryPages =
+            $category['pages'] ?? [];
+
+        if (!is_array($categoryPages)) {
+            continue;
+        }
+
+        foreach ($categoryPages as $page) {
+
+            $name =
+                (string)($page['name'] ?? '');
+
+            $id =
+                (string)($page['id'] ?? '');
+
+            if ($id === '') {
+                continue;
+            }
+
+            if (
+                mb_stripos(
+                    $name,
+                    $search,
+                    0,
+                    'UTF-8'
+                ) !== false
+            ) {
+
+                $searchResults[] = [
+                    'id' => $id,
+                    'name' => $name,
+                    'category_id' => $categoryId
+                ];
+            }
+        }
+    }
+}
+/*
+ * Aktuális autó adatai
+ */
+
+$carName = '';
+$vin = '';
 
 $carId = filter_input(
     INPUT_GET,
@@ -23,430 +238,202 @@ $carId = filter_input(
     FILTER_VALIDATE_INT
 );
 
-/**
- * Ellenőrizzük, hogy létező típust kértek-e.
- */
-if (!isset($configs[$page])) {
-    echo '<p>Érvénytelen lista.</p>';
-    return;
-}
-
-
-$config = $configs[$page];
-$userCar = null;
-$userCarConfig = null;
-
-if ($carId !== false && $carId !== null) {
+if (
+    $carId !== false &&
+    $carId !== null &&
+    $carId > 0
+) {
 
     $userCars = getUserCars();
 
-    foreach ($userCars as $car) {
+    foreach ($userCars as $userCar) {
 
         if (
-            isset($car['id']) &&
-            (int)$car['id'] === $carId
+            isset($userCar['id']) &&
+            (int)$userCar['id'] === $carId
         ) {
-            $userCar = $car;
+
+            $carName = trim(
+                (string)($userCar['name'] ?? '')
+            );
+
+            $vin = (string)(
+                $userCar['vin'] ?? ''
+            );
+
             break;
         }
     }
+}
+?>
+						<table align="left" width="100%" class="table-border">
+                            <tr>
+                                <td class="textv-top">
+                                <table align="center" class="table-border" width="100%">
+                                    <tr>
+                                        <td style="padding:0px;text-align:center;">
+                                        <span class="epc-title">
+                                        <?php if ($carName !== ''): ?>
+                                        <?= htmlspecialchars($carName) ?> - <?= htmlspecialchars($vin) ?> - 
+                                        <?php endif; ?>
+                                        <?= htmlspecialchars( $isSearch ? 'Keresés: ' . $search : (string)($selectedCategory['name'] ?? '')) ?> - <?= $book === 'body' ? 'Karosszéria-javítási kézikönyv' : 'Szerviz kézikönyv' ?>
+                                        </span>
+                                        </td>
+                                    </tr>
+                				<!-- Keresés -->
+               						<tr>
+                    					<td style="padding:20px;text-align:center;">
+                        				<form action="/manual/" method="get">
+                            			<table align="center">
+                                			<tr>
+                                				<td class="pr5">
+                                        		<input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Keresés a manualban" required>
+                                        		<input type="hidden" name="type" value="<?= htmlspecialchars($type) ?>">
+                                        		<input type="hidden" name="year" value="<?= (int)$year ?>">
+                                        		<input type="hidden" name="book" value="<?= htmlspecialchars($book) ?>">
+                                        		<?= $navigationInputs ?>
+                                    			</td>
+                                    			<td>
+                                        		<button type="submit">Keresés
+                                        		</button>
+                                    			</td>
+                                			</tr>
+                            			</table>
+                        				</form>
+                    					</td>
+                					</tr>
+									<tr>
+										<td style="padding:20px;text-align:center;">
+										<table align="center">
+											<tr>
+												<td><a href="?type=<?= urlencode($type) ?>&year=<?= (int)$year ?><?= $navigationParams ?>&book=manual" class="<?= $book !== 'manual' ? 'greybutton' : '' ?>"><button type="submit">Javítási könyvek</button></a></td>
+           										<td><a href="?type=<?= urlencode($type) ?>&year=<?= (int)$year ?><?= $navigationParams ?>&book=body" class="<?= $book !== 'body' ? 'greybutton' : '' ?>"><button type="submit">Karosszéria-javítási könyvek</button></a></td>
+											</tr>
+										</table>
+										</td>
+									</tr>
+                                    <tr>
+                                        <td class="textv-top">
+                                        <table class="menutable" width="100%">
+                        					<tr>
+                        						<td class="textv-top" width="200">
+                        						<table class="table-border">
+                        							
+                                						<?php foreach ($categories as $category): ?>
+                                    					<?php
+                                    					$categoryId =
+                                        				(int)($category['id'] ?? 0);
+
+                                    					$categoryName =
+                                        				(string)($category['name'] ?? '');
+                                        				
+                                        				$isActive =
+  												 	 	!$isSearch &&
+    													($categoryId === $selectedCategoryId);
+                                    					?>
+                                    				<tr>
+                                    					<td>
+                                        				<a href="?type=<?= urlencode($type) ?>&year=<?= (int)$year ?><?= $navigationParams ?>&category=<?= $categoryId ?>&book=<?= urlencode($book) ?>" class="<?= $isActive ? '' : 'greybutton' ?>">
+                                            			<button type="button" style="width:200px"><?= htmlspecialchars($categoryName) ?>
+                                            			</button>
+                                        				</a>
+                                    					</td>
+                                    				</tr>
+                                						<?php endforeach; ?>
+                        							
+                        						</table>
+                        						</td>
+                        						<td class="textv-top">
+                        						<table class="table-border" width="100%">
+                        			
+<?php
+
+/*
+ * A kiválasztott kategória témáinak megjelenítése.
+ *
+ * Minden téma külön sorban jelenik meg.
+ * A sorok háttérszíne váltakozik.
+ */
+
+$rowIndex = 0;
+
+$listItems = $isSearch
+    ? $searchResults
+    : $pages;
+
+foreach ($listItems as $page):
+
+$id =
+    (string)($page['id'] ?? '');
+
+$name =
+    (string)($page['name'] ?? '');
+
+$itemCategoryId = $isSearch
+    ? (int)($page['category_id'] ?? 0)
+    : (int)$selectedCategoryId;
+
+    if ($id === '') {
+        continue;
+    }
+
 
     /*
-     * Az autó konfigurációjának lekérése
+     * A konkrét manual oldal linkje.
      */
-    if ($userCar !== null) {
 
-        $userCarConfig = getCarConfig($userCar);
-
-        /*
-         * Ellenőrizzük, hogy az autó valóban
-         * ehhez az EPC oldalhoz tartozik-e.
-         */
-        if (
-            $userCarConfig === null ||
-            ($userCarConfig['epc_page'] ?? '') !== $page
-        ) {
-            $userCar = null;
-            $userCarConfig = null;
-        }
-
-    }
-}
-
-/**
- * JSON betöltése
- */
-$lista = json_decode(
-    file_get_contents($config['lista_json']),
-    true
-);
+    $href =
+        '/manual/view.php'
+        . '?type='
+        . urlencode($type)
+        . '&year='
+        . (int)$year
+. '&category='
+. $itemCategoryId
+        . '&id='
+        . urlencode($id);
 
 
-/**
- * Ha a JSON nem tölthető be vagy hibás.
- */
-if (!is_array($lista)) {
-    echo '<p>A lista betöltése sikertelen.</p>';
-    return;
-}
-/**
- * Kategóriák kigyűjtése a JSON-ból
- */
-$categories = [];
+    /*
+     * Váltakozó háttérszín.
+     *
+     * Az első sor row-even,
+     * a második row-odd.
+     */
 
-foreach ($lista as $elem) {
-    if (!empty($elem['category'])) {
-        $categories[] = (string)$elem['category'];
-    }
-}
-
-$categories = array_unique($categories);
-
-
-/**
- * Kiválasztott kategória
- */
-$selectedCategory = $_GET['category'] ?? 'all';
-
-
-/**
- * Lista szűrése
- */
-if ($selectedCategory !== 'all') {
-    $lista = array_filter($lista, function ($elem) use ($selectedCategory) {
-        return isset($elem['category'])
-            && $elem['category'] === $selectedCategory;
-    });
-}
-
-$lista = array_values($lista);
-
-
+    $rowClass =
+        ($rowIndex % 2 === 0)
+        ? 'row-even'
+        : 'row-odd';
 
 ?>
-			<table align="left" width="100%" class="table-border">
-				<tr>
-					<td class="textv-top">
-					<table align="left" class="table-border">
-					<?php if ($page === 'cn1' || $page === 'clr'): ?>
-					<?php if ($userCar !== null): ?>
-						<tr>
-    						<td style="padding:0px;text-align:center;">
-							<span class="epc-title">
-							<?php if (trim((string)($userCar['name'] ?? '')) !== ''): ?>
-           					<?= htmlspecialchars($userCar['name']) ?> - 
-        					<?php endif; ?>
-        					<?= htmlspecialchars($userCar['vin']) ?> - 
-        					<?php if (trim((string)($selectedCategory ?? '')) !== '' && $selectedCategory !== 'all'): ?><?= htmlspecialchars($selectedCategory) ?> - <?php endif; ?>
-							EPC
-							</span>
-    						</td>
-						</tr>
-					<?php else: ?>
-						<tr>
-    						<td style="padding:0px;text-align:center;">
-        					<span class="epc-title">
-        					<?= htmlspecialchars($config['name']) ?> - 
-        					<?php if (trim((string)($selectedCategory ?? '')) !== '' && $selectedCategory !== 'all'): ?><?= htmlspecialchars($selectedCategory) ?> - <?php endif; ?>
-        					EPC
-        					</span>
-        					</td>
-						</tr>
-					<?php endif; ?>
-						<tr>
-							<td style="padding:20px;text-align:center;">
-							<form action="/epc/search.php" method="get">
-							<table align="center">
-								<tr>
-									<td class="pr5"><input type="text" name="part_number" placeholder="Cikkszám vagy Alkatrész neve" required><input type="hidden" name="type" value="<?= htmlspecialchars($type) ?>"><?= $navigationInputs ?></td>
-									<td><button type="submit">Keresés</button></td>
-								</tr>
-							</table>
-							</form>
-							</td>
-						</tr>
-						<tr>
-							<td style="padding:20px;text-align:center;">
-							<table align="center">
-								<tr>
-									<td>
-									<a href="?page=<?= urlencode($page) ?><?= $navigationParams ?>&category=all" data-category="all" class="<?= $selectedCategory !== 'all' ? 'greybutton' : '' ?>"><button type="submit">Összes</button></a>
-									</td>
-           							<?php foreach ($categories as $category): ?>
-                					<td>
-                    				<a href="?page=<?= urlencode($page) ?><?= $navigationParams ?>&category=<?= urlencode($category) ?>" data-category="<?= htmlspecialchars($category) ?>" class="<?= $selectedCategory !== $category ? 'greybutton' : '' ?>"><button type="submit"><?= htmlspecialchars($category) ?></button></a>
-                					</td>
-            						<?php endforeach; ?>
-								</tr>
-							</table>
-							</td>
-						</tr>
-<?php endif; ?>
-						<tr>
-							<td class="textv-top">	ű
-<?php
-if (isset($_GET['ajax']) && $_GET['ajax'] === '1') {
-    ob_start();
-}
-?>					
-							<table id="epc-list" class="menutable">
-<?php
 
-/**
- * Képnév generálás
- *
- * Az első aláhúzásos eset mindkét rendszernél:
- * B_1 -> B_1_.png
- *
- * Egyéb eset:
- * CN  -> .gif
- * CLR -> .png
- */
-function getImageName(string $id, string $extension): string
-{
-    if (substr_count($id, '_') === 1) {
-        return $id . '_.png';
-    }
-
-    return $id . '.' . $extension;
-}
-
-
-/**
- * Oldal link generálás
- */
-function getHref(string $type, string $id): string
-{
-    return '/epc/view.php?type=' . urlencode($type) . '&page=' . urlencode(strtolower($id));
-}
-
-
-foreach ($lista as $i => $elem) {
-
-    /**
-     * Új sor minden harmadik elem előtt.
-     */
-    if ($i % 4 === 0) {
-        echo '<tr>';
-    }
-
-
-    $id = (string)($elem['id'] ?? '');
-    $title = (string)($elem['title'] ?? '');
-
-
-    $href = getHref($page, $id);
-
-    $image = $config['image_dir']
-           . getImageName($id, $config['extension']);
-
-    ?>
-    <td>
-        <a href="<?= htmlspecialchars($href) ?><?= $navigationParams ?>" class="epc">
-            <?= htmlspecialchars($id) ?>
-            <?= htmlspecialchars(mb_convert_case($title, MB_CASE_TITLE, 'UTF-8')) ?>
-            <br><br>
-            <img src="<?= htmlspecialchars($image) ?>" width="80%">
+<tr>
+    <td class="<?= $rowClass ?>">
+        <a
+            href="<?= htmlspecialchars($href) ?><?= $navigationParams ?>"
+            class="manual"
+        >
+            <?= htmlspecialchars($name) ?>
         </a>
     </td>
+</tr>
 
-    <?php
-
-
-    /**
-     * Harmadik elem után lezárjuk a sort.
-     */
-    if (($i + 1) % 4 === 0) {
-        echo '</tr>';
-    }
-}
-
-
-/**
- * Ha az utolsó sorban nincs meg a 3 elem,
- * feltöltjük üres cellákkal.
- */
-$maradek = count($lista) % 4;
-
-if ($maradek !== 0) {
-
-    for ($i = $maradek; $i < 4; $i++) {
-        echo '<td></td>';
-    }
-
-    echo '</tr>';
-}
-
-?>
-							</table>
 <?php
 
-if (isset($_GET['ajax']) && $_GET['ajax'] === '1') {
+    $rowIndex++;
 
-    $html = ob_get_clean();
-
-    header('Content-Type: application/json; charset=UTF-8');
-
-    echo json_encode([
-        'html' => $html,
-        'category' => $selectedCategory
-    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-
-    exit;
-}
+endforeach;
 
 ?>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
 
-document.addEventListener('click', function (event) {
-
-    const link = event.target.closest('a[data-category]');
-
-    if (!link) {
-        return;
-    }
-
-    event.preventDefault();
-
-    const category = link.dataset.category;
-
-    console.log('EPC kategória:', category);
-
-});
-
-    /*
-     * Kategória betöltése AJAX-szal
-     */
-    function loadCategory(category, updateUrl = true) {
-
-        const currentUrl = new URL(window.location.href);
-
-        /*
-         * Megőrizzük az összes jelenlegi URL-paramétert.
-         * Csak a category értékét módosítjuk.
-         */
-        currentUrl.searchParams.set('category', category);
-        currentUrl.searchParams.set('ajax', '1');
-
-        fetch(currentUrl.pathname + '?' + currentUrl.searchParams.toString())
-            .then(function (response) {
-
-                if (!response.ok) {
-                    throw new Error('A kérés sikertelen.');
-                }
-
-                return response.json();
-            })
-            .then(function (data) {
-
-                /*
-                 * A PHP a teljes EPC táblát küldi vissza.
-                 */
-                const oldList = document.getElementById('epc-list');
-
-                if (!oldList) {
-                    return;
-                }
-
-                oldList.outerHTML = data.html;
-
-
-                /*
-                 * Kategória gombok állapotának frissítése.
-                 */
-                buttons.forEach(function (button) {
-
-                    if (button.dataset.category === String(data.category)) {
-                        button.classList.remove('greybutton');
-                    } else {
-                        button.classList.add('greybutton');
-                    }
-
-                });
-
-
-                /*
-                 * URL frissítése oldalbetöltés nélkül.
-                 */
-                if (updateUrl) {
-
-                    const cleanUrl = new URL(window.location.href);
-
-                    cleanUrl.searchParams.set(
-                        'category',
-                        data.category
-                    );
-
-                    cleanUrl.searchParams.delete('ajax');
-
-                    history.pushState(
-                        { category: data.category },
-                        '',
-                        cleanUrl.pathname + '?' + cleanUrl.searchParams.toString()
-                    );
-                }
-
-            })
-            .catch(function (error) {
-
-                console.error(error);
-
-                /*
-                 * Ha az AJAX nem sikerül,
-                 * visszatérünk a normál GET-es működéshez.
-                 */
-                const button = Array.from(buttons).find(function (item) {
-                    return item.dataset.category === String(category);
-                });
-
-                if (button) {
-                    window.location.href = button.href;
-                }
-
-            });
-    }
-
-
-    /*
-     * Kategóriagombok kattintása
-     */
-    buttons.forEach(function (button) {
-
-        button.addEventListener('click', function (event) {
-
-            event.preventDefault();
-
-            const category = button.dataset.category;
-
-            if (!category) {
-                return;
-            }
-
-            loadCategory(category);
-
-        });
-
-    });
-
-
-    /*
-     * Böngésző Vissza / Előre gomb kezelése
-     */
-    window.addEventListener('popstate', function () {
-
-        const params = new URLSearchParams(window.location.search);
-        const category = params.get('category') || 'all';
-
-        loadCategory(category, false);
-
-    });
-
-});
-</script>
-							</td>
-						</tr>
-					</table>
-					</td>
-				</tr>
-			</table>
+                        						</table>
+                        						</td>
+                        					</tr>
+                        				</table>
+                        				</td>
+                					</tr>
+            					</table>
+        						</td>
+   			 				</tr>
+						</table>
