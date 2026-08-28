@@ -121,6 +121,8 @@ if ($selectedCategory !== 'all') {
 
 $lista = array_values($lista);
 
+
+
 ?>
 			<table align="left" width="100%" class="table-border">
 				<tr>
@@ -167,10 +169,12 @@ $lista = array_values($lista);
 							<td style="padding:20px;text-align:center;">
 							<table align="center">
 								<tr>
-									<td><a href="?page=<?= urlencode($page) ?><?= $navigationParams ?>&category=all" class="<?= $selectedCategory !== 'all' ? 'greybutton' : '' ?>"><button type="submit">Összes</button></a></td>
+									<td>
+									<a href="?page=<?= urlencode($page) ?><?= $navigationParams ?>&category=all" data-category="all" class="<?= $selectedCategory !== 'all' ? 'greybutton' : '' ?>"><button type="submit">Összes</button></a>
+									</td>
            							<?php foreach ($categories as $category): ?>
                 					<td>
-                    				<a href="?page=<?= urlencode($page) ?><?= $navigationParams ?>&category=<?= urlencode($category) ?>" class="<?= $selectedCategory !== $category ? 'greybutton' : '' ?>"><button type="submit"><?= htmlspecialchars($category) ?></button></a>
+                    				<a href="?page=<?= urlencode($page) ?><?= $navigationParams ?>&category=<?= urlencode($category) ?>" data-category="<?= htmlspecialchars($category) ?>" class="<?= $selectedCategory !== $category ? 'greybutton' : '' ?>"><button type="submit"><?= htmlspecialchars($category) ?></button></a>
                 					</td>
             						<?php endforeach; ?>
 								</tr>
@@ -179,8 +183,13 @@ $lista = array_values($lista);
 						</tr>
 <?php endif; ?>
 						<tr>
-							<td class="textv-top">
-							<table class="menutable">
+							<td class="textv-top">	ű
+<?php
+if (isset($_GET['ajax']) && $_GET['ajax'] === '1') {
+    ob_start();
+}
+?>					
+							<table id="epc-list" class="menutable">
 <?php
 
 /**
@@ -270,6 +279,162 @@ if ($maradek !== 0) {
 
 ?>
 							</table>
+<?php
+
+if (isset($_GET['ajax']) && $_GET['ajax'] === '1') {
+
+    $html = ob_get_clean();
+
+    header('Content-Type: application/json; charset=UTF-8');
+
+    echo json_encode([
+        'html' => $html,
+        'category' => $selectedCategory
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    exit;
+}
+
+?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const buttons = document.querySelectorAll('a[data-category]');
+
+    if (!buttons.length) {
+        return;
+    }
+
+
+    /*
+     * Kategória betöltése AJAX-szal
+     */
+    function loadCategory(category, updateUrl = true) {
+
+        const currentUrl = new URL(window.location.href);
+
+        /*
+         * Megőrizzük az összes jelenlegi URL-paramétert.
+         * Csak a category értékét módosítjuk.
+         */
+        currentUrl.searchParams.set('category', category);
+        currentUrl.searchParams.set('ajax', '1');
+
+        fetch(currentUrl.pathname + '?' + currentUrl.searchParams.toString())
+            .then(function (response) {
+
+                if (!response.ok) {
+                    throw new Error('A kérés sikertelen.');
+                }
+
+                return response.json();
+            })
+            .then(function (data) {
+
+                /*
+                 * A PHP a teljes EPC táblát küldi vissza.
+                 */
+                const oldList = document.getElementById('epc-list');
+
+                if (!oldList) {
+                    return;
+                }
+
+                oldList.outerHTML = data.html;
+
+
+                /*
+                 * Kategória gombok állapotának frissítése.
+                 */
+                buttons.forEach(function (button) {
+
+                    if (button.dataset.category === String(data.category)) {
+                        button.classList.remove('greybutton');
+                    } else {
+                        button.classList.add('greybutton');
+                    }
+
+                });
+
+
+                /*
+                 * URL frissítése oldalbetöltés nélkül.
+                 */
+                if (updateUrl) {
+
+                    const cleanUrl = new URL(window.location.href);
+
+                    cleanUrl.searchParams.set(
+                        'category',
+                        data.category
+                    );
+
+                    cleanUrl.searchParams.delete('ajax');
+
+                    history.pushState(
+                        { category: data.category },
+                        '',
+                        cleanUrl.pathname + '?' + cleanUrl.searchParams.toString()
+                    );
+                }
+
+            })
+            .catch(function (error) {
+
+                console.error(error);
+
+                /*
+                 * Ha az AJAX nem sikerül,
+                 * visszatérünk a normál GET-es működéshez.
+                 */
+                const button = Array.from(buttons).find(function (item) {
+                    return item.dataset.category === String(category);
+                });
+
+                if (button) {
+                    window.location.href = button.href;
+                }
+
+            });
+    }
+
+
+    /*
+     * Kategóriagombok kattintása
+     */
+    buttons.forEach(function (button) {
+
+        button.addEventListener('click', function (event) {
+
+            event.preventDefault();
+
+            const category = button.dataset.category;
+
+            if (!category) {
+                return;
+            }
+
+            loadCategory(category);
+
+        });
+
+    });
+
+
+    /*
+     * Böngésző Vissza / Előre gomb kezelése
+     */
+    window.addEventListener('popstate', function () {
+
+        const params = new URLSearchParams(window.location.search);
+        const category = params.get('category') || 'all';
+
+        loadCategory(category, false);
+
+    });
+
+});
+</script>
 							</td>
 						</tr>
 					</table>
