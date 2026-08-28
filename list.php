@@ -299,12 +299,21 @@ if (isset($_GET['ajax']) && $_GET['ajax'] === '1') {
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const buttons = document.querySelectorAll('a[data-category]');
+document.addEventListener('click', function (event) {
 
-    if (!buttons.length) {
+    const link = event.target.closest('a[data-category]');
+
+    if (!link) {
         return;
     }
 
+    event.preventDefault();
+
+    const category = link.dataset.category;
+
+    console.log('EPC kategória:', category);
+
+});
 
     /*
      * Kategória betöltése AJAX-szal
