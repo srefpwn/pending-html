@@ -18,14 +18,51 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/navigation.php';
  * Típus
  */
 
-$type = strtolower(
-    trim((string)($_GET['type'] ?? ''))
+$brand = strtolower(
+    trim((string)($_GET['brand'] ?? ''))
 );
 
+$model = strtolower(
+    trim((string)($_GET['model'] ?? ''))
+);
+
+$series = strtolower(
+    trim((string)($_GET['series'] ?? ''))
+);
+
+$modelCode = strtolower(
+    trim((string)($_GET['model_code'] ?? ''))
+);
 
 /*
  * Évjárat
  */
+ 
+$manualConfig = null;
+
+foreach ($configs as $item) {
+
+    if (
+        ($item['brand'] ?? '') === $brand &&
+        ($item['model'] ?? '') === $model &&
+        ($item['series'] ?? '') === $series &&
+        ($item['model_code'] ?? '') === $modelCode
+    ) {
+        $manualConfig = $item;
+        break;
+    }
+}
+
+if ($manualConfig === null) {
+    die('Ehhez az autóhoz nincs ilyen manual.');
+}
+
+$yearConfig =
+    $manualConfig['years'][(string)$year] ?? null;
+
+if ($yearConfig === null) {
+    die('A megadott évhez nem található Manual.');
+}
 
 $year = filter_input(
     INPUT_GET,
@@ -59,9 +96,6 @@ if ($anc !== '1' && $anc !== '2') {
  * Alapvető ellenőrzés
  */
 
-if ($type === '') {
-    die('Érvénytelen típus.');
-}
 
 if (
     $year === false ||
@@ -80,14 +114,6 @@ if ($id === '') {
  * Típus ellenőrzése
  */
 
-$allowedTypes = [
-    'cn1',
-    'cl9'
-];
-
-if (!in_array($type, $allowedTypes, true)) {
-    die('Érvénytelen típus.');
-}
 
 
 /*
@@ -107,11 +133,9 @@ if (
  */
 
 $jsonFile =
-    $_SERVER['DOCUMENT_ROOT']
-    . '/data/manual/honda/accord/series_7/json/'
+    $yearConfig['json_files']
     . $id
     . '.json';
-
 
 /*
  * JSON fájl ellenőrzése
