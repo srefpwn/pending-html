@@ -15,9 +15,36 @@ require_once __DIR__ . '/functions.php';
  * /manual/?type=cn1&year=2006
  */
 
-$type = strtolower(
-    trim((string)($_GET['type'] ?? ''))
+$brand = strtolower(
+    trim((string)($_GET['brand'] ?? ''))
 );
+
+$model = strtolower(
+    trim((string)($_GET['model'] ?? ''))
+);
+
+$series = strtolower(
+    trim((string)($_GET['series'] ?? ''))
+);
+
+$modelCode = strtolower(
+    trim((string)($_GET['model_code'] ?? ''))
+);
+
+$manualConfig = null;
+
+foreach ($configs as $item) {
+
+    if (
+        ($item['brand'] ?? '') === $brand &&
+        ($item['model'] ?? '') === $model &&
+        ($item['series'] ?? '') === $series &&
+        ($item['model_code'] ?? '') === $modelCode
+    ) {
+        $manualConfig = $item;
+        break;
+    }
+}
 
 $year = filter_input(
     INPUT_GET,
@@ -31,7 +58,7 @@ $year = filter_input(
  */
 
 if (
-    $type === '' ||
+    $manualConfig === null ||
     $year === false ||
     $year === null ||
     $year <= 0
@@ -53,7 +80,11 @@ if (!in_array($book, ['manual', 'body'], true)) {
     $book = 'manual';
 }
 
-$listaFile = getManualListFile($type, $year, $book);
+$listaFile = getManualListFile(
+    $manualConfig,
+    $year,
+    $book
+);
 
 /*
  * JSON fájl ellenőrzése
@@ -289,9 +320,10 @@ if (
                                 			<tr>
                                 				<td class="pr5">
                                         		<input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Keresés a manualban" required>
-                                        		<input type="hidden" name="type" value="<?= htmlspecialchars($type) ?>">
-                                        		<input type="hidden" name="year" value="<?= (int)$year ?>">
-                                        		<input type="hidden" name="book" value="<?= htmlspecialchars($book) ?>">
+                                        		<input type="hidden" name="brand" value="<?= htmlspecialchars($brand) ?>">
+												<input type="hidden" name="model" value="<?= htmlspecialchars($model) ?>">
+												<input type="hidden" name="series" value="<?= htmlspecialchars($series) ?>">
+												<input type="hidden" name="model_code" value="<?= htmlspecialchars($modelCode) ?>">
                                         		<?= $navigationInputs ?>
                                     			</td>
                                     			<td>
@@ -307,8 +339,16 @@ if (
 										<td style="padding:20px;text-align:center;">
 										<table id="manual-book" align="center">
 											<tr>
-												<td><a href="?type=<?= urlencode($type) ?>&year=<?= (int)$year ?><?= $navigationParams ?>&book=manual" data-book="manual" class="<?= $book !== 'manual' ? 'greybutton' : '' ?>"><button type="submit">Javítási könyvek</button></a></td>
-           										<td><a href="?type=<?= urlencode($type) ?>&year=<?= (int)$year ?><?= $navigationParams ?>&book=body" data-book="body" class="<?= $book !== 'body' ? 'greybutton' : '' ?>"><button type="submit">Karosszéria-javítási könyvek</button></a></td>
+   			 									<td>
+        										<a href="?brand=<?= urlencode($brand) ?>&model=<?= urlencode($model) ?>&series=<?= urlencode($series) ?>&model_code=<?= urlencode($modelCode) ?>&year=<?= (int)$year ?><?= $navigationParams ?>&book=manual" data-book="manual" class="<?= $book !== 'manual' ? 'greybutton' : '' ?>">
+        										<button type="submit">Javítási könyvek</button>
+        										</a>
+    											</td>
+												<td>
+        										<a href="?brand=<?= urlencode($brand) ?>&model=<?= urlencode($model) ?>&series=<?= urlencode($series) ?>&model_code=<?= urlencode($modelCode) ?>&year=<?= (int)$year ?><?= $navigationParams ?>&book=body" data-book="body" class="<?= $book !== 'body' ? 'greybutton' : '' ?>">
+        										<button type="submit">Karosszéria-javítási könyvek</button>
+        										</a>
+    											</td>
 											</tr>
 										</table>
 										</td>
@@ -334,7 +374,7 @@ if (
                                     					?>
                                     				<tr>
                                     					<td>
-                                        				<a href="?type=<?= urlencode($type) ?>&year=<?= (int)$year ?><?= $navigationParams ?>&category=<?= $categoryId ?>&book=<?= urlencode($book) ?>" data-category="<?= $categoryId ?>" class="<?= $isActive ? '' : 'greybutton' ?>">
+                                        				<a href="?brand=<?= urlencode($brand) ?>&model=<?= urlencode($model) ?>&series=<?= urlencode($series) ?>&model_code=<?= urlencode($modelCode) ?>&year=<?= (int)$year ?><?= $navigationParams ?>&category=<?= $categoryId ?>&book=<?= urlencode($book) ?>" data-category="<?= $categoryId ?>" class="<?= $isActive ? '' : 'greybutton' ?>">
                                             			<button type="button" style="width:200px"><?= htmlspecialchars($categoryName) ?>
                                             			</button>
                                         				</a>
