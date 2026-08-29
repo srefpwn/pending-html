@@ -2,12 +2,6 @@
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php';
 
-$brand = 'honda';
-$model = 'accord';
-$series = 'series_7';
-$modelCode = 'cn1';
-$year = 2006;
-
 $type = strtolower(trim((string)($_GET['type'] ?? 'cn1')));
 $year = filter_input(INPUT_GET, 'year', FILTER_VALIDATE_INT);
 
@@ -101,19 +95,16 @@ function convertManualLinks(
      */
     $html = preg_replace_callback(
         '#javascript\s*:\s*CtsProc\s*\(\s*[\'"]([^\'"]*)[\'"]\s*,\s*[\'"]([^\'"]+)[\'"]\s*,\s*[\'"]([^\'"]*)[\'"]\s*\)\s*;?#i',
-        function ($match) use ($brand, $model, $series, $modelCode, $year, $carId) {
+        function ($match) use ($type, $year, $carId) {
 
             $targetId = trim($match[2]);
             $anc      = trim($match[3]);
 
-$url =
-    '/manual/view.php'
-    . '?brand=' . rawurlencode($brand)
-    . '&model=' . rawurlencode($model)
-    . '&series=' . rawurlencode($series)
-    . '&model_code=' . rawurlencode($modelCode)
-    . '&year=' . rawurlencode((string)$year)
-    . '&id=' . rawurlencode($targetId);
+            $url =
+                '/manual/view.php'
+                . '?type=' . rawurlencode($type)
+                . '&year=' . rawurlencode((string)$year)
+                . '&id=' . rawurlencode($targetId);
 
             /*
              * Ha van Anc paraméter,
@@ -145,21 +136,18 @@ $url =
      */
     $html = preg_replace_callback(
         '#javascript\s*:\s*PrtProc\s*\(\s*[\'"]([^\'"]*)[\'"]\s*,\s*[\'"]([^\'"]+)[\'"](?:\s*,\s*[\'"]([^\'"]*)[\'"])?\s*\)\s*;?#i',
-        function ($match) use ($brand, $model, $series, $modelCode, $year, $carId) {
+        function ($match) use ($type, $year, $carId) {
 
             $targetId = trim($match[2]);
             $anc      = isset($match[3])
                 ? trim($match[3])
                 : '';
 
-$url =
-    '/manual/view.php'
-    . '?brand=' . rawurlencode($brand)
-    . '&model=' . rawurlencode($model)
-    . '&series=' . rawurlencode($series)
-    . '&model_code=' . rawurlencode($modelCode)
-    . '&year=' . rawurlencode((string)$year)
-    . '&id=' . rawurlencode($targetId);
+            $url =
+                '/manual/view.php'
+                . '?type=' . rawurlencode($type)
+                . '&year=' . rawurlencode((string)$year)
+                . '&id=' . rawurlencode($targetId);
 
             /*
              * Ha van Anc paraméter,
