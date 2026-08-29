@@ -14,10 +14,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/cars/functions.php';
  * ?page=cn  -> CN
  * ?page=clr -> CLR
  */
-$brand = strtolower(trim($_GET['brand'] ?? ''));
-$model = strtolower(trim($_GET['model'] ?? ''));
-$series = strtolower(trim($_GET['series'] ?? ''));
-$modelCode = strtolower(trim($_GET['model_code'] ?? ''));
+$page = strtolower($_GET['page'] ?? '');
+$type = $page;
 
 $carId = filter_input(
     INPUT_GET,
@@ -26,29 +24,15 @@ $carId = filter_input(
 );
 
 /**
- * Ellenőrizzük, hogy létező EPC konfigurációt kértek-e.
+ * Ellenőrizzük, hogy létező típust kértek-e.
  */
-$config = null;
-
-foreach ($configs as $item) {
-
-    if (
-        strtolower((string)($item['brand'] ?? '')) === $brand &&
-        strtolower((string)($item['model'] ?? '')) === $model &&
-        strtolower((string)($item['series'] ?? '')) === $series &&
-        strtolower((string)($item['model_code'] ?? '')) === $modelCode
-    ) {
-        $config = $item;
-        break;
-    }
-}
-
-if ($config === null) {
-    echo '<p>Érvénytelen EPC konfiguráció.</p>';
+if (!isset($configs[$page])) {
+    echo '<p>Érvénytelen lista.</p>';
     return;
 }
 
 
+$config = $configs[$page];
 $userCar = null;
 $userCarConfig = null;
 
@@ -80,7 +64,7 @@ if ($carId !== false && $carId !== null) {
          */
         if (
             $userCarConfig === null ||
-           ($userCarConfig['epc_page'] ?? '') !== $modelCode
+            ($userCarConfig['epc_page'] ?? '') !== $page
         ) {
             $userCar = null;
             $userCarConfig = null;
@@ -144,6 +128,7 @@ $lista = array_values($lista);
 				<tr>
 					<td class="textv-top">
 					<table align="left" class="table-border">
+					<?php if ($page === 'cn1' || $page === 'clr'): ?>
 					<?php if ($userCar !== null): ?>
 						<tr>
     						<td style="padding:0px;text-align:center;">
@@ -173,7 +158,7 @@ $lista = array_values($lista);
 							<form action="/epc/search.php" method="get">
 							<table align="center">
 								<tr>
-									<td class="pr5"><input type="text" name="part_number" placeholder="Cikkszám vagy Alkatrész neve" required><input type="hidden" name="brand" value="<?= htmlspecialchars($brand) ?>"><input type="hidden" name="model" value="<?= htmlspecialchars($model) ?>"><input type="hidden" name="series" value="<?= htmlspecialchars($series) ?>"><input type="hidden" name="model_code" value="<?= htmlspecialchars($modelCode) ?>"><?= $navigationInputs ?></td>
+									<td class="pr5"><input type="text" name="part_number" placeholder="Cikkszám vagy Alkatrész neve" required><input type="hidden" name="type" value="<?= htmlspecialchars($type) ?>"><?= $navigationInputs ?></td>
 									<td><button type="submit">Keresés</button></td>
 								</tr>
 							</table>
@@ -185,11 +170,11 @@ $lista = array_values($lista);
 							<table align="center">
 								<tr>
 									<td>
-									<a href="?brand=<?= urlencode($brand) ?>&model=<?= urlencode($model) ?>&series=<?= urlencode($series) ?>&model_code=<?= urlencode($modelCode) ?><?= $navigationParams ?>&category=all" data-category="all" class="<?= $selectedCategory !== 'all' ? 'greybutton' : '' ?>"><button type="submit">Összes</button></a>
+									<a href="?page=<?= urlencode($page) ?><?= $navigationParams ?>&category=all" data-category="all" class="<?= $selectedCategory !== 'all' ? 'greybutton' : '' ?>"><button type="submit">Összes</button></a>
 									</td>
            							<?php foreach ($categories as $category): ?>
                 					<td>
-                    				<a href="?brand=<?= urlencode($brand) ?>&model=<?= urlencode($model) ?>&series=<?= urlencode($series) ?>&model_code=<?= urlencode($modelCode) ?><?= $navigationParams ?>&category=<?= urlencode($category) ?>" data-category="<?= htmlspecialchars($category) ?>" class="<?= $selectedCategory !== $category ? 'greybutton' : '' ?>"><button type="submit"><?= htmlspecialchars($category) ?></button></a>
+                    				<a href="?page=<?= urlencode($page) ?><?= $navigationParams ?>&category=<?= urlencode($category) ?>" data-category="<?= htmlspecialchars($category) ?>" class="<?= $selectedCategory !== $category ? 'greybutton' : '' ?>"><button type="submit"><?= htmlspecialchars($category) ?></button></a>
                 					</td>
             						<?php endforeach; ?>
 								</tr>
@@ -225,20 +210,9 @@ function getImageName(string $id, string $extension): string
 /**
  * Oldal link generálás
  */
-function getHref(
-    string $brand,
-    string $model,
-    string $series,
-    string $modelCode,
-    string $id
-): string {
-
-    return '/epc/view.php'
-        . '?brand=' . urlencode($brand)
-        . '&model=' . urlencode($model)
-        . '&series=' . urlencode($series)
-        . '&model_code=' . urlencode($modelCode)
-        . '&page=' . urlencode(strtolower($id));
+function getHref(string $type, string $id): string
+{
+    return '/epc/view.php?type=' . urlencode($type) . '&page=' . urlencode(strtolower($id));
 }
 
 
@@ -256,13 +230,7 @@ foreach ($lista as $i => $elem) {
     $title = (string)($elem['title'] ?? '');
 
 
-    $href = getHref(
-    $brand,
-    $model,
-    $series,
-    $modelCode,
-    $id
-);
+    $href = getHref($page, $id);
 
     $image = $config['image_dir']
            . getImageName($id, $config['extension']);
