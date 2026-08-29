@@ -38,6 +38,13 @@ $modelCode = strtolower(
  * Évjárat
  */
  
+$year = filter_input(
+    INPUT_GET,
+    'year',
+    FILTER_VALIDATE_INT
+);
+
+
 $manualConfig = null;
 
 foreach ($configs as $item) {
@@ -63,12 +70,6 @@ $yearConfig =
 if ($yearConfig === null) {
     die('A megadott évhez nem található Manual.');
 }
-
-$year = filter_input(
-    INPUT_GET,
-    'year',
-    FILTER_VALIDATE_INT
-);
 
 
 /*
@@ -190,7 +191,10 @@ if (!is_array($page)) {
 
 function convertManualLinks(
     string $html,
-    string $type,
+    string $brand,
+    string $model,
+    string $series,
+    string $modelCode,
     int $year,
     ?int $carId = null
 ): string {
@@ -215,11 +219,14 @@ function convertManualLinks(
 
             $targetId = trim($match[2]);
 
-            $url =
-                '/manual/view.php'
-                . '?type=' . rawurlencode($type)
-                . '&year=' . rawurlencode((string)$year)
-                . '&id=' . rawurlencode($targetId);
+     $url =
+    '/manual/view.php'
+    . '?brand=' . rawurlencode($brand)
+    . '&model=' . rawurlencode($model)
+    . '&series=' . rawurlencode($series)
+    . '&model_code=' . rawurlencode($modelCode)
+    . '&year=' . rawurlencode((string)$year)
+    . '&id=' . rawurlencode($targetId);
 
 
             if ($carId !== null) {
@@ -256,11 +263,14 @@ function convertManualLinks(
 
             $targetId = trim($match[2]);
 
-            $url =
-                '/manual/view.php'
-                . '?type=' . rawurlencode($type)
-                . '&year=' . rawurlencode((string)$year)
-                . '&id=' . rawurlencode($targetId);
+     $url =
+    '/manual/view.php'
+    . '?brand=' . rawurlencode($brand)
+    . '&model=' . rawurlencode($model)
+    . '&series=' . rawurlencode($series)
+    . '&model_code=' . rawurlencode($modelCode)
+    . '&year=' . rawurlencode((string)$year)
+    . '&id=' . rawurlencode($targetId);
 
 
             if ($carId !== null) {
@@ -354,7 +364,10 @@ if ($carId !== false && $carId !== null) {
 
 $pageHtml = convertManualLinks(
     $pageHtml,
-    $type,
+    $brand,
+    $model,
+    $series,
+    $modelCode,
     (int)$year,
     ($carId !== false && $carId !== null)
         ? (int)$carId
