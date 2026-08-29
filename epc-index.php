@@ -3,27 +3,49 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/epc/config.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/navigation.php';
 
-$page = $_GET['page'] ?? 'tortenet';
-
-$backUrl = isset($configs[$page])
-    ? '/epc/'
-    : '/';
-
-$allowed_pages = [
-    'cn',
-    'clr'
-];
+$brand = strtolower(trim($_GET['brand'] ?? ''));
+$model = strtolower(trim($_GET['model'] ?? ''));
+$series = strtolower(trim($_GET['series'] ?? ''));
+$modelCode = strtolower(trim($_GET['model_code'] ?? ''));
 
 $from_cars = $_GET['from_cars'] ?? '';
 
+/*
+ * EPC konfiguráció keresése
+ */
+$config = null;
+
+if (
+    $brand !== '' &&
+    $model !== '' &&
+    $series !== '' &&
+    $modelCode !== ''
+) {
+    foreach ($configs as $item) {
+
+        if (
+            strtolower((string)($item['brand'] ?? '')) === $brand &&
+            strtolower((string)($item['model'] ?? '')) === $model &&
+            strtolower((string)($item['series'] ?? '')) === $series &&
+            strtolower((string)($item['model_code'] ?? '')) === $modelCode
+        ) {
+            $config = $item;
+            break;
+        }
+    }
+}
+
+$hasConfig = ($config !== null);
+
+/*
+ * AJAX kérés esetén csak az EPC listát adjuk vissza.
+ */
 if (
     isset($_GET['ajax']) &&
     $_GET['ajax'] === '1' &&
-    isset($configs[$page])
+    $hasConfig
 ) {
-
     require_once $_SERVER['DOCUMENT_ROOT'] . '/epc/list.php';
-
     exit;
 }
 ?>
@@ -58,7 +80,7 @@ if (
 				<table style="width:100%;padding-bottom:20px;">
 					<tr>
 						<td>
-						<?php if (isset($configs[$page])): ?>
+						<?php if ($hasConfig): ?>
 						<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/epc/list.php';?>
 						<?php else: ?>
                         <table align="left" width="100%" class="table-border">
@@ -81,7 +103,7 @@ if (
     						<tr>
 								<?php foreach ($configs as $key => $config): ?>
         						<td style="width:33.33%;text-align:center;padding:20px;">
-								<a href="?page=<?= urlencode($key) ?>" style="text-decoration:none;">
+								<a href="?brand=<?= urlencode($config['brand']) ?>&model=<?= urlencode($config['model']) ?>&series=<?= urlencode($config['series']) ?>&model_code=<?= urlencode($config['model_code']) ?>" style="text-decoration:none;">
 								<img src="<?= htmlspecialchars($config['preview']) ?>" width="100%"><br><br>
 								<span><?= htmlspecialchars($config['name']) ?></span>
            						</a>
