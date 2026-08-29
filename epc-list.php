@@ -80,7 +80,7 @@ if ($carId !== false && $carId !== null) {
          */
         if (
             $userCarConfig === null ||
-            ($userCarConfig['epc_page'] ?? '') !== $page
+           ($userCarConfig['epc_page'] ?? '') !== $modelCode
         ) {
             $userCar = null;
             $userCarConfig = null;
@@ -173,7 +173,7 @@ $lista = array_values($lista);
 							<form action="/epc/search.php" method="get">
 							<table align="center">
 								<tr>
-									<td class="pr5"><input type="text" name="part_number" placeholder="Cikkszám vagy Alkatrész neve" required><input type="hidden" name="type" value="<?= htmlspecialchars($type) ?>"><?= $navigationInputs ?></td>
+									<td class="pr5"><input type="text" name="part_number" placeholder="Cikkszám vagy Alkatrész neve" required><input type="hidden" name="brand" value="<?= htmlspecialchars($brand) ?>"><input type="hidden" name="model" value="<?= htmlspecialchars($model) ?>"><input type="hidden" name="series" value="<?= htmlspecialchars($series) ?>"><input type="hidden" name="model_code" value="<?= htmlspecialchars($modelCode) ?>"><?= $navigationInputs ?></td>
 									<td><button type="submit">Keresés</button></td>
 								</tr>
 							</table>
