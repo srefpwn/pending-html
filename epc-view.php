@@ -5,26 +5,35 @@ require_once __DIR__ . '/config.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/cars/functions.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/navigation.php';
 
-/*
- * Típus és oldal meghatározása
- *
- * Példák:
- * /7gen/epc/view.php?type=cn&page=ABC
- * /7gen/epc/view.php?type=clr&page=ABC
- */
+$brand = strtolower(trim($_GET['brand'] ?? ''));
+$model = strtolower(trim($_GET['model'] ?? ''));
+$series = strtolower(trim($_GET['series'] ?? ''));
+$modelCode = strtolower(trim($_GET['model_code'] ?? ''));
 
-$type = strtolower($_GET['type'] ?? '');
 $page = strtoupper($_GET['page'] ?? '');
 
 /*
- * Engedélyezett típusok
+ * EPC konfiguráció keresése
  */
+$config = null;
 
-$allowedTypes = ['cn1', 'clr'];
+foreach ($configs as $item) {
 
-if (!in_array($type, $allowedTypes, true)) {
-    die("Érvénytelen típus.");
+    if (
+        strtolower((string)($item['brand'] ?? '')) === $brand &&
+        strtolower((string)($item['model'] ?? '')) === $model &&
+        strtolower((string)($item['series'] ?? '')) === $series &&
+        strtolower((string)($item['model_code'] ?? '')) === $modelCode
+    ) {
+        $config = $item;
+        break;
+    }
 }
+
+if ($config === null) {
+    die("Érvénytelen EPC konfiguráció.");
+}
+
 
 /*
  * Autó meghatározása, ha van car paraméter
@@ -63,13 +72,16 @@ if ($carId !== false && $carId !== null) {
 
         $userCarConfig = getCarConfig($userCar);
 
-        if (
-            $userCarConfig === null ||
-            ($userCarConfig['epc_page'] ?? '') !== $type
-        ) {
-            $userCar = null;
-            $userCarConfig = null;
-        }
+if (
+    $userCarConfig === null ||
+    ($userCarConfig['brand'] ?? '') !== $config['brand'] ||
+    ($userCarConfig['model'] ?? '') !== $config['model'] ||
+    ($userCarConfig['series'] ?? '') !== $config['series'] ||
+    ($userCarConfig['model_code'] ?? '') !== $config['model_code']
+) {
+    $userCar = null;
+    $userCarConfig = null;
+}
     }
 }
 
@@ -77,7 +89,7 @@ if ($carId !== false && $carId !== null) {
  * JSON betöltése
  */
 
-$jsonFile = $configs[$type]['epc_json'];
+$jsonFile = $config['epc_json'];
 
 $json = file_get_contents($jsonFile);
 
@@ -95,7 +107,7 @@ if ($epc === null) {
  * Képformátum típusonként
  */
 
-$imageExtension = $configs[$type]['extension'];
+$imageExtension = $config['extension'];
 
 /*
  * Kép fájljának meghatározása
@@ -109,7 +121,7 @@ if (substr_count($imagePage, '_') == 1) {
     $imageFile = $imagePage . "." . $imageExtension;
 }
 
-$imagePath = $configs[$type]['image_dir'] . $imageFile;
+$imagePath = $config['image_dir'] . $imageFile;
 
 /*
  * Kért kategória megkeresése
@@ -137,9 +149,7 @@ if ($current === null) {
 
 $search = $_GET['search'] ?? '';
 $back = $_GET['back'] ?? '';
-echo '<pre>';
-var_dump($back);
-echo '</pre>';
+
 $from_cars = $_GET['from_cars'] ?? '';
 ?>
 <html>
@@ -182,7 +192,7 @@ $from_cars = $_GET['from_cars'] ?? '';
         				<?= htmlspecialchars($userCar['vin']) ?> - 
         				<?= htmlspecialchars(mb_convert_case($current['title'], MB_CASE_TITLE, 'UTF-8')) ?> - EPC
     					<?php else: ?>
-        				<?= htmlspecialchars($configs[$type]['name']) ?> - <?= htmlspecialchars(mb_convert_case($current['title'], MB_CASE_TITLE, 'UTF-8')) ?> - EPC
+        				<?= htmlspecialchars($configs['name']) ?> - <?= htmlspecialchars(mb_convert_case($current['title'], MB_CASE_TITLE, 'UTF-8')) ?> - EPC
     					<?php endif; ?>
     					</span>
 						</td>
