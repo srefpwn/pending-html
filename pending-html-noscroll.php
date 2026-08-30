@@ -3,10 +3,27 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php';
 
 $type = strtolower(trim((string)($_GET['type'] ?? 'cn1')));
+
+$brand = strtolower(trim((string)($_GET['brand'] ?? '')));
+$model = strtolower(trim((string)($_GET['model'] ?? '')));
+$series = strtolower(trim((string)($_GET['series'] ?? '')));
+$modelCode = strtolower(trim((string)($_GET['model_code'] ?? '')));
+
 $year = filter_input(INPUT_GET, 'year', FILTER_VALIDATE_INT);
 
-if ($type === '' || $year === false || $year === null || $year <= 0) {
+if (
+    $type === '' ||
+    $brand === '' ||
+    $model === '' ||
+    $series === '' ||
+    $modelCode === '' ||
+    $year === false ||
+    $year === null ||
+    $year <= 0
+) {
+
     exit('Érvénytelen típus vagy évjárat.');
+
 }
 
 $sourceDir = __DIR__ . '/html-src';
@@ -86,6 +103,10 @@ function convertJsImagePaths(string $js): string
 function convertManualLinks(
     string $html,
     string $type,
+    string $brand,
+    string $model,
+    string $series,
+    string $modelCode,
     int $year,
     ?int $carId = null
 ): string {
@@ -100,11 +121,14 @@ function convertManualLinks(
             $targetId = trim($match[2]);
             $anc      = trim($match[3]);
 
-            $url =
-                '/manual/view.php'
-                . '?type=' . rawurlencode($type)
-                . '&year=' . rawurlencode((string)$year)
-                . '&id=' . rawurlencode($targetId);
+$url =
+    '/manual/view.php'
+    . '?brand=' . rawurlencode($brand)
+    . '&model=' . rawurlencode($model)
+    . '&series=' . rawurlencode($series)
+    . '&model_code=' . rawurlencode($modelCode)
+    . '&year=' . rawurlencode((string)$year)
+    . '&id=' . rawurlencode($targetId);
 
             /*
              * Ha van Anc paraméter,
@@ -143,11 +167,14 @@ function convertManualLinks(
                 ? trim($match[3])
                 : '';
 
-            $url =
-                '/manual/view.php'
-                . '?type=' . rawurlencode($type)
-                . '&year=' . rawurlencode((string)$year)
-                . '&id=' . rawurlencode($targetId);
+$url =
+    '/manual/view.php'
+    . '?brand=' . rawurlencode($brand)
+    . '&model=' . rawurlencode($model)
+    . '&series=' . rawurlencode($series)
+    . '&model_code=' . rawurlencode($modelCode)
+    . '&year=' . rawurlencode((string)$year)
+    . '&id=' . rawurlencode($targetId);
 
             /*
              * Ha van Anc paraméter,
@@ -306,7 +333,15 @@ function loadAndInlineHondaScripts(
             }
 
             $js = convertJsImagePaths($js);
-            $js = convertManualLinks($js, $type, $year);
+            $js = convertManualLinks(
+    $js,
+    $type,
+    $brand,
+    $model,
+    $series,
+    $modelCode,
+    $year
+);
 
             return "<script>\n" . $js . "\n</script>";
         },
@@ -1053,7 +1088,15 @@ function prepareIframeDocument(
 
 $html = convertImagePaths($html);
 
-$html = convertManualLinks($html, $type, $year);
+$html = convertManualLinks(
+    $html,
+    $type,
+    $brand,
+    $model,
+    $series,
+    $modelCode,
+    $year
+);
 
 $html = convertJmpLinks($html);
 
