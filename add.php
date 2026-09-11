@@ -940,6 +940,8 @@ if (empty($formItems)) {
         														</td>
         														<td class="epc-text p5" style="background-color:#bb271a;color:#ffffff;width:15%;">Egységár
        															</td>
+        														<td class="epc-text p5" style="background-color:#bb271a;color:#ffffff;width:15%;">Összesen
+       															</td>
         														<td style="background-color:#bb271a;color:#ffffff;width:100px;">
         														</td>
     														</tr>
@@ -963,6 +965,9 @@ $rowClass =
         <td class="p5">
         <input type="number" name="item_unit_price[]" min="0" step="0.01" value="<?= htmlspecialchars($formItem['unit_price']) ?>" >
         </td>
+        <td class="p5">
+    	<input type="number" class="item-total-price" readonly>
+		</td>
 		<td class="p5 textv-center">
    		<?php if ($index > 0): ?>
         <button type="button" class="service-item-delete" onclick="removeServiceItem(this)"> − Törlés
@@ -1392,6 +1397,85 @@ document.addEventListener(
         toggleServiceType();
 
         updateServiceItemRows();
+
+        updateAllServiceItemTotals();
+
+    }
+);
+function updateServiceItemTotal(row)
+{
+    const quantityInput =
+        row.querySelector(
+            'input[name="item_quantity[]"]'
+        );
+
+    const unitPriceInput =
+        row.querySelector(
+            'input[name="item_unit_price[]"]'
+        );
+
+    const totalInput =
+        row.querySelector(
+            '.item-total-price'
+        );
+
+    if (
+        !quantityInput ||
+        !unitPriceInput ||
+        !totalInput
+    ) {
+        return;
+    }
+
+    const quantity =
+        parseFloat(quantityInput.value) || 0;
+
+    const unitPrice =
+        parseFloat(unitPriceInput.value) || 0;
+
+    const total =
+        quantity * unitPrice;
+
+    totalInput.value =
+        total > 0
+            ? total
+            : '';
+}
+
+
+function updateAllServiceItemTotals()
+{
+    const rows =
+        document.querySelectorAll(
+            'tr.service-item'
+        );
+
+    rows.forEach(
+        function (row) {
+            updateServiceItemTotal(row);
+        }
+    );
+}
+
+
+document.addEventListener(
+    'input',
+    function (event) {
+
+        if (
+            event.target.matches(
+                'input[name="item_quantity[]"], input[name="item_unit_price[]"]'
+            )
+        ) {
+            const row =
+                event.target.closest(
+                    'tr.service-item'
+                );
+
+            if (row) {
+                updateServiceItemTotal(row);
+            }
+        }
 
     }
 );
