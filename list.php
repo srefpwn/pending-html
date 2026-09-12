@@ -129,7 +129,6 @@ $lista = array_values($lista);
 				<tr>
 					<td class="textv-top">
 					<table align="left" class="table-border">
-					<?php if ($config['model_code'] === 'cn1' || $config['model_code'] === 'cl9' || $config['model_code'] === 'clr' || $config['model_code'] === 're5'): ?>
 					<?php if ($userCar !== null): ?>
 						<tr>
     						<td style="padding:0px;text-align:center;">
@@ -153,7 +152,6 @@ $lista = array_values($lista);
         					</span>
         					</td>
 						</tr>
-					<?php endif; ?>
 						<tr>
 							<td style="padding:20px;text-align:center;">
 							<form action="/epc/search.php" method="get">
