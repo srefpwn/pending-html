@@ -55,6 +55,7 @@ $year = filter_input(
 
 
 $manualConfig = null;
+$manualError = '';
 
 foreach ($configs as $item) {
 
@@ -72,18 +73,18 @@ foreach ($configs as $item) {
 }
 
 if ($manualConfig === null) {
- include $_SERVER['DOCUMENT_ROOT'] . '/manual/error.php'; 
- 
-    exit;
-
+    $manualError = 'A kiválasztott autóhoz szervizmanual nem érhető el.';
 }
 
-$yearConfig =
-    $manualConfig['years'][(string)$year] ?? null;
+$yearConfig = null;
 
-if ($yearConfig === null) {
-    include $_SERVER['DOCUMENT_ROOT'] . '/manual/error.php';
-    exit;
+if ($manualError === '') {
+    $yearConfig =
+        $manualConfig['years'][(string)$year] ?? null;
+
+    if ($yearConfig === null) {
+        $manualError = 'A kiválasztott autóhoz szervizmanual nem érhető el.';
+    }
 }
 
 
@@ -327,36 +328,30 @@ if ($pageHtml === '') {
     die('A manual oldal HTML tartalma üres.');
 }
 
-
 /*
- * Autó meghatározása, ha van car paraméter
+ * Autó ellenőrzése
  */
-
 $carId = filter_input(
     INPUT_GET,
     'car',
     FILTER_VALIDATE_INT
 );
 
+$userCar = null;
+$userCarConfig = null;
+
 if (
     $carId === false ||
     $carId === null ||
     $carId <= 0
 ) {
-    include $_SERVER['DOCUMENT_ROOT'] . '/manual/error.php';
-    exit;
-}
-
-$userCar = null;
-$userCarConfig = null;
-
-
-if ($carId !== false && $carId !== null) {
+    $manualError =
+        'A kiválasztott autóhoz szervizmanual nem érhető el.';
+} else {
 
     $userCars = getUserCars();
 
     foreach ($userCars as $car) {
-
         if (
             isset($car['id']) &&
             (int)$car['id'] === $carId
@@ -366,26 +361,35 @@ if ($carId !== false && $carId !== null) {
         }
     }
 
-
     /*
-     * Ha van autó, lekérjük a konfigurációját.
+     * Az autó nem létezik
      */
+    if ($userCar === null) {
 
-if ($userCar !== null) {
-    $userCarConfig =
-        getCarConfig($userCar);
+        $manualError =
+            'A kiválasztott autóhoz szervizmanual nem érhető el.';
 
-    if ($userCarConfig === null) {
-        $userCar = null;
-        $userCarConfig = null;
     } else {
 
         /*
+         * VIN alapján meghatározott konfiguráció
+         */
+        $userCarConfig =
+            getCarConfig($userCar);
+
+        /*
          * A car csak akkor érvényes,
-         * ha ugyanahhoz a manual konfigurációhoz tartozik,
-         * amelyet a GET paraméterek meghatároznak.
+         * ha:
+         *
+         * - létezik a VIN konfiguráció
+         * - engedélyezett a manual
+         * - az autó brand/model/series adatai egyeznek
+         * - a VIN konfiguráció model/body/trim adatai
+         *   egyeznek a kért manual konfigurációval
          */
         if (
+            $userCarConfig === null ||
+            ($userCarConfig['manual_enable'] ?? 0) != 1 ||
             ($userCar['brand'] ?? '') !== $brand ||
             ($userCar['model'] ?? '') !== $model ||
             ($userCar['series'] ?? '') !== $series ||
@@ -393,12 +397,10 @@ if ($userCar !== null) {
             ($userCarConfig['body_code'] ?? '') !== $bodyCode ||
             ($userCarConfig['trim_code'] ?? '') !== $trimCode
         ) {
-            $userCar = null;
-            $userCarConfig = null;
-            $carId = null;
+            $manualError =
+                'A kiválasztott autóhoz szervizmanual nem érhető el.';
         }
     }
-}
 }
 /*
  * CtsProc linkek átalakítása
