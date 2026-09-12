@@ -152,6 +152,7 @@ $lista = array_values($lista);
         					</span>
         					</td>
 						</tr>
+					<?php endif; ?>
 						<tr>
 							<td style="padding:20px;text-align:center;">
 							<form action="/epc/search.php" method="get">
@@ -180,7 +181,6 @@ $lista = array_values($lista);
 							</table>
 							</td>
 						</tr>
-						<?php endif; ?>
 						<tr>
 							<td class="textv-top">				
 							<table class="menutable">
