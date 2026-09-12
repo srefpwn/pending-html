@@ -105,17 +105,34 @@ if (
                   		</table>
                   		<?php endif; ?>
 						<table align="center" width="100%">
-    						<tr>
-								<?php foreach ($configs as $key => $config): ?>
-        						<td style="width:33.33%;text-align:center;padding:20px;">
-								<a href="?brand=<?= urlencode($config['brand']) ?>&model=<?= urlencode($config['model']) ?>&series=<?= urlencode($config['series']) ?>&model_code=<?= urlencode($config['model_code']) ?>" style="text-decoration:none;">
-								<img src="<?= htmlspecialchars($config['preview']) ?>" width="100%"><br><br>
-								<span><?= htmlspecialchars($config['name']) ?></span>
-           						</a>
-        						</td>
-						<?php endforeach; ?>
-   							</tr>
-						</table>
+
+<?php foreach ($configs as $key => $config): ?>
+
+<?php if ($key % 3 === 0): ?>
+<tr>
+<?php endif; ?>
+
+<td style="width:33.33%;text-align:center;padding:20px;">
+<a href="?brand=<?= urlencode($config['brand']) ?>&model=<?= urlencode($config['model']) ?>&series=<?= urlencode($config['series']) ?>&model_code=<?= urlencode($config['model_code']) ?>" style="text-decoration:none;">
+
+<img src="<?= htmlspecialchars($config['preview']) ?>" width="100%"><br><br>
+
+<span><?= htmlspecialchars($config['name']) ?></span>
+
+</a>
+</td>
+
+<?php if (($key + 1) % 3 === 0): ?>
+</tr>
+<?php endif; ?>
+
+<?php endforeach; ?>
+
+<?php if (count($configs) % 3 !== 0): ?>
+</tr>
+<?php endif; ?>
+
+</table>
 						<?php endif; ?>
 						</td>
 					</tr>
