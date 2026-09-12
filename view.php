@@ -228,16 +228,7 @@ function convertManualLinks(
 
     $html = preg_replace_callback(
         '#javascript\s*:\s*CtsProc\s*\(\s*[\'"]([^\'"]*)[\'"]\s*,\s*[\'"]([^\'"]+)[\'"]\s*,\s*[\'"]([^\'"]*)[\'"]\s*\)#i',
-        function ($match) use (
-    $brand,
-    $model,
-    $series,
-    $modelCode,
-    $bodyCode,
-    $trimCode,
-    $year,
-    $carId
-) {
+        function ($match) use ($type, $year, $carId) {
 
             $targetId = trim($match[2]);
 
@@ -283,16 +274,7 @@ function convertManualLinks(
 
     $html = preg_replace_callback(
         '#javascript\s*:\s*PrtProc\s*\(\s*[\'"]([^\'"]*)[\'"]\s*,\s*[\'"]([^\'"]+)[\'"](?:\s*,\s*[\'"]([^\'"]*)[\'"])?\s*\)\s*;?#i',
-        function ($match) use (
-    $brand,
-    $model,
-    $series,
-    $modelCode,
-    $bodyCode,
-    $trimCode,
-    $year,
-    $carId
-) {
+        function ($match) use ($type, $year, $carId) {
 
             $targetId = trim($match[2]);
 
@@ -418,38 +400,32 @@ $pageHtml = convertManualLinks(
  * hozzáadjuk az aktuális autó ID-ját.
  */
 if ($carId !== false && $carId !== null) {
+
     $pageHtml = preg_replace_callback(
         '#/manual/view\.php\?[^"\'<>\s]+#i',
-        function ($match) use (
-            $modelCode,
-            $bodyCode,
-            $trimCode,
-            $year,
-            $carId
-        ) {
+        function ($match) use ($carId) {
+
             $url = $match[0];
 
-            if (!preg_match('#(?:[?&])model_code=[^&]+#i', $url)) {
-                $url .= '&model_code=' . rawurlencode($modelCode);
+            /*
+             * Ha már van car paraméter,
+             * nem adjuk hozzá újra.
+             */
+            if (
+                preg_match(
+                    '#(?:[?&])car=[^&]+#i',
+                    $url
+                )
+            ) {
+                return $url;
             }
 
-            if (!preg_match('#(?:[?&])body_code=[^&]+#i', $url)) {
-                $url .= '&body_code=' . rawurlencode($bodyCode);
-            }
-
-            if (!preg_match('#(?:[?&])trim_code=[^&]+#i', $url)) {
-                $url .= '&trim_code=' . rawurlencode($trimCode);
-            }
-
-            if (!preg_match('#(?:[?&])year=[^&]+#i', $url)) {
-                $url .= '&year=' . rawurlencode((string)$year);
-            }
-
-            if (!preg_match('#(?:[?&])car=[^&]+#i', $url)) {
-                $url .= '&car=' . rawurlencode((string)$carId);
-            }
-
-            return $url;
+            /*
+             * Aktuális autó ID hozzáadása.
+             */
+            return $url
+                . '&car='
+                . rawurlencode((string)$carId);
         },
         $pageHtml
     );
