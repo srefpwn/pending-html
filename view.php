@@ -113,17 +113,21 @@ if ($anc !== '1' && $anc !== '2') {
  * Alapvető ellenőrzés
  */
 
-
 if (
     $year === false ||
     $year === null ||
     $year <= 0
 ) {
-    die('Érvénytelen évjárat.');
+    $manualError =
+        'A kiválasztott autóhoz szervizmanual nem érhető el.';
 }
 
-if ($id === '') {
-    die('Hiányzó oldalazonosító.');
+if (
+    $id === '' &&
+    $manualError === ''
+) {
+    $manualError =
+        'A kiválasztott autóhoz szervizmanual nem érhető el.';
 }
 
 
@@ -139,58 +143,63 @@ if ($id === '') {
 
 if (
     !preg_match('/^[0-9]{15}$/', $id) &&
-    !preg_match('/^ZOOM[0-9]+(?:_PR)?$/i', $id)
+    !preg_match('/^ZOOM[0-9]+(?:_PR)?$/i', $id) &&
+    $manualError === ''
 ) {
-    die('Érvénytelen oldalazonosító.');
+    $manualError =
+        'A kiválasztott autóhoz szervizmanual nem érhető el.';
 }
-
 
 /*
  * JSON fájl elérési útja
  */
+$jsonFile = '';
+$page = [];
 
-$jsonFile =
-    $yearConfig['json_files']
-    . $id
-    . '.json';
+if ($manualError === '') {
 
-/*
- * JSON fájl ellenőrzése
- */
+    $jsonFile =
+        $yearConfig['json_files']
+        . $id
+        . '.json';
 
-if (!is_file($jsonFile)) {
-    die('A kért manual oldal nem található.');
-}
+    /*
+     * JSON fájl ellenőrzése
+     */
+    if (!is_file($jsonFile)) {
 
+        $manualError =
+            'A kiválasztott autóhoz szervizmanual nem érhető el.';
 
-/*
- * JSON betöltése
- */
+    } else {
 
-$json = file_get_contents($jsonFile);
+        /*
+         * JSON betöltése
+         */
+        $json = file_get_contents($jsonFile);
 
-if ($json === false) {
-    die('A manual oldal nem olvasható.');
-}
+        if ($json === false) {
 
+            $manualError =
+                'A kiválasztott autóhoz szervizmanual nem érhető el.';
 
-/*
- * JSON feldolgozása
- */
+        } else {
 
-$page = json_decode(
-    $json,
-    true
-);
+            /*
+             * JSON feldolgozása
+             */
+            $page = json_decode(
+                $json,
+                true
+            );
 
+            if (!is_array($page)) {
 
-if (!is_array($page)) {
-    die(
-        'JSON hiba: '
-        . htmlspecialchars(
-            json_last_error_msg()
-        )
-    );
+                $manualError =
+                    'A kiválasztott autóhoz szervizmanual nem érhető el.';
+            }
+        }
+    }
 }
 
 /*
@@ -324,8 +333,12 @@ $pageHtml =
  * Ellenőrzés
  */
 
-if ($pageHtml === '') {
-    die('A manual oldal HTML tartalma üres.');
+if (
+    $pageHtml === '' &&
+    $manualError === ''
+) {
+    $manualError =
+        'A kiválasztott autóhoz szervizmanual nem érhető el.';
 }
 
 /*
