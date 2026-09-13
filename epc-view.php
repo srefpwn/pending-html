@@ -34,8 +34,11 @@ foreach ($configs as $item) {
     }
 }
 
+$epcError = '';
+
 if ($config === null) {
-    die("Érvénytelen EPC konfiguráció.");
+    $epcError =
+        'A kiválasztott autóhoz EPC nem érhető el.';
 }
 
 
