@@ -118,11 +118,22 @@ foreach ($configs as $item) {
     }
 }
 
-if ($config === null) {
-    http_response_code(400);
-    exit('Érvénytelen EPC konfiguráció.');
-}
+$epcError = '';
 
+if (
+    (
+        $brand !== '' ||
+        $model !== '' ||
+        $series !== '' ||
+        $modelCode !== '' ||
+        $bodyCode !== '' ||
+        $trimCode !== ''
+    ) &&
+    $config === null
+) {
+    $epcError =
+        'A kiválasztott autóhoz EPC nem érhető el.';
+}
 /**
  * Cikkszám normalizálása.
  *
