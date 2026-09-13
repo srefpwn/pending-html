@@ -100,7 +100,18 @@ if ($userCar !== null) {
 }
     }
 }
-
+if (
+    isset($_GET['car']) &&
+    (
+        $carId === false ||
+        $carId === null ||
+        $carId <= 0 ||
+        $userCar === null
+    )
+) {
+    $epcError =
+        'A kiválasztott autóhoz EPC nem érhető el.';
+}
 /*
  * JSON betöltése
  */
