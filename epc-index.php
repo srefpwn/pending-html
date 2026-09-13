@@ -19,7 +19,6 @@ $from_cars = $_GET['from_cars'] ?? '';
  */
 $config = null;
 
-
 if (
     $brand !== '' &&
     $model !== '' &&
@@ -44,82 +43,8 @@ if (
     }
 }
 
-/*
- * EPC hiba
- */
-$epcError = '';
-
 $hasConfig = ($config !== null);
 
-$hasSelection =
-    $brand !== '' ||
-    $model !== '' ||
-    $series !== '' ||
-    $modelCode !== '' ||
-    $bodyCode !== '' ||
-    $trimCode !== '';
-
-if (
-    $hasSelection &&
-    !$hasConfig
-) {
-    $epcError =
-        'A kiválasztott autóhoz EPC nem érhető el.';
-}
-/*
- * Autó ellenőrzése
- */
-$carId = filter_input(
-    INPUT_GET,
-    'car',
-    FILTER_VALIDATE_INT
-);
-
-$userCar = null;
-$userCarConfig = null;
-
-if (
-    $carId !== false &&
-    $carId !== null &&
-    $carId > 0
-) {
-    $userCars = getUserCars();
-
-    foreach ($userCars as $car) {
-        if (
-            isset($car['id']) &&
-            (int)$car['id'] === $carId
-        ) {
-            $userCar = $car;
-            break;
-        }
-    }
-
-    if ($userCar === null) {
-
-        $epcError =
-            'A kiválasztott autóhoz EPC nem érhető el.';
-
-    } else {
-
-        $userCarConfig =
-            getCarConfig($userCar);
-
-        if (
-            $userCarConfig === null ||
-            ($userCarConfig['epc_enable'] ?? 0) != 1 ||
-            ($userCar['brand'] ?? '') !== $brand ||
-            ($userCar['model'] ?? '') !== $model ||
-            ($userCar['series'] ?? '') !== $series ||
-            ($userCarConfig['model_code'] ?? '') !== $modelCode ||
-            ($userCarConfig['body_code'] ?? '') !== $bodyCode ||
-            ($userCarConfig['trim_code'] ?? '') !== $trimCode
-        ) {
-            $epcError =
-                'A kiválasztott autóhoz EPC nem érhető el.';
-        }
-    }
-}
 /*
  * AJAX kérés esetén csak az EPC listát adjuk vissza.
  */
@@ -176,17 +101,15 @@ if (
                        			</td>
                   			</tr>
                   		</table>
-                  		<?php if ($epcError !== ''): ?>
-    <table align="center" width="100%">
-        <tr>
-            <td style="padding:0px;text-align:center;">
-                <span class="epc-title5">
-                    <?= htmlspecialchars($epcError) ?>
-                </span>
-            </td>
-        </tr>
-    </table>
-<?php endif; ?>
+                  		<?php if (isset($_GET['car'])): ?>
+                  		<table align="center" width="100%">
+                    		<tr>
+                       			<td style="padding:0px;text-align:center;">
+                       			<span class="epc-title5">Ehhez az autóhoz nincs EPC, válasszon az elérhető típusok közül.</span>
+                       			</td>
+                  			</tr>
+                  		</table>
+                  		<?php endif; ?>
 						<table align="center" width="100%">
 
 <?php foreach ($configs as $key => $config): ?>
