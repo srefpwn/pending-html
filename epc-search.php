@@ -225,7 +225,7 @@ $results = [];
 /**
  * Ha van keresési kifejezés, elvégezzük a keresést.
  */
-if ($partNumber !== '') {
+if ($epcError === '' && $partNumber !== '') {
 
     foreach ($epc as $page) {
 
@@ -338,27 +338,29 @@ if ($partNumber !== '') {
 							<tr>
 								<td class="textv-top" style="padding-bottom:40px;">
 								<table align="left" width="100%" class="table-border">
-									<?php if ($userCar !== null): ?>
-									<tr>
-    									<td style="padding:0px;text-align:center;">
-										<span class="epc-title">
-										<?php if (trim((string)($userCar['name'] ?? '')) !== ''): ?>
-           								<?= htmlspecialchars($userCar['name']) ?> - 
-        								<?php endif; ?>
-        								<?= htmlspecialchars($userCar['vin']) ?> - 
-										EPC Kereső
-										</span>
-    									</td>
-									</tr>
-									<?php else: ?>
-									<tr>
-    									<td style="padding:0px;text-align:center;">
-        								<span class="epc-title">
-        								<?= htmlspecialchars($config['name']) ?> - EPC Kereső
-        								</span>
+									<?php if ($epcError !== ''): ?>
+    								<tr>
+        								<td style="padding:0px;text-align:center;">
+            							<span class="epc-title"><?= htmlspecialchars($epcError) ?>
+            							</span>
         								</td>
-									</tr>
+    								</tr>
+									<?php elseif ($userCar !== null): ?>
+    								<tr>
+       						 			<td style="padding:0px;text-align:center;">
+            							<span class="epc-title"><?php if (trim((string)($userCar['name'] ?? '')) !== ''): ?><?= htmlspecialchars($userCar['name']) ?> - <?php endif; ?><?= htmlspecialchars($userCar['vin']) ?> - EPC Kereső
+            							</span>
+        								</td>
+    								</tr>
+									<?php else: ?>
+    								<tr>
+        								<td style="padding:0px;text-align:center;">
+            							<span class="epc-title"><?= htmlspecialchars($config['name']) ?> - EPC Kereső
+            							</span>
+        								</td>
+    								</tr>
 									<?php endif; ?>
+									<?php if ($epcError === ''): ?>
 									<tr>
 										<td style="padding:20px;text-align:center;">
            								<form action="/epc/search.php" method="get">
@@ -382,9 +384,9 @@ if ($partNumber !== '') {
                 						<span class='epc-text''>Találatok: <?= count($results) ?></span>
                 						<br><br>
                 						<span class='epc-text''>Keresett kifejezés: <?= htmlspecialchars($partNumber) ?></span>
-                						<?php foreach ($results as $result): ?>
                 						</td>
                 					</tr>
+                					<?php foreach ($results as $result): ?>
                 					<tr>
                 						<td width="100%" style="padding:20px;padding-bottom:0px;">
                     					<table class="table-100-center textv-top">
@@ -416,10 +418,12 @@ if ($partNumber !== '') {
                             					</td>
                         					</tr>
                     					</table>
-                						<?php endforeach; ?>
-            							<?php endif; ?>
             							</td>
             						</tr>
+            						<?php endforeach; ?>
+                						
+                					<?php endif; ?>
+            						<?php endif; ?>
             					</table>
 								</td>
 							</tr>
