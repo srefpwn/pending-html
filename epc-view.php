@@ -113,61 +113,63 @@ if (
         'A kiválasztott autóhoz EPC nem érhető el.';
 }
 /*
- * JSON betöltése
+ * EPC adatok betöltése csak akkor,
+ * ha nincs hiba
  */
-
-$jsonFile = $config['epc_json'];
-
-$json = file_get_contents($jsonFile);
-
-if ($json === false) {
-    die("Nem találom a(z) " . $type . "-epc.json fájlt.");
-}
-
-$epc = json_decode($json, true);
-
-if ($epc === null) {
-    die("JSON hiba: " . json_last_error_msg());
-}
-
-/*
- * Képformátum típusonként
- */
-
-$imageExtension = $config['extension'];
-
-/*
- * Kép fájljának meghatározása
- */
-
-$imagePage = strtoupper($page);
-
-if (substr_count($imagePage, '_') == 1) {
-    $imageFile = $imagePage . "_." . $imageExtension;
-} else {
-    $imageFile = $imagePage . "." . $imageExtension;
-}
-
-$imagePath = $config['image_dir'] . $imageFile;
-
-/*
- * Kért kategória megkeresése
- */
-
 $current = null;
 
-foreach ($epc as $category) {
+if ($epcError === '') {
 
-    if (($category['id'] ?? '') === $page) {
-        $current = $category;
-        break;
+    /*
+     * JSON betöltése
+     */
+    $jsonFile = $config['epc_json'];
+
+    $json = file_get_contents($jsonFile);
+
+    if ($json === false) {
+        die("Nem találom a(z) " . $type . "-epc.json fájlt.");
     }
 
-}
+    $epc = json_decode($json, true);
 
-if ($current === null) {
-    echo "Page not found";
-    exit;
+    if ($epc === null) {
+        die("JSON hiba: " . json_last_error_msg());
+    }
+
+    /*
+     * Képformátum típusonként
+     */
+    $imageExtension = $config['extension'];
+
+    /*
+     * Kép fájljának meghatározása
+     */
+    $imagePage = strtoupper($page);
+
+    if (substr_count($imagePage, '_') == 1) {
+        $imageFile = $imagePage . "_." . $imageExtension;
+    } else {
+        $imageFile = $imagePage . "." . $imageExtension;
+    }
+
+    $imagePath = $config['image_dir'] . $imageFile;
+
+    /*
+     * Kért kategória megkeresése
+     */
+    foreach ($epc as $category) {
+
+        if (($category['id'] ?? '') === $page) {
+            $current = $category;
+            break;
+        }
+    }
+
+    if ($current === null) {
+        $epcError =
+            'A kiválasztott autóhoz EPC nem érhető el.';
+    }
 }
 
 /*
