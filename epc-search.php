@@ -193,20 +193,21 @@ $searchName = normalizeName($partNumber);
 /**
  * EPC JSON betöltése.
  */
-$epcFile = $config['epc_json'];
+$epc = null;
 
+if ($epcError === '') {
 
-if (!is_file($epcFile)) {
-    http_response_code(500);
-    exit('Az EPC adatfájl nem található.');
+    $epcFile = $config['epc_json'];
+
+    if (!is_file($epcFile)) {
+        http_response_code(500);
+        exit('Az EPC adatfájl nem található.');
+    }
+
+    $json = file_get_contents($epcFile);
+
+    $epc = json_decode($json, true);
 }
-
-
-$json = file_get_contents($epcFile);
-
-$epc = json_decode($json, true);
-
-
 /**
  * Ellenőrizzük a JSON-t.
  */
