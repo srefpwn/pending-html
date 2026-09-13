@@ -211,7 +211,7 @@ if ($epcError === '') {
 /**
  * Ellenőrizzük a JSON-t.
  */
-if (!is_array($epc)) {
+if ($epcError === '' && !is_array($epc)) {
     http_response_code(500);
     exit('Az EPC adatfájl nem olvasható.');
 }
