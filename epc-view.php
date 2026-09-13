@@ -218,16 +218,26 @@ $from_cars = $_GET['from_cars'] ?? '';
 					<tr>
 						<td style="padding:0px;text-align:center;">
     					<span class="epc-title">
-    					<?php if ($userCar !== null): ?>
-        				<?php if (trim((string)($userCar['name'] ?? '')) !== ''): ?>
-            			<?= htmlspecialchars($userCar['name']) ?> - 
-        				<?php endif; ?>
-        				<?= htmlspecialchars($userCar['vin']) ?> - 
-        				<?= htmlspecialchars(mb_convert_case($current['title'], MB_CASE_TITLE, 'UTF-8')) ?> - EPC
-    					<?php else: ?>
-        				<?= htmlspecialchars($config['name']) ?> - <?= htmlspecialchars(mb_convert_case($current['title'], MB_CASE_TITLE, 'UTF-8')) ?> - EPC
-    					<?php endif; ?>
-    					</span>
+<?php if ($epcError !== ''): ?>
+
+    <?= htmlspecialchars($epcError) ?>
+
+<?php elseif ($userCar !== null): ?>
+
+    <?php if (trim((string)($userCar['name'] ?? '')) !== ''): ?>
+        <?= htmlspecialchars($userCar['name']) ?> -
+    <?php endif; ?>
+
+    <?= htmlspecialchars($userCar['vin']) ?> -
+    <?= htmlspecialchars(mb_convert_case($current['title'], MB_CASE_TITLE, 'UTF-8')) ?> - EPC
+
+<?php else: ?>
+
+    <?= htmlspecialchars($config['name']) ?> -
+    <?= htmlspecialchars(mb_convert_case($current['title'], MB_CASE_TITLE, 'UTF-8')) ?> - EPC
+
+<?php endif; ?>
+</span>
 						</td>
 					</tr>
 					<tr>
