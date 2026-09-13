@@ -120,9 +120,10 @@ $current = null;
 
 if ($epcError === '') {
 
-    /*
-     * JSON betöltése
-     */
+$epc = null;
+
+if ($epcError === '') {
+
     $jsonFile = $config['epc_json'];
 
     $json = file_get_contents($jsonFile);
@@ -136,6 +137,7 @@ if ($epcError === '') {
     if ($epc === null) {
         die("JSON hiba: " . json_last_error_msg());
     }
+}
 
     /*
      * Képformátum típusonként
