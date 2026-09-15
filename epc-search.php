@@ -22,6 +22,20 @@ $carId = filter_input( INPUT_GET, 'car', FILTER_VALIDATE_INT);
 $userCar = null;
 $userCarConfig = null;
 
+$epcError = '';
+
+if (
+    isUser() &&
+    (
+        $carId === false ||
+        $carId === null ||
+        $carId <= 0 ||
+        $userCar === null
+    )
+) {
+    $epcError = 'A kiválasztott autóhoz EPC nem érhető el.';
+}
+
 if ($carId !== false && $carId !== null) {
 
     $userCars = getUserCars();
@@ -65,6 +79,15 @@ if ($userCar !== null) {
             $userCarConfig = null;
         }
     }
+    if (
+    isUser() &&
+    $userCar !== null &&
+    ($userCarConfig['epc_enable'] ?? '0') !== '1'
+) {
+    $userCar = null;
+    $userCarConfig = null;
+    $epcError = 'A kiválasztott autóhoz EPC nem érhető el.';
+}
 }
 
 
@@ -113,9 +136,12 @@ if ($userCar !== null) {
 /**
  * Csak engedélyezett típus használható.
  */
+ 
+ 
 $config = null;
 
-foreach ($configs as $item) {
+if ($epcError === '') {
+    foreach ($configs as $item) {
 
 if (
     ($item['brand'] ?? '') === $brand &&
@@ -141,8 +167,7 @@ if (
     break;
 }
 }
-
-$epcError = '';
+}
 
 if (
     (
