@@ -29,8 +29,7 @@ if (
     (
         $carId === false ||
         $carId === null ||
-        $carId <= 0 ||
-        $userCar === null
+        $carId <= 0
     )
 ) {
     $epcError = 'A kiválasztott autóhoz EPC nem érhető el.';
@@ -50,6 +49,12 @@ if ($carId !== false && $carId !== null) {
             break;
         }
     }
+if (
+    isUser() &&
+    $userCar === null
+) {
+    $epcError = 'A kiválasztott autóhoz EPC nem érhető el.';
+}
 
 if ($userCar !== null) {
 
