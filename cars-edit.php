@@ -89,6 +89,15 @@ if ($car === null) {
 
 $carConfig = getCarConfig($car);
 
+$epcEnabled =
+    (string)($carConfig['epc_enable'] ?? '0') === '1';
+
+$manualEnabled =
+    (string)($carConfig['manual_enable'] ?? '0') === '1';
+
+$servicetipsEnabled =
+    (string)($carConfig['servicetips_enable'] ?? '0') === '1';
+
 /*
  * Vissza URL
  */
@@ -167,7 +176,7 @@ $modelConfig =
                                                     <!-- Cím -->
                                                     <tr>
                                                         <td style="padding:0px;text-align:center;">
-                                                            <span class="epc-title">Autó hozzáadása</span>
+                                                            <span class="epc-title">Autó Módosítása</span>
                                                         </td>
                                                     </tr>
                                                     <!-- Üzenet -->
@@ -200,14 +209,14 @@ $modelConfig =
 																<td width="50%" class="epc-text row-even p5">Autó neve:
 																</td>
 																<td width="50%" class="row-even p5">
-																<input type="text" name="name" maxlength="50">
+																<input type="text" name="name" maxlength="50" value="<?= htmlspecialchars($car['name'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 																</td>
 															</tr>
                                                        		<tr>
 																<td width="50%" class="epc-text row-odd p5">Alvázszám:
 																</td>
 																<td width="50%" class="row-odd p5">
-																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" required>
+																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" value="<?= htmlspecialchars($car['vin'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
 																</td>
 															</tr>
                                                        		<tr>
@@ -319,12 +328,50 @@ $modelConfig =
 																</td>
 															</tr>
                                                         </table>
+														<table align="center" class="table-border" width="100%">
+															<tr>
+																<td class="pl10 epc-text row-odd p5 text-left" style="background-color:#bb271a;color:#ffffff;width:100%;text-align:center;">Jogosultságok
+																</td>
+															</tr>
+														</table>
+														<table align="center" style="text-align:left;border-spacing:0px;padding-bottom:20px;" width="100%" class="table-border">
+                                                        	<tr>
+																<td width="50%" class="epc-text row-even p5">EPC:
+																</td>
+																<td width="50%" class="row-even p5">
+																<select name="epc_enable">
+            														<option value="1" <?= ($carConfig['epc_enable'] ?? '0') === '1' ? 'selected' : '' ?>>Engedélyezés</option>
+            														<option value="0" <?= ($carConfig['epc_enable'] ?? '0') === '0' ? 'selected' : '' ?>>Tiltás</option>
+        														</select>
+																</td>
+															</tr>
+                                                       		<tr>
+																<td width="50%" class="epc-text row-odd p5">Manual:
+																</td>
+																<td width="50%" class="row-odd p5">
+																<select name="manual_enable">
+            														<option value="1" <?= ($carConfig['manual_enable'] ?? '0') === '1' ? 'selected' : '' ?>>Engedélyezés</option>
+           															<option value="0" <?= ($carConfig['manual_enable'] ?? '0') === '0' ? 'selected' : '' ?>>Tiltás</option>
+        														</select>
+																</td>
+															</tr>
+															<tr>
+																<td width="50%" class="epc-text row-even p5">ServiceTips:
+																</td>
+																<td width="50%" class="row-even p5">
+																<select name="servicetips_enable">
+            														<option value="1" <?= ($carConfig['servicetips_enable'] ?? '0') === '1' ? 'selected' : '' ?>>Engedélyezés</option>
+																	<option value="0" <?= ($carConfig['servicetips_enable'] ?? '0') === '0' ? 'selected' : '' ?>>Tiltás</option>
+        														</select>
+																</td>
+															</tr>
+														</table>
                                                         <table class="table-border text-center">
                                                         <!-- Gombok -->
                                                             <tr>
                                                                 <td></td>
                                                                 <td style="padding-top:10px;">
-                                                                <button type="submit">Autó hozzáadása
+                                                                <button type="submit">beállítások mentése
                                                                 </button>
                                                                 </td>
                                                             </tr>
@@ -746,7 +793,14 @@ function loadModelConfig(values = {}) {
     if (values.color) {
         colorSelect.value = values.color;
     }
-}loadModelConfig();
+}
+loadModelConfig({
+    production_year: <?= json_encode($car['production_year'] ?? '') ?>,
+    body: <?= json_encode($car['body'] ?? '') ?>,
+    engine: <?= json_encode($car['engine'] ?? '') ?>,
+    trim: <?= json_encode($car['trim'] ?? '') ?>,
+    color: <?= json_encode($car['color'] ?? '') ?>
+});
 function findVinModel(vin) {
     for (const [brandKey, brandConfig] of Object.entries(carCatalog)) {
 
