@@ -92,6 +92,35 @@ function saveUserCarsData(array $data): bool
     ) !== false;
 }
 
+function updateUserCar(
+    int $userId,
+    int $carId,
+    array $updatedCar
+): bool {
+    $carsData = loadUserCarsData();
+
+    $userKey = (string)$userId;
+
+    if (!isset($carsData[$userKey]) || !is_array($carsData[$userKey])) {
+        return false;
+    }
+
+    foreach ($carsData[$userKey] as $index => $car) {
+
+        if (
+            isset($car['id']) &&
+            (int)$car['id'] === $carId
+        ) {
+            $updatedCar['id'] = $carId;
+
+            $carsData[$userKey][$index] = $updatedCar;
+
+            return saveUserCarsData($carsData);
+        }
+    }
+
+    return false;
+}
 
 /*
  * Aktuális felhasználó autóinak lekérése
