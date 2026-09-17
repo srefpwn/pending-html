@@ -89,6 +89,44 @@ if ($car === null) {
 
 $carConfig = getCarConfig($car);
 
+/*
+ * Vissza URL
+ */
+
+$backUrl = '/cars/';
+
+/*
+ * Üzenetek
+ */
+
+$message = '';
+$messageType = '';
+
+/*
+ * CSRF token
+ */
+
+if (empty($_SESSION['cars_csrf_token'])) {
+    $_SESSION['cars_csrf_token'] = bin2hex(random_bytes(32));
+}
+
+$csrfToken = $_SESSION['cars_csrf_token'];
+
+/*
+ * Űrlap alapértékek
+ */
+
+$selectedBrand = $car['brand'] ?? '';
+
+$brandModels =
+    $car_catalog[$selectedBrand]['models'] ?? [];
+
+$selectedModel = $car['model'] ?? '';
+
+$modelConfig =
+    $brandModels[$selectedModel] ?? null;
+
+
 ?>
 <html>
 <head>
