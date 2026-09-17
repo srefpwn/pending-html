@@ -92,6 +92,47 @@ function saveUserCarsData(array $data): bool
     ) !== false;
 }
 
+function saveVinPermissions(
+    string $vin,
+    array $permissions
+): bool {
+    $vin = normalizeVin($vin);
+
+    if ($vin === '') {
+        return false;
+    }
+
+    $data = loadVinPermissions();
+
+    $data[$vin] = [
+        'epc_enable' =>
+            (string)($permissions['epc_enable'] ?? '0'),
+
+        'manual_enable' =>
+            (string)($permissions['manual_enable'] ?? '0'),
+
+        'servicetips_enable' =>
+            (string)($permissions['servicetips_enable'] ?? '0'),
+    ];
+
+    $json = json_encode(
+        $data,
+        JSON_PRETTY_PRINT |
+        JSON_UNESCAPED_UNICODE |
+        JSON_UNESCAPED_SLASHES
+    );
+
+    if ($json === false) {
+        return false;
+    }
+
+    return file_put_contents(
+        VIN_PERMISSIONS_FILE,
+        $json,
+        LOCK_EX
+    ) !== false;
+}
+
 function updateUserCar(
     int $userId,
     int $carId,
