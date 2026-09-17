@@ -124,18 +124,7 @@ function normalizeVin(string $vin): string
     );
 }
 
-function getVinPermissions(string $vin): array
-{
-    $vin = normalizeVin($vin);
 
-    if ($vin === '') {
-        return [];
-    }
-
-    $data = loadVinPermissions();
-
-    return $data[$vin] ?? [];
-}
 /*
  * VIN keresése a konfigurációk között
  */
