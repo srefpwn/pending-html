@@ -101,7 +101,10 @@ function updateUserCar(
 
     $userKey = (string)$userId;
 
-    if (!isset($carsData[$userKey]) || !is_array($carsData[$userKey])) {
+    if (
+        !isset($carsData[$userKey]) ||
+        !is_array($carsData[$userKey])
+    ) {
         return false;
     }
 
@@ -111,9 +114,14 @@ function updateUserCar(
             isset($car['id']) &&
             (int)$car['id'] === $carId
         ) {
-            $updatedCar['id'] = $carId;
+            foreach ($updatedCar as $key => $value) {
 
-            $carsData[$userKey][$index] = $updatedCar;
+                if ($key === 'id') {
+                    continue;
+                }
+
+                $carsData[$userKey][$index][$key] = $value;
+            }
 
             return saveUserCarsData($carsData);
         }
