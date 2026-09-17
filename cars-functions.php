@@ -56,6 +56,19 @@ function loadVinPermissions(): array
 
     return is_array($data) ? $data : [];
 }
+
+function getVinPermissions(string $vin): array
+{
+    $vin = normalizeVin($vin);
+
+    if ($vin === '') {
+        return [];
+    }
+
+    $data = loadVinPermissions();
+
+    return $data[$vin] ?? [];
+}
 /*
  * JSON adatok mentése
  */
@@ -482,7 +495,24 @@ function getCarConfig(array $car): ?array
 
     $vin = normalizeVin($car['vin']);
 
-    return $vin_configs[$vin] ?? null;
+    if (!isset($vin_configs[$vin])) {
+        return null;
+    }
+
+    $config = $vin_configs[$vin];
+
+    $permissions = getVinPermissions($vin);
+
+    $config['epc_enable'] =
+        (string)($permissions['epc_enable'] ?? '0');
+
+    $config['manual_enable'] =
+        (string)($permissions['manual_enable'] ?? '0');
+
+    $config['servicetips_enable'] =
+        (string)($permissions['servicetips_enable'] ?? '0');
+
+    return $config;
 }
 
 /*
