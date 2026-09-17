@@ -98,7 +98,7 @@ $vin = (string)(
  * Service Tips JSON a VIN konfigurációból érkezik.
  */
 
-$vinConfig = $vin_configs[$vin] ?? null;
+$vinConfig = getCarConfig($car);
 
 $serviceTipsEnabled =
     is_array($vinConfig) &&
