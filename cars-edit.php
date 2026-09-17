@@ -86,6 +86,14 @@ if ($car === null) {
 /*
  * VIN konfiguráció
  */
+ 
+ /*
+ * Üzenetek
+ */
+
+$message = '';
+$messageType = '';
+
 
 /*
  * CSRF token
@@ -130,10 +138,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     if (
-        $updatedCar['name'] === '' ||
         $updatedCar['vin'] === ''
     ) {
-        $message = 'A név és a VIN megadása kötelező.';
+        $message = 'A VIN megadása kötelező.';
         $messageType = 'error';
 
     } else {
@@ -144,15 +151,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $updatedCar
         );
 
-        if ($saved) {
-            $message = 'Az autó adatai sikeresen mentve.';
-            $messageType = 'success';
+       if ($saved) {
 
-            $car = $updatedCar;
-        } else {
-            $message = 'Az autó adatainak mentése sikertelen.';
-            $messageType = 'error';
-        }
+    $permissions = [
+        'epc_enable' =>
+            (string)($_POST['epc_enable'] ?? '0'),
+
+        'manual_enable' =>
+            (string)($_POST['manual_enable'] ?? '0'),
+
+        'servicetips_enable' =>
+            (string)($_POST['servicetips_enable'] ?? '0'),
+    ];
+
+    $permissionsSaved = saveVinPermissions(
+        $updatedCar['vin'],
+        $permissions
+    );
+
+    if ($permissionsSaved) {
+
+        $message = 'Az autó adatai és jogosultságai sikeresen mentve.';
+        $messageType = 'success';
+
+        $car = $updatedCar;
+
+    } else {
+
+        $message = 'Az autó adatai mentve lettek, de a jogosultságok mentése sikertelen.';
+        $messageType = 'error';
+
+        $car = $updatedCar;
+    }
+
+} else {
+
+    $message = 'Az autó adatainak mentése sikertelen.';
+    $messageType = 'error';
+}
     }
 }
 
@@ -173,12 +209,6 @@ $servicetipsEnabled =
 
 $backUrl = '/cars/';
 
-/*
- * Üzenetek
- */
-
-$message = '';
-$messageType = '';
 
 
 /*
