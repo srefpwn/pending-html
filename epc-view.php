@@ -81,13 +81,13 @@ if ($carId !== false && $carId !== null) {
 
     if ($userCar !== null) {
 
-        $userCarConfig = getCarConfig($userCar);
+    $userCarConfig = getCarConfig($userCar);
 
 if ($userCar !== null) {
 
     $vin = $userCar['vin'] ?? '';
 
-    $userCarConfig = $vin_configs[$vin] ?? null;
+    $userCarConfig = getCarConfig($userCar);
 
     if (
         $userCarConfig === null ||
@@ -116,7 +116,7 @@ if ($userCar !== null) {
 
     $vin = $userCar['vin'] ?? '';
 
-    $userCarConfig = $vin_configs[$vin] ?? null;
+    $userCarConfig = getCarConfig($userCar);
 
     if (
         $userCarConfig === null ||
