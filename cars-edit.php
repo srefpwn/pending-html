@@ -87,6 +87,75 @@ if ($car === null) {
  * VIN konfiguráció
  */
 
+/*
+ * CSRF token
+ */
+
+if (empty($_SESSION['cars_csrf_token'])) {
+    $_SESSION['cars_csrf_token'] = bin2hex(random_bytes(32));
+}
+
+$csrfToken = $_SESSION['cars_csrf_token'];
+
+
+/*
+ * Mentés
+ */
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if (
+        !isset($_POST['csrf_token']) ||
+        !hash_equals(
+            $csrfToken,
+            (string)$_POST['csrf_token']
+        )
+    ) {
+        http_response_code(403);
+        exit('Érvénytelen CSRF token.');
+    }
+
+    $updatedCar = [
+        'id' => $carId,
+        'name' => trim((string)($_POST['name'] ?? '')),
+        'vin' => normalizeVin((string)($_POST['vin'] ?? '')),
+        'brand' => trim((string)($_POST['brand'] ?? '')),
+        'model' => trim((string)($_POST['model'] ?? '')),
+        'production_year' => trim((string)($_POST['production_year'] ?? '')),
+        'series' => trim((string)($_POST['series'] ?? '')),
+        'body' => trim((string)($_POST['body'] ?? '')),
+        'engine' => trim((string)($_POST['engine'] ?? '')),
+        'trim' => trim((string)($_POST['trim'] ?? '')),
+        'color' => trim((string)($_POST['color'] ?? '')),
+    ];
+
+    if (
+        $updatedCar['name'] === '' ||
+        $updatedCar['vin'] === ''
+    ) {
+        $message = 'A név és a VIN megadása kötelező.';
+        $messageType = 'error';
+
+    } else {
+
+        $saved = updateUserCar(
+            $userId,
+            $carId,
+            $updatedCar
+        );
+
+        if ($saved) {
+            $message = 'Az autó adatai sikeresen mentve.';
+            $messageType = 'success';
+
+            $car = $updatedCar;
+        } else {
+            $message = 'Az autó adatainak mentése sikertelen.';
+            $messageType = 'error';
+        }
+    }
+}
+
 $carConfig = getCarConfig($car);
 
 $epcEnabled =
@@ -111,15 +180,6 @@ $backUrl = '/cars/';
 $message = '';
 $messageType = '';
 
-/*
- * CSRF token
- */
-
-if (empty($_SESSION['cars_csrf_token'])) {
-    $_SESSION['cars_csrf_token'] = bin2hex(random_bytes(32));
-}
-
-$csrfToken = $_SESSION['cars_csrf_token'];
 
 /*
  * Űrlap alapértékek
