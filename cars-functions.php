@@ -15,7 +15,10 @@ define(
     'USER_CARS_FILE',
     $_SERVER['DOCUMENT_ROOT'] . '/data/cars/user_cars.json'
 );
-
+define(
+    'VIN_PERMISSIONS_FILE',
+    $_SERVER['DOCUMENT_ROOT'] . '/data/cars/vin_permissions.json'
+);
 
 /*
  * JSON adatok betöltése
@@ -37,7 +40,22 @@ function loadUserCarsData(): array
     return is_array($data) ? $data : [];
 }
 
+function loadVinPermissions(): array
+{
+    if (!file_exists(VIN_PERMISSIONS_FILE)) {
+        return [];
+    }
 
+    $json = file_get_contents(VIN_PERMISSIONS_FILE);
+
+    if ($json === false || trim($json) === '') {
+        return [];
+    }
+
+    $data = json_decode($json, true);
+
+    return is_array($data) ? $data : [];
+}
 /*
  * JSON adatok mentése
  */
@@ -93,7 +111,18 @@ function normalizeVin(string $vin): string
     );
 }
 
+function getVinPermissions(string $vin): array
+{
+    $vin = normalizeVin($vin);
 
+    if ($vin === '') {
+        return [];
+    }
+
+    $data = loadVinPermissions();
+
+    return $data[$vin] ?? [];
+}
 /*
  * VIN keresése a konfigurációk között
  */
