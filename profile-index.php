@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $updatedData = [
         'name' => trim((string)($_POST['name'] ?? '')),
+    	'address' => trim((string)($_POST['address'] ?? '')),
     ];
 
     $saved = updateUser(
@@ -158,21 +159,21 @@ $backUrl = '/';
 																<td width="50%" class="epc-text row-even p5">Felhasználónév:
 																</td>
 																<td width="50%" class="row-even p5">
-																<input type="text" name="name" maxlength="50" value="<?= htmlspecialchars($car['name'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+																<input type="text" name="name" maxlength="50" value="<?= htmlspecialchars($user['user'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 																</td>
 															</tr>
                                                        		<tr>
 																<td width="50%" class="epc-text row-odd p5">Név:
 																</td>
 																<td width="50%" class="row-odd p5">
-																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" value="<?= htmlspecialchars($car['vin'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required <?= $isAdmin ? '' : 'readonly' ?>>
+																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" value="<?= htmlspecialchars($user['name'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 																</td>
 															</tr>
                                                        		<tr>
 																<td width="50%" class="epc-text row-even p5">Cím:
 																</td>
 																<td width="50%" class="row-odd p5">
-																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" value="<?= htmlspecialchars($car['vin'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required <?= $isAdmin ? '' : 'readonly' ?>>
+																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" value="<?= htmlspecialchars($user['address'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 																</td>
 															</tr>
                                                        		<tr>
@@ -186,7 +187,7 @@ $backUrl = '/';
 																<td width="50%" class="epc-text row-even p5">Jelenlegi jelszó:
 																</td>
 																<td width="50%" class="row-odd p5">
-																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" value="<?= htmlspecialchars($car['vin'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required <?= $isAdmin ? '' : 'readonly' ?>>
+																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" value="<?= htmlspecialchars($car['vin'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 																</td>
 															</tr>
                                                        		<tr>
@@ -200,7 +201,7 @@ $backUrl = '/';
 																<td width="50%" class="epc-text row-even p5">Új jelszó ismét:
 																</td>
 																<td width="50%" class="row-odd p5">
-																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" value="<?= htmlspecialchars($car['vin'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required <?= $isAdmin ? '' : 'readonly' ?>>
+																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" value="<?= htmlspecialchars($car['vin'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 																</td>
 															</tr>
                                                         </table>
