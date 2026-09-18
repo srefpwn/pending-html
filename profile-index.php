@@ -146,7 +146,6 @@ $backUrl = '/';
                                                         <td style="padding:20px;text-align:center;padding-bottom:40px;">
                                                     	<form method="post">
                                                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
-                                                        <input type="hidden" name="series" id="seriesInput" value="">
 														<table align="center" class="table-border" width="100%">
 															<tr>
 																<td class="pl10 epc-text row-odd p5 text-left" style="background-color:#bb271a;color:#ffffff;width:100%;text-align:center;">Adatok
@@ -166,14 +165,14 @@ $backUrl = '/';
 																<td width="50%" class="epc-text row-odd p5">Név:
 																</td>
 																<td width="50%" class="row-odd p5">
-																<?= htmlspecialchars($user['name'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+																<input type="text" name="name" maxlength="50" value="<?= htmlspecialchars($user['name'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 																</td>
 															</tr>
                                                        		<tr>
 																<td width="50%" class="epc-text row-even p5">Cím:
 																</td>
 																<td width="50%" class="row-odd p5">
-																<?= htmlspecialchars($user['address'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+																<input type="text" name="address" maxlength="100" value="<?= htmlspecialchars($user['address'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 																</td>
 															</tr>
                                                        		<tr>
