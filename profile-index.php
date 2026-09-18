@@ -46,7 +46,6 @@ $csrfToken = $_SESSION['profile_csrf_token'];
 /*
  * Mentés
  */
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (
@@ -122,31 +121,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
         }
     }
-}
 
-/*
- * Mentés
- */
+    /*
+     * Mentés
+     */
 
-if ($messageType !== 'error') {
+    if ($messageType !== 'error') {
 
-    $saved = updateUser(
-        $userId,
-        $updatedData
-    );
+        $saved = updateUser(
+            $userId,
+            $updatedData
+        );
 
-    if ($saved) {
+        if ($saved) {
 
-        $message = 'A profil adatai sikeresen módosítva.';
-        $messageType = 'success';
+            $message = 'A profil adatai sikeresen módosítva.';
+            $messageType = 'success';
 
-        $user['name'] = $updatedData['name'];
-        $user['address'] = $updatedData['address'];
+            $user['name'] = $updatedData['name'];
+            $user['address'] = $updatedData['address'];
 
-    } else {
+        } else {
 
-        $message = 'A profil adatainak mentése sikertelen.';
-        $messageType = 'error';
+            $message = 'A profil adatainak mentése sikertelen.';
+            $messageType = 'error';
+        }
     }
 }
 
