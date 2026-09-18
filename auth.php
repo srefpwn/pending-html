@@ -7,22 +7,29 @@ session_set_cookie_params([
 ]);
 session_start();
 
-$USERS = [
-    [
-        'id' => 1,
-        'user' => 'admin',
-        'name' => 'Gutter Richárd',   // csak megjelenítés
-        'hash' => '$2y$10$Acd1efBVagwASefYF.PkAu3/FdirfjJXMg40Ije47pdcB8/xJRPie',
-        'role' => 'admin'
-    ],
-        [
-        'id' => 2,
-        'user' => 'sref',
-        'name' => 'teszt',   // csak megjelenítés
-        'hash' => '$2y$10$Acd1efBVagwASefYF.PkAu3/FdirfjJXMg40Ije47pdcB8/xJRPie',
-        'role' => 'user'
-    ]
-];
+
+ 
+define(
+    'USERS_FILE',
+    $_SERVER['DOCUMENT_ROOT'] . '/data/users/users.json'
+);
+
+function loadUsers(): array
+{
+    if (!file_exists(USERS_FILE)) {
+        return [];
+    }
+
+    $json = file_get_contents(USERS_FILE);
+
+    if ($json === false || trim($json) === '') {
+        return [];
+    }
+
+    $data = json_decode($json, true);
+
+    return is_array($data) ? $data : [];
+}
 
 
 const SESSION_TIMEOUT = 1800; // 30 perc
