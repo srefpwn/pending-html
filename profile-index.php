@@ -1,6 +1,4 @@
 <?php
-echo 'PROFILE TEST';
-exit;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/users/functions.php';
@@ -62,73 +60,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit('Érvénytelen CSRF token.');
     }
 
-$currentPassword = trim(
-    (string)($_POST['current_password'] ?? '')
-);
+    /*
+     * Profiladatok
+     */
 
-$newPassword = trim(
-    (string)($_POST['new_password'] ?? '')
-);
+    $updatedData = [
+        'name' => trim((string)($_POST['name'] ?? '')),
+        'address' => trim((string)($_POST['address'] ?? '')),
+    ];
 
-$newPasswordConfirm = trim(
-    (string)($_POST['new_password_confirm'] ?? '')
-);
+    /*
+     * Jelszómezők
+     */
 
-/*
- * Profiladatok
- */
+    $currentPassword = (string)($_POST['current_password'] ?? '');
+    $newPassword = (string)($_POST['new_password'] ?? '');
+    $newPasswordConfirm = (string)($_POST['new_password_confirm'] ?? '');
 
-$updatedData = [
-    'name' => trim(
-        (string)($_POST['name'] ?? '')
-    ),
-    'address' => trim(
-        (string)($_POST['address'] ?? '')
-    ),
-];
+    /*
+     * Jelszó módosítás csak akkor indul,
+     * ha legalább egy mezőt kitöltöttek.
+     */
 
-/*
- * Jelszó módosítás ellenőrzése
- */
+    $passwordChangeRequested =
+        $currentPassword !== '' ||
+        $newPassword !== '' ||
+        $newPasswordConfirm !== '';
 
-$passwordChangeRequested =
-    $currentPassword !== '' ||
-    $newPassword !== '' ||
-    $newPasswordConfirm !== '';
+    if ($passwordChangeRequested) {
 
-if ($passwordChangeRequested) {
+        if ($currentPassword === '') {
 
-    if ($currentPassword === '') {
+            $message = 'A jelenlegi jelszó megadása kötelező.';
+            $messageType = 'error';
 
-        $message = 'A jelenlegi jelszó megadása kötelező.';
-        $messageType = 'error';
+        } elseif ($newPassword === '') {
 
-    } elseif ($newPassword === '') {
+            $message = 'Az új jelszó megadása kötelező.';
+            $messageType = 'error';
 
-        $message = 'Az új jelszó megadása kötelező.';
-        $messageType = 'error';
+        } elseif ($newPasswordConfirm === '') {
 
-    } elseif ($newPasswordConfirm === '') {
+            $message = 'Az új jelszó ismételt megadása kötelező.';
+            $messageType = 'error';
 
-        $message = 'Az új jelszó ismételt megadása kötelező.';
-        $messageType = 'error';
+        } elseif ($newPassword !== $newPasswordConfirm) {
 
-    } elseif ($newPassword !== $newPasswordConfirm) {
+            $message = 'Az új jelszavak nem egyeznek.';
+            $messageType = 'error';
 
-        $message = 'Az új jelszavak nem egyeznek.';
-        $messageType = 'error';
+        } elseif (!verifyUserPassword($userId, $currentPassword)) {
 
-    } elseif (!verifyUserPassword($userId, $currentPassword)) {
+            $message = 'A jelenlegi jelszó helytelen.';
+            $messageType = 'error';
 
-        $message = 'A jelenlegi jelszó helytelen.';
-        $messageType = 'error';
+        } else {
 
-    } else {
-
-        $updatedData['hash'] = password_hash(
-            $newPassword,
-            PASSWORD_DEFAULT
-        );
+            $updatedData['hash'] = password_hash(
+                $newPassword,
+                PASSWORD_DEFAULT
+            );
+        }
     }
 }
 
