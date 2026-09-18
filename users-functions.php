@@ -86,3 +86,21 @@ function updateUser(
 
     return false;
 }
+function verifyUserPassword(
+    int $userId,
+    string $password
+): bool {
+    $user = getUserById($userId);
+
+    if (
+        $user === null ||
+        !isset($user['hash'])
+    ) {
+        return false;
+    }
+
+    return password_verify(
+        $password,
+        $user['hash']
+    );
+}
