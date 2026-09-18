@@ -1,118 +1,46 @@
 <?php
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/cars/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/users/functions.php';
 
 /*
- * Jogosultság
+ * Felhasználó azonosítása
  */
 
-$isAdmin = isAdmin();
+$userId = (int)($_SESSION['user_id'] ?? 0);
+
+if ($userId < 1) {
+    http_response_code(403);
+    exit('A felhasználó azonosítása sikertelen.');
+}
 
 /*
- * Azonosítók
+ * Felhasználó betöltése
  */
 
-$carId = filter_input(
-    INPUT_GET,
-    'car_id',
-    FILTER_VALIDATE_INT
-);
+$user = getUserById($userId);
 
-if (
-    $carId === false ||
-    $carId === null ||
-    $carId < 1
-) {
-    http_response_code(400);
-    exit('Érvénytelen azonosító.');
-}
-
-if ($isAdmin) {
-
-    $userId = filter_input(
-        INPUT_GET,
-        'user_id',
-        FILTER_VALIDATE_INT
-    );
-
-    if (
-        $userId === false ||
-        $userId === null ||
-        $userId < 1
-    ) {
-        http_response_code(400);
-        exit('Érvénytelen felhasználói azonosító.');
-    }
-
-} else {
-
-    $userId = (int)($_SESSION['user_id'] ?? 0);
-
-    if ($userId < 1) {
-        http_response_code(403);
-        exit('A felhasználó azonosítása sikertelen.');
-    }
-
-}
-
-$carsData = loadUserCarsData();
-
-$userKey = (string)$userId;
-
-if (
-    !isset($carsData[$userKey]) ||
-    !is_array($carsData[$userKey])
-) {
+if ($user === null) {
     http_response_code(404);
-    exit('A felhasználó autói nem találhatók.');
+    exit('A felhasználó nem található.');
 }
 
 /*
- * A konkrét autó megkeresése
- */
-
-$car = null;
-
-foreach ($carsData[$userKey] as $item) {
-
-    if (
-        isset($item['id']) &&
-        (int)$item['id'] === $carId
-    ) {
-        $car = $item;
-        break;
-    }
-}
-
-if ($car === null) {
-    http_response_code(404);
-    exit('A kért autó nem található.');
-}
-
-/*
- * VIN konfiguráció
- */
- 
- /*
  * Üzenetek
  */
 
 $message = '';
 $messageType = '';
 
-
 /*
  * CSRF token
  */
 
-if (empty($_SESSION['cars_csrf_token'])) {
-    $_SESSION['cars_csrf_token'] = bin2hex(random_bytes(32));
+if (empty($_SESSION['profile_csrf_token'])) {
+    $_SESSION['profile_csrf_token'] = bin2hex(random_bytes(32));
 }
 
-$csrfToken = $_SESSION['cars_csrf_token'];
-
+$csrfToken = $_SESSION['profile_csrf_token'];
 
 /*
  * Mentés
@@ -131,147 +59,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit('Érvénytelen CSRF token.');
     }
 
-if ($isAdmin) {
-
-    /*
-     * Admin: minden adat szerkeszthető
-     */
-
-    $updatedCar = [
-        'id' => $carId,
-        'name' => trim((string)($_POST['name'] ?? '')),
-        'vin' => normalizeVin((string)($_POST['vin'] ?? '')),
-        'brand' => trim((string)($_POST['brand'] ?? '')),
-        'model' => trim((string)($_POST['model'] ?? '')),
-        'production_year' => trim((string)($_POST['production_year'] ?? '')),
-        'series' => trim((string)($_POST['series'] ?? '')),
-        'body' => trim((string)($_POST['body'] ?? '')),
-        'engine' => trim((string)($_POST['engine'] ?? '')),
-        'trim' => trim((string)($_POST['trim'] ?? '')),
-        'color' => trim((string)($_POST['color'] ?? '')),
-    ];
-
-    if ($updatedCar['vin'] === '') {
-
-        $message = 'A VIN megadása kötelező.';
-        $messageType = 'error';
-
-    } else {
-
-        $saved = updateUserCar(
-            $userId,
-            $carId,
-            $updatedCar
-        );
-
-        if ($saved) {
-
-            $permissions = [
-                'epc_enable' =>
-                    (string)($_POST['epc_enable'] ?? '0'),
-
-                'manual_enable' =>
-                    (string)($_POST['manual_enable'] ?? '0'),
-
-                'servicetips_enable' =>
-                    (string)($_POST['servicetips_enable'] ?? '0'),
-            ];
-
-            $permissionsSaved = saveVinPermissions(
-                $updatedCar['vin'],
-                $permissions
-            );
-
-            if ($permissionsSaved) {
-
-                $message =
-                    'Az autó adatai és jogosultságai sikeresen mentve.';
-
-                $messageType = 'success';
-                $car = $updatedCar;
-
-            } else {
-
-                $message =
-                    'Az autó adatai mentve lettek, de a jogosultságok mentése sikertelen.';
-
-                $messageType = 'error';
-                $car = $updatedCar;
-            }
-
-        } else {
-
-            $message =
-                'Az autó adatainak mentése sikertelen.';
-
-            $messageType = 'error';
-        }
-    }
-
-} else {
-
-    /*
-     * User: kizárólag az autó neve módosítható
-     */
-
-    $updatedCar = [
+    $updatedData = [
         'name' => trim((string)($_POST['name'] ?? '')),
     ];
 
-    $saved = updateUserCar(
+    $saved = updateUser(
         $userId,
-        $carId,
-        $updatedCar
+        $updatedData
     );
 
     if ($saved) {
-
-        $message = 'Az autó neve sikeresen módosítva.';
+        $message = 'A profil adatai sikeresen módosítva.';
         $messageType = 'success';
 
-        $car['name'] = $updatedCar['name'];
-
+        $user['name'] = $updatedData['name'];
     } else {
-
-        $message = 'Az autó nevének mentése sikertelen.';
+        $message = 'A profil adatainak mentése sikertelen.';
         $messageType = 'error';
     }
 }
-}
-
-$carConfig = getCarConfig($car);
-
-$epcEnabled =
-    (string)($carConfig['epc_enable'] ?? '0') === '1';
-
-$manualEnabled =
-    (string)($carConfig['manual_enable'] ?? '0') === '1';
-
-$servicetipsEnabled =
-    (string)($carConfig['servicetips_enable'] ?? '0') === '1';
 
 /*
  * Vissza URL
  */
 
-$backUrl = '/cars/';
-
-
-
-/*
- * Űrlap alapértékek
- */
-
-$selectedBrand = $car['brand'] ?? '';
-
-$brandModels =
-    $car_catalog[$selectedBrand]['models'] ?? [];
-
-$selectedModel = $car['model'] ?? '';
-
-$modelConfig =
-    $brandModels[$selectedModel] ?? null;
-
+$backUrl = '/';
 
 ?>
 <html>
@@ -538,546 +350,5 @@ $modelConfig =
 		<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/bottom.php'; ?>
     </tr>
 </table>
-<script>
-const carCatalog = <?= json_encode(
-    $car_catalog,
-    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-) ?>;
-
-const brandSelect = document.querySelector('select[name="brand"]');
-const modelSelect = document.querySelector('select[name="model"]');
-const yearSelect = document.querySelector('select[name="production_year"]');
-const bodySelect = document.querySelector('select[name="body"]');
-const engineSelect = document.querySelector('select[name="engine"]');
-const trimSelect = document.querySelector('select[name="trim"]');
-const colorSelect = document.querySelector('select[name="color"]');
-const vinInput = document.querySelector('input[name="vin"]');
-let vinLockedFields = new Set();
-
-const seriesInput = document.querySelector('input[name="series"]');
-
-let activeSeries = '';
-let yearSeriesMap = {};
-
-function populateSelect(select, options) {
-    select.innerHTML = '';
-
-    const placeholder = document.createElement('option');
-    placeholder.value = '';
-    placeholder.textContent = '- Válasszon -';
-    select.appendChild(placeholder);
-
-    Object.entries(options || {}).forEach(([value, label]) => {
-        const option = document.createElement('option');
-
-        option.value = value;
-        
-        if (select === colorSelect) {
-            option.textContent = `${label} - ${value}`;
-        } else {
-            option.textContent = label;
-        }
-
-        select.appendChild(option);
-    });
-}
-function populateYearSelect(seriesConfig) {
-    yearSelect.innerHTML = '';
-    yearSeriesMap = {};
-    activeSeries = '';
-    seriesInput.value = '';
-
-    const placeholder = document.createElement('option');
-    placeholder.value = '';
-    placeholder.textContent = '- Válasszon -';
-    yearSelect.appendChild(placeholder);
-
-    Object.entries(seriesConfig || {}).forEach(([seriesKey, seriesData]) => {
-
-        const years = seriesData?.years || {};
-
-        if (Object.keys(years).length === 0) {
-            return;
-        }
-
-        const group = document.createElement('optgroup');
-        group.label = seriesData.name || seriesKey;
-
-        Object.entries(years).forEach(([yearValue, yearLabel]) => {
-
-            const option = document.createElement('option');
-
-            option.value = yearValue;
-            option.textContent = yearLabel;
-
-            yearSeriesMap[yearValue] = seriesKey;
-
-            group.appendChild(option);
-        });
-
-        yearSelect.appendChild(group);
-    });
-}
-yearSelect.addEventListener('change', function () {
-
-    const year = this.value;
-
-    activeSeries = yearSeriesMap[year] || '';
-    seriesInput.value = activeSeries;
-
-    const brand = brandSelect.value;
-    const model = modelSelect.value;
-
-    const modelConfig =
-        carCatalog[brand]?.models?.[model];
-
-    const seriesConfig =
-        modelConfig?.series?.[activeSeries];
-
-    if (!seriesConfig) {
-        populateSelect(bodySelect, {});
-        populateSelect(engineSelect, {});
-        populateSelect(trimSelect, {});
-        populateSelect(colorSelect, {});
-        return;
-    }
-
-    populateSelect(
-        bodySelect,
-        seriesConfig.options?.body
-    );
-
-    populateSelect(
-        engineSelect,
-        seriesConfig.options?.engine
-    );
-
-    populateSelect(
-        trimSelect,
-        seriesConfig.options?.trim
-    );
-
-    populateSelect(
-        colorSelect,
-        seriesConfig.options?.color
-    );
-});
-
-function loadModelConfig(values = {}) {
-    const brand = brandSelect.value;
-    const model = modelSelect.value;
-
-    const modelConfig = carCatalog[brand]?.models?.[model];
-
-    if (!modelConfig) {
-        populateYearSelect({});
-        populateSelect(bodySelect, {});
-        populateSelect(engineSelect, {});
-        populateSelect(trimSelect, {});
-        populateSelect(colorSelect, {});
-        return;
-    }
-
-    /*
-     * Évjáratok szériák szerint
-     */
-    populateYearSelect(modelConfig.series || {});
-
-    /*
-     * Típus kiválasztásakor nincs automatikus évjárat.
-     * A többi mező sem töltődik ki addig,
-     * amíg nincs kiválasztva évjárat.
-     */
-    populateSelect(bodySelect, {});
-    populateSelect(engineSelect, {});
-    populateSelect(trimSelect, {});
-    populateSelect(colorSelect, {});
-
-    if (values.production_year) {
-        yearSelect.value = values.production_year;
-
-        activeSeries =
-            yearSeriesMap[values.production_year] || '';
-
-        seriesInput.value = activeSeries;
-
-        const seriesConfig =
-            modelConfig.series?.[activeSeries];
-
-        if (seriesConfig) {
-            populateSelect(
-                bodySelect,
-                seriesConfig.options?.body
-            );
-
-            populateSelect(
-                engineSelect,
-                seriesConfig.options?.engine
-            );
-
-            populateSelect(
-                trimSelect,
-                seriesConfig.options?.trim
-            );
-
-            populateSelect(
-                colorSelect,
-                seriesConfig.options?.color
-            );
-        }
-    }
-}
-function lockSelect(select, value) {
-    if (!select) {
-        return;
-    }
-
-    Array.from(select.options).forEach(option => {
-        option.disabled = option.value !== value;
-    });
-
-    select.value = value;
-}
-
-function unlockSelect(select) {
-    if (!select) {
-        return;
-    }
-
-    Array.from(select.options).forEach(option => {
-        option.disabled = false;
-    });
-}
-function applyVinLocks(vinValues) {
-    vinLockedFields = new Set();
-
-    const lockedFields = [
-        'production_year',
-        'body',
-        'engine'
-    ];
-
-    lockedFields.forEach(field => {
-        const value = vinValues[field];
-
-        if (!value) {
-            return;
-        }
-
-        let select = null;
-
-        switch (field) {
-            case 'production_year':
-                select = yearSelect;
-                break;
-
-            case 'body':
-                select = bodySelect;
-                break;
-
-            case 'engine':
-                select = engineSelect;
-                break;
-        }
-
-        if (!select) {
-            return;
-        }
-
-        lockSelect(select, value);
-        vinLockedFields.add(field);
-    });
-}
-function loadBrandModels(brand, selectedModel = '', lockModel = false) {
-    const models = carCatalog[brand]?.models || {};
-
-    modelSelect.innerHTML = '';
-
-    const placeholder = document.createElement('option');
-    placeholder.value = '';
-    placeholder.textContent = '- Válasszon -';
-
-    if (lockModel) {
-        placeholder.disabled = true;
-    }
-
-    modelSelect.appendChild(placeholder);
-
-    Object.entries(models).forEach(([modelKey, modelData]) => {
-        const option = document.createElement('option');
-
-        option.value = modelKey;
-        option.textContent = modelData.name;
-
-        if (modelKey === selectedModel) {
-            option.selected = true;
-        }
-
-        if (lockModel && modelKey !== selectedModel) {
-            option.disabled = true;
-        }
-
-        modelSelect.appendChild(option);
-    });
-}
-brandSelect.addEventListener('change', function () {
-    const brand = this.value;
-    const models = carCatalog[brand]?.models || {};
-
-    modelSelect.innerHTML = '';
-
-    const placeholder = document.createElement('option');
-    placeholder.value = '';
-    placeholder.textContent = '- Válasszon -';
-    modelSelect.appendChild(placeholder);
-
-    Object.entries(models).forEach(([modelKey, modelData]) => {
-        const option = document.createElement('option');
-
-        option.value = modelKey;
-        option.textContent = modelData.name;
-
-        modelSelect.appendChild(option);
-    });
-
-    populateSelect(yearSelect, {});
-    populateSelect(bodySelect, {});
-    populateSelect(engineSelect, {});
-    populateSelect(trimSelect, {});
-    populateSelect(colorSelect, {});
-});
-
-modelSelect.addEventListener('change', function () {
-    loadModelConfig();
-});
-
-function loadModelConfig(values = {}) {
-    const brand = brandSelect.value;
-    const model = modelSelect.value;
-
-    const modelConfig = carCatalog[brand]?.models?.[model];
-
-    if (!modelConfig) {
-        populateYearSelect({});
-        populateSelect(bodySelect, {});
-        populateSelect(engineSelect, {});
-        populateSelect(trimSelect, {});
-        populateSelect(colorSelect, {});
-        return;
-    }
-
-    /*
-     * Évjáratok szériák szerint
-     */
-    populateYearSelect(modelConfig.series || {});
-
-    /*
-     * Típus kiválasztásakor még nincs évjárat,
-     * ezért a többi mező üres marad.
-     */
-    populateSelect(bodySelect, {});
-    populateSelect(engineSelect, {});
-    populateSelect(trimSelect, {});
-    populateSelect(colorSelect, {});
-
-    activeSeries = '';
-    seriesInput.value = '';
-
-    /*
-     * Ha már van konkrét évjárat,
-     * meghatározzuk hozzá a szériát.
-     */
-    if (values.production_year) {
-
-        yearSelect.value = values.production_year;
-
-        activeSeries =
-            yearSeriesMap[values.production_year] || '';
-
-        seriesInput.value = activeSeries;
-
-        const seriesConfig =
-            modelConfig.series?.[activeSeries];
-
-        if (seriesConfig) {
-
-            populateSelect(
-                bodySelect,
-                seriesConfig.options?.body
-            );
-
-            populateSelect(
-                engineSelect,
-                seriesConfig.options?.engine
-            );
-
-            populateSelect(
-                trimSelect,
-                seriesConfig.options?.trim
-            );
-
-            populateSelect(
-                colorSelect,
-                seriesConfig.options?.color
-            );
-        }
-    }
-
-    if (values.body) {
-        bodySelect.value = values.body;
-    }
-
-    if (values.engine) {
-        engineSelect.value = values.engine;
-    }
-
-    if (values.trim) {
-        trimSelect.value = values.trim;
-    }
-
-    if (values.color) {
-        colorSelect.value = values.color;
-    }
-}
-loadModelConfig({
-    production_year: <?= json_encode($car['production_year'] ?? '') ?>,
-    body: <?= json_encode($car['body'] ?? '') ?>,
-    engine: <?= json_encode($car['engine'] ?? '') ?>,
-    trim: <?= json_encode($car['trim'] ?? '') ?>,
-    color: <?= json_encode($car['color'] ?? '') ?>
-});
-function findVinModel(vin) {
-    for (const [brandKey, brandConfig] of Object.entries(carCatalog)) {
-
-        for (const [modelKey, modelConfig] of Object.entries(brandConfig.models || {})) {
-
-            for (const [seriesKey, seriesConfig] of Object.entries(modelConfig.series || {})) {
-
-                const rules = seriesConfig.vin?.rules || [];
-
-                for (const rule of rules) {
-
-                    if (rule.model_code !== true) {
-                        continue;
-                    }
-
-                    const position = rule.position - 1;
-
-                    const value = vin.substring(
-                        position,
-                        position + rule.length
-                    );
-
-                    if (rule.values?.[value] !== undefined) {
-                        return {
-                            brand: brandKey,
-                            model: modelKey,
-                            series: seriesKey
-                        };
-                    }
-                }
-            }
-        }
-    }
-
-    return null;
-}
-function decodeVin(vin, seriesKey = '') {
-    const brand = brandSelect.value;
-    const model = modelSelect.value;
-
-    const modelConfig =
-        carCatalog[brand]?.models?.[model];
-
-    const seriesConfig =
-        modelConfig?.series?.[seriesKey];
-
-    if (!seriesConfig?.vin?.rules) {
-        return {};
-    }
-
-    const vinValues = {};
-
-    seriesConfig.vin.rules.forEach(rule => {
-
-        const position = rule.position - 1;
-
-        const value = vin.substring(
-            position,
-            position + rule.length
-        );
-
-        let result;
-
-        if (rule.engine_values) {
-
-            const engine = vinValues.engine;
-
-            result =
-                rule.engine_values?.[engine]?.[value];
-
-        } else {
-
-            result = rule.values?.[value];
-        }
-
-        if (result !== undefined) {
-            vinValues[rule.target] = result;
-        }
-    });
-
-    return vinValues;
-}
-function processVin(vin) {
-    const modelInfo = findVinModel(vin);
-
-    if (!modelInfo) {
-        return null;
-    }
-
-    brandSelect.value = modelInfo.brand;
-
-    loadBrandModels(
-        modelInfo.brand,
-        modelInfo.model,
-        true
-    );
-
-   const vinValues = decodeVin(vin, modelInfo.series);
-
-    loadModelConfig(vinValues);
-
-    applyVinLocks(vinValues);
-
-    return {
-        ...modelInfo,
-        values: vinValues
-    };
-}
-function clearVinLocks() {
-    unlockSelect(yearSelect);
-    unlockSelect(bodySelect);
-    unlockSelect(engineSelect);
-
-    vinLockedFields.clear();
-
-    loadBrandModels(brandSelect.value, modelSelect.value);
-}
-vinInput.addEventListener('input', function () {
-    const vin = this.value.trim().toUpperCase();
-
-    if (vin.length < 17) {
-        clearVinLocks();
-        return;
-    }
-
-    if (vin.length === 17) {
-        const result = processVin(vin);
-
-        console.log('VIN eredmény:', result);
-    }
-});
-
-</script>
 </body>
 </html>
