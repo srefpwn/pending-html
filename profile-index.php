@@ -90,7 +90,7 @@ $backUrl = '/';
 ?>
 <html>
 <head>
-    <title>RichCars - Autó Módosítása</title>
+    <title>RichCars - Profilom</title>
 		<meta charset="UTF-8">
 		<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
