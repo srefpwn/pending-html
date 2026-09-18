@@ -59,23 +59,97 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit('Érvénytelen CSRF token.');
     }
 
-    $updatedData = [
-        'name' => trim((string)($_POST['name'] ?? '')),
-    	'address' => trim((string)($_POST['address'] ?? '')),
-    ];
+$currentPassword = trim(
+    (string)($_POST['current_password'] ?? '')
+);
+
+$newPassword = trim(
+    (string)($_POST['new_password'] ?? '')
+);
+
+$newPasswordConfirm = trim(
+    (string)($_POST['new_password_confirm'] ?? '')
+);
+
+/*
+ * Profiladatok
+ */
+
+$updatedData = [
+    'name' => trim(
+        (string)($_POST['name'] ?? '')
+    ),
+    'address' => trim(
+        (string)($_POST['address'] ?? '')
+    ),
+];
+
+/*
+ * Jelszó módosítás ellenőrzése
+ */
+
+$passwordChangeRequested =
+    $currentPassword !== '' ||
+    $newPassword !== '' ||
+    $newPasswordConfirm !== '';
+
+if ($passwordChangeRequested) {
+
+    if ($currentPassword === '') {
+
+        $message = 'A jelenlegi jelszó megadása kötelező.';
+        $messageType = 'error';
+
+    } elseif ($newPassword === '') {
+
+        $message = 'Az új jelszó megadása kötelező.';
+        $messageType = 'error';
+
+    } elseif ($newPasswordConfirm === '') {
+
+        $message = 'Az új jelszó ismételt megadása kötelező.';
+        $messageType = 'error';
+
+    } elseif ($newPassword !== $newPasswordConfirm) {
+
+        $message = 'Az új jelszavak nem egyeznek.';
+        $messageType = 'error';
+
+    } elseif (!verifyUserPassword($userId, $currentPassword)) {
+
+        $message = 'A jelenlegi jelszó helytelen.';
+        $messageType = 'error';
+
+    } else {
+
+        $updatedData['hash'] = password_hash(
+            $newPassword,
+            PASSWORD_DEFAULT
+        );
+    }
+}
+
+/*
+ * Mentés
+ */
+
+if ($messageType !== 'error') {
 
     $saved = updateUser(
         $userId,
         $updatedData
     );
 
-if ($saved) {
-    $message = 'A profil adatai sikeresen módosítva.';
-    $messageType = 'success';
+    if ($saved) {
 
-    $user['name'] = $updatedData['name'];
-    $user['address'] = $updatedData['address'];
-} else {
+        $message = 'A profil adatai sikeresen módosítva.';
+        $messageType = 'success';
+
+        $user['name'] = $updatedData['name'];
+        $user['address'] = $updatedData['address'];
+
+    } else {
+
         $message = 'A profil adatainak mentése sikertelen.';
         $messageType = 'error';
     }
