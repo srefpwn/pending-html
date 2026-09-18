@@ -125,7 +125,7 @@ $backUrl = '/';
                                                     <!-- Cím -->
                                                     <tr>
                                                         <td style="padding:0px;text-align:center;">
-                                                            <span class="epc-title">Autó Módosítása</span>
+                                                            <span class="epc-title">Profilom</span>
                                                         </td>
                                                     </tr>
                                                     <!-- Üzenet -->
@@ -155,174 +155,55 @@ $backUrl = '/';
                                                         <table align="center" style="text-align:left;border-spacing:0px;padding-bottom:20px;" width="100%" class="table-border">
                                                         <!-- Autó neve -->
                                                        		<tr>
-																<td width="50%" class="epc-text row-even p5">Autó neve:
+																<td width="50%" class="epc-text row-even p5">Felhasználónév:
 																</td>
 																<td width="50%" class="row-even p5">
 																<input type="text" name="name" maxlength="50" value="<?= htmlspecialchars($car['name'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 																</td>
 															</tr>
                                                        		<tr>
-																<td width="50%" class="epc-text row-odd p5">Alvázszám:
+																<td width="50%" class="epc-text row-odd p5">Név:
 																</td>
 																<td width="50%" class="row-odd p5">
 																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" value="<?= htmlspecialchars($car['vin'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required <?= $isAdmin ? '' : 'readonly' ?>>
 																</td>
 															</tr>
                                                        		<tr>
-																<td width="50%" class="epc-text row-even p5">Márka:
+																<td width="50%" class="epc-text row-even p5">Cím:
 																</td>
-																<td width="50%" class="row-even p5">
-																<span class="select-wrapper2">
-																<select name="brand" required <?= $isAdmin ? '' : 'disabled' ?>>
-    															<?php foreach ($car_catalog as $brandKey => $brandData): ?>
-        															<option value="<?= htmlspecialchars($brandKey) ?>"
-            														<?= $brandKey === $selectedBrand ? 'selected' : '' ?>>
-            														<?= htmlspecialchars($brandData['name']) ?>
-        															</option>
-    															<?php endforeach; ?>
-																</select>
-                                                                </span>
+																<td width="50%" class="row-odd p5">
+																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" value="<?= htmlspecialchars($car['vin'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required <?= $isAdmin ? '' : 'readonly' ?>>
 																</td>
 															</tr>
                                                        		<tr>
-																<td width="50%" class="epc-text row-odd p5">Típus:
+																<td width="50%" class="epc-text row-odd p5">Új jelszó:
 																</td>
-																<td width="50%" class="row-odd p5">
-																<span class="select-wrapper2">
-																<select name="model" required <?= $isAdmin ? '' : 'disabled' ?>>
-																	<option value="">- Válasszon -</option>
-    															<?php foreach ($brandModels as $modelKey => $modelData): ?>
-        															<option value="<?= htmlspecialchars($modelKey) ?>"
-            														<?= $modelKey === $selectedModel ? 'selected' : '' ?>>
-            														<?= htmlspecialchars($modelData['name']) ?>
-        															</option>
-    															<?php endforeach; ?>
-																</select>
-                                                                </span>
+																<td width="50%" class="row-even p5">
+																<input type="text" name="name" maxlength="50" value="<?= htmlspecialchars($car['name'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 																</td>
 															</tr>
                                                        		<tr>
-																<td width="50%" class="epc-text row-even p5">Gyártási idő:
-																</td>
-																<td width="50%" class="row-even p5">
-																<span class="select-wrapper2">
-																<select name="production_year" required <?= $isAdmin ? '' : 'disabled' ?>>
-    																<option value="">- Válasszon -</option>
-																</select>
-                                                                </span>
-																</td>
-															</tr>
-															<tr>
-																<td width="50%" class="epc-text row-odd p5">Kivitel:
+																<td width="50%" class="epc-text row-even p5">Jelenlegi jelszó:
 																</td>
 																<td width="50%" class="row-odd p5">
-																<span class="select-wrapper2">
-																<select name="body" required <?= $isAdmin ? '' : 'disabled' ?>>
-																	<option value="">- Válasszon -</option>
-																<?php foreach (($modelConfig['options']['body'] ?? []) as $bodyKey => $bodyLabel): ?>
-    																<option value="<?= htmlspecialchars($bodyKey) ?>">
-        															<?= htmlspecialchars($bodyLabel) ?>
-    																</option>
-																<?php endforeach; ?>
-																</select>
-                                                                </span>
+																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" value="<?= htmlspecialchars($car['vin'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required <?= $isAdmin ? '' : 'readonly' ?>>
 																</td>
 															</tr>
-															<tr>
-																<td width="50%" class="epc-text row-even p5">Motor:
+                                                       		<tr>
+																<td width="50%" class="epc-text row-odd p5">Új jelszó:
 																</td>
 																<td width="50%" class="row-even p5">
-																<span class="select-wrapper2">
-																<select name="engine" required <?= $isAdmin ? '' : 'disabled' ?>>
-																	<option value="">- Válasszon -</option>
-    															<?php foreach (($modelConfig['options']['engine'] ?? []) as $engineKey => $engineLabel): ?>
-        															<option value="<?= htmlspecialchars($engineKey) ?>">
-            														<?= htmlspecialchars($engineLabel) ?>
-        															</option>
-    															<?php endforeach; ?>
-																</select>
-																</span>
+																<input type="text" name="name" maxlength="50" value="<?= htmlspecialchars($car['name'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 																</td>
 															</tr>
-															<tr>
-																<td width="50%" class="epc-text row-odd p5">Felszereltség:
+                                                       		<tr>
+																<td width="50%" class="epc-text row-even p5">Új jelszó ismét:
 																</td>
 																<td width="50%" class="row-odd p5">
-																<span class="select-wrapper2">
-																<select name="trim" required <?= $isAdmin ? '' : 'disabled' ?>>
-																	<option value="">- Válasszon -</option>
-    															<?php foreach (($modelConfig['options']['trim'] ?? []) as $trimKey => $trimLabel): ?>
-        															<option value="<?= htmlspecialchars($trimKey) ?>">
-            														<?= htmlspecialchars($trimLabel) ?>
-        															</option>
-    															<?php endforeach; ?>
-																</select>
-                                                                </span>
-																</td>
-															</tr>
-															<tr>
-																<td width="50%" class="epc-text row-even p5">Szín:
-																</td>
-																<td width="50%" class="row-even p5">
-																<span class="select-wrapper2">
-																<select name="color" required <?= $isAdmin ? '' : 'disabled' ?>>
-																	<option value="">- Válasszon -</option>
-    															<?php foreach (($modelConfig['options']['color'] ?? []) as $colorCode => $colorName): ?>
-        															<option value="<?= htmlspecialchars($colorCode) ?>">
-            														<?= htmlspecialchars($colorName) ?> - <?= htmlspecialchars($colorCode) ?>
-        															</option>
-    															<?php endforeach; ?>
-																</select>
-                                                                </span>
+																<input type="text" name="vin" maxlength="30" placeholder="Alvázszám" value="<?= htmlspecialchars($car['vin'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required <?= $isAdmin ? '' : 'readonly' ?>>
 																</td>
 															</tr>
                                                         </table>
-                                                        <?php if ($isAdmin): ?>
-														<table align="center" class="table-border" width="100%">
-															<tr>
-																<td class="pl10 epc-text row-odd p5 text-left" style="background-color:#bb271a;color:#ffffff;width:100%;text-align:center;">Jogosultságok
-																</td>
-															</tr>
-														</table>
-														<table align="center" style="text-align:left;border-spacing:0px;padding-bottom:20px;" width="100%" class="table-border">
-                                                        	<tr>
-																<td width="50%" class="epc-text row-even p5">EPC:
-																</td>
-																<td width="50%" class="row-even p5">
-																<span class="select-wrapper2">
-																<select name="epc_enable">
-            														<option value="1" <?= ($carConfig['epc_enable'] ?? '0') === '1' ? 'selected' : '' ?>>Engedélyezés</option>
-            														<option value="0" <?= ($carConfig['epc_enable'] ?? '0') === '0' ? 'selected' : '' ?>>Tiltás</option>
-        														</select>
-                                                                </span>
-																</td>
-															</tr>
-                                                       		<tr>
-																<td width="50%" class="epc-text row-odd p5">Szerviz kézikönyv:
-																</td>
-																<td width="50%" class="row-odd p5">
-																<span class="select-wrapper2">
-																<select name="manual_enable">
-            														<option value="1" <?= ($carConfig['manual_enable'] ?? '0') === '1' ? 'selected' : '' ?>>Engedélyezés</option>
-           															<option value="0" <?= ($carConfig['manual_enable'] ?? '0') === '0' ? 'selected' : '' ?>>Tiltás</option>
-        														</select>
-                                                                </span>
-																</td>
-															</tr>
-															<tr>
-																<td width="50%" class="epc-text row-even p5">Szerviz információk:
-																</td>
-																<td width="50%" class="row-even p5">
-																<span class="select-wrapper2">
-																<select name="servicetips_enable">
-            														<option value="1" <?= ($carConfig['servicetips_enable'] ?? '0') === '1' ? 'selected' : '' ?>>Engedélyezés</option>
-																	<option value="0" <?= ($carConfig['servicetips_enable'] ?? '0') === '0' ? 'selected' : '' ?>>Tiltás</option>
-        														</select>
-                                                                </span>
-																</td>
-															</tr>
-														</table>
-														<?php endif; ?>
                                                         <table class="table-border text-center">
                                                         <!-- Gombok -->
                                                             <tr>
