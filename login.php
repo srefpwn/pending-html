@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
 
     $loginUser = strtolower(trim($_POST['user']));
 
-    foreach ($USERS as $account) {
+    foreach (loadUsers() as $account) {
 
         if (
             $account['user'] === $loginUser
