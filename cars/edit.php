@@ -66,44 +66,46 @@ if ($isAdmin) {
     }
 
 }
-
 $carsData = loadUserCarsData();
 
 $userKey = (string)$userId;
 
-if (
-    !isset($carsData[$userKey]) ||
-    !is_array($carsData[$userKey])
-) {
-
-            $message =
-                'A felhasználó autói nem találhatók.';
-
-            $messageType = 'error';
-}
-
-/*
- * A konkrét autó megkeresése
- */
-
 $car = null;
 
-foreach ($carsData[$userKey] as $item) {
+if ($messageType !== 'error') {
 
     if (
-        isset($item['id']) &&
-        (int)$item['id'] === $carId
+        !isset($carsData[$userKey]) ||
+        !is_array($carsData[$userKey])
     ) {
-        $car = $item;
-        break;
-    }
-}
+        $message =
+            'A felhasználó autói nem találhatók.';
 
-if ($car === null) {
+        $messageType = 'error';
+
+    } else {
+
+        /*
+         * A konkrét autó megkeresése
+         */
+        foreach ($carsData[$userKey] as $item) {
+
+            if (
+                isset($item['id']) &&
+                (int)$item['id'] === $carId
+            ) {
+                $car = $item;
+                break;
+            }
+        }
+
+        if ($car === null) {
             $message =
                 'A kért autó nem található.';
 
             $messageType = 'error';
+        }
+    }
 }
 
 /*
@@ -131,7 +133,11 @@ $csrfToken = $_SESSION['cars_csrf_token'];
  * Mentés
  */
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+    $messageType !== 'error' &&
+    $car !== null
+) {
 
     if (
         !isset($_POST['csrf_token']) ||
@@ -341,6 +347,8 @@ $modelConfig =
                                                         </td>
                                                     </tr>
                                                     <?php endif; ?>
+                                                    <?php if ($messageType !== 'error' && $car !== null): ?>
+
                                                     <!-- Űrlap -->
                                                     <tr>
                                                         <td style="padding:20px;text-align:center;padding-bottom:40px;">
@@ -536,6 +544,7 @@ $modelConfig =
                                                         </table>
                                                         </form>
                                                         </td>
+                                                        <?php endif; ?>
                                                     </tr>
                                                 </table>
                                             </td>
