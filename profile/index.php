@@ -108,11 +108,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
      */
 
     $updatedData = [
+   	 	'user' => trim((string)($_POST['username'] ?? '')),
         'name' => trim((string)($_POST['name'] ?? '')),
         'address' => trim((string)($_POST['address'] ?? '')),
         'email' => trim((string)($_POST['email'] ?? '')),
         
     ];
+    $username = $updatedData['user'];
+
+if ($username === '') {
+
+    $message = 'A felhasználónév megadása kötelező.';
+    $messageType = 'error';
+
+}
     $email = $updatedData['email'];
 
 if ($email === '') {
