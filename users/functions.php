@@ -73,12 +73,26 @@ function updateUser(
         ) {
             foreach ($updatedData as $key => $value) {
 
-                if ($key === 'id') {
-                    continue;
-                }
+    if ($key === 'id') {
+        continue;
+    }
 
-                $users[$index][$key] = $value;
+    if ($key === 'user') {
+
+        foreach ($users as $otherUser) {
+
+            if (
+                isset($otherUser['id'], $otherUser['user']) &&
+                (int)$otherUser['id'] !== $userId &&
+                strtolower($otherUser['user']) === strtolower($value)
+            ) {
+                return false;
             }
+        }
+    }
+
+    $users[$index][$key] = $value;
+}
 
             return saveUsers($users);
         }
@@ -125,4 +139,59 @@ function deleteUser(int $userId): bool
     }
 
     return false;
+}
+function addUser(
+    string $username,
+    string $name,
+    string $address,
+    string $email,
+    string $password,
+    string $role = 'user'
+): bool {
+
+    $users = loadUsers();
+
+    // Felhasználónév és e-mail ellenőrzése
+    foreach ($users as $user) {
+
+        if (
+            isset($user['user']) &&
+            strtolower($user['user']) === strtolower($username)
+        ) {
+            return false;
+        }
+
+        if (
+            isset($user['email']) &&
+            strtolower($user['email']) === strtolower($email)
+        ) {
+            return false;
+        }
+    }
+
+    // Következő ID meghatározása
+    $nextId = 1;
+
+    foreach ($users as $user) {
+
+        if (
+            isset($user['id']) &&
+            (int)$user['id'] >= $nextId
+        ) {
+            $nextId = (int)$user['id'] + 1;
+        }
+    }
+
+    // Új felhasználó
+    $users[] = [
+        'id'      => $nextId,
+        'user'    => $username,
+        'name'    => $name,
+        'address' => $address,
+        'email'   => $email,
+        'hash'    => password_hash($password, PASSWORD_DEFAULT),
+        'role'    => $role
+    ];
+
+    return saveUsers($users);
 }
