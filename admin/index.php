@@ -172,6 +172,12 @@ $csrfToken = $_SESSION['cars_csrf_token'];
                                                                             </td>
                                                                         </tr>
                                                                     </table>
+                                                                    <?php
+$userId = (string)$user['id'];
+$userCars = $carsData[$userId] ?? [];
+?>
+
+																	<div id="user-cars-<?= (int)$user['id'] ?>" style="display:none;">
                                                                     <table width="100%" class="text-center table-border">
                                                                         <tr>
 																			<td style="padding-top:20px;text-align:center;background-color:#aaaaaa;">
@@ -185,6 +191,7 @@ $csrfToken = $_SESSION['cars_csrf_token'];
 																			</td>
 																		</tr>
                                                                     </table>
+                                                                    <?php foreach ($userCars as $car): ?>
                                                                     <table width="100%" class="text-center table-border">
                                                                         <tr>
                                                                             <td style="width:300px;text-align:center; padding:20px;background-color:#aaaaaa;">
@@ -194,7 +201,7 @@ $csrfToken = $_SESSION['cars_csrf_token'];
                                                                             		<span class="epc-text2"><b>Név: </b></span>
                                                                     				</td>
                                                                             		<td style="padding:10px;">
-                                                                            		<span class="epc-text2">KIK</span>
+                                                                            		<span class="epc-text2"><?= htmlspecialchars($car['name'] ?? '') ?></span>
                                                                     				</td>
                                                                            		</tr>
                                                                            	</table>
@@ -206,7 +213,7 @@ $csrfToken = $_SESSION['cars_csrf_token'];
                                                                             		<span class="epc-text2"><b>Alvázszám: </b></span>
                                                                             		</td>
                                                                             		<td style="height:auto;padding:10px;text-align:left;">
-                                                                            		<span class="epc-text2">SHSRE5790HU002409</span>
+                                                                            		<span class="epc-text2"><?= htmlspecialchars($car['vin'] ?? '') ?></span>
                                                                             		</td>
                                                                             	</tr>
                                                                            	</table>
@@ -261,82 +268,8 @@ $csrfToken = $_SESSION['cars_csrf_token'];
                                                                             </td>
                                                                         </tr>
                                                                     </table>
-                                                                    <table width="100%" class="text-center table-border">
-                                                                        <tr>
-                                                                            <td style="width:300px;text-align:center; padding:20px;background-color:#aaaaaa;">
-                                                                            <table class="table-border" style="text-align:center;">
-                                                                            	<tr>
-                                                                            		<td style="padding:10px;">
-                                                                            		<span class="epc-text2"><b>Név: </b></span>
-                                                                    				</td>
-                                                                    				<td style="padding:10px;">
-                                                                            		<span class="epc-text2">CRV</span>
-                                                                    				</td>
-                                                                           		</tr>
-                                                                           	</table>
-                                                                            </td>
-                                                                            <td class="textv-center" style="padding-left:0px; padding-top:20px;padding-bottom:20px;background-color:#aaaaaa;">
-                                                                            <table class="table-border" width="100%">
-                                                                            	<tr>
-                                                                            		<td style="height:auto;padding:10px;width:15%;">
-                                                                            		<span class="epc-text2"><b>Alvázszám: </b></span>
-                                                                            		</td>
-                                                                            		<td style="height:auto;padding:10px;text-align:left;">
-                                                                            		<span class="epc-text2">SHSRE5790HU002409</span>
-                                                                            		</td>
-                                                                            	</tr>
-                                                                           	</table>
-                                                                            </td>
-                                                                            <td style=" padding:20px; height:100%;background-color:#aaaaaa;">
-                                                                            <table class="table-border text-right textv-top" style="height:100%;">
-                                                                            	<tr>
-                                                                            		<td class="textv-bottom" style="vertical-align:bottom;">
-                                                                            		<table class="table-border">
-                                                                            			<tr>
-                                                                            				<td>
-                                                                            				<form method="post" onsubmit="return confirm('Biztosan törölni szeretnéd ezt az autót?');">
-																							<input type="hidden" name="action" value="delete">
-																							<input type="hidden" name="car_id" value="<?= (int)$car['id'] ?>">
-																							<input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
-																							<button style="width:140px" type="submit">Szervizkönyv</button>
-																							</form>
-																							</td>
-																						</tr>
-																					</table>
-                                                                            		</td>
-                                                                            		<td class="textv-bottom" style="vertical-align:bottom;">
-                                                                            		<table class="table-border">
-                                                                            			<tr>
-                                                                            				<td>
-                                                                            				<form method="post" onsubmit="return confirm('Biztosan törölni szeretnéd ezt az autót?');">
-																							<input type="hidden" name="action" value="delete">
-																							<input type="hidden" name="car_id" value="<?= (int)$car['id'] ?>">
-																							<input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
-																							<button style="width:140px" type="submit">Szerkesztés</button>
-																							</form>
-																							</td>
-																						</tr>
-																					</table>
-                                                                            		</td>
-                                                                            		<td class="textv-bottom" style="vertical-align:bottom;">
-                                                                            		<table class="table-border">
-                                                                            			<tr>
-                                                                            				<td>
-                                                                            				<form method="post" onsubmit="return confirm('Biztosan törölni szeretnéd ezt az autót?');">
-																							<input type="hidden" name="action" value="delete">
-																							<input type="hidden" name="car_id" value="<?= (int)$car['id'] ?>">
-																							<input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
-																							<button style="width:140px" type="submit">Törlés</button>
-																							</form>
-																							</td>
-																						</tr>
-																					</table>
-                                                                            		</td>
-                                                                            	</tr>
-                                                                            </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
+                                                                    <?php endforeach; ?>
+                                                                    </div>
                                                                 </td>
                                                             </tr>
                                                             <?php endforeach; ?>
