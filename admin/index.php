@@ -4,6 +4,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/navigation.php';
 
+if (!isAdmin()) {
+    http_response_code(403);
+    exit('Hozzáférés megtagadva.');
+}
+
 // Vissza URL
 $backUrl = '/';
 
