@@ -3,7 +3,6 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/users/functions.php';
 
-
 /*
  * Felhasználó azonosítása
  */
@@ -17,34 +16,60 @@ if ($sessionUserId < 1) {
 
 $userId = $sessionUserId;
 
+$isNewUser = false;
+
 /*
  * Admin esetén másik felhasználó szerkesztése
  */
 
-if (isAdmin() && isset($_GET['id'])) {
+if (isAdmin()) {
 
-    $requestedUserId = filter_input(
-        INPUT_GET,
-        'id',
-        FILTER_VALIDATE_INT
-    );
+    if (isset($_GET['new']) && $_GET['new'] === '1') {
 
-    if ($requestedUserId !== false && $requestedUserId !== null && $requestedUserId > 0) {
-        $userId = $requestedUserId;
+        $isNewUser = true;
+        $userId = 0;
+
+        $user = [
+            'id'      => 0,
+            'user'    => '',
+            'name'    => '',
+            'address' => '',
+            'email'   => '',
+            'hash'    => '',
+            'role'    => 'user'
+        ];
+
+    } elseif (isset($_GET['id'])) {
+
+        $requestedUserId = filter_input(
+            INPUT_GET,
+            'id',
+            FILTER_VALIDATE_INT
+        );
+
+        if (
+            $requestedUserId !== false &&
+            $requestedUserId !== null &&
+            $requestedUserId > 0
+        ) {
+            $userId = $requestedUserId;
+        }
     }
 }
 
 /*
- * Felhasználó betöltése
+ * Meglévő felhasználó betöltése
  */
 
-$user = getUserById($userId);
+if (!$isNewUser) {
 
-if ($user === null) {
-    http_response_code(404);
-    exit('A felhasználó nem található.');
+    $user = getUserById($userId);
+
+    if ($user === null) {
+        http_response_code(404);
+        exit('A felhasználó nem található.');
+    }
 }
-
 /*
  * Üzenetek
  */
@@ -257,8 +282,12 @@ $backUrl = '/';
                                                        		<tr>
 																<td width="50%" class="epc-text row-even p5">Felhasználónév:
 																</td>
-																<td width="50%" class="row-even p10 epc-text">
+																<td width="50%" class="row-even p5">
+																<?php if (isAdmin()): ?>
+																<input type="text" name="username" maxlength="50" value="<?= htmlspecialchars($user['user'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+																<?php else: ?>
 																<?= htmlspecialchars($user['user'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+																<?php endif; ?>
 																</td>
 															</tr>
                                                        		<tr>
