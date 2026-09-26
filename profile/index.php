@@ -132,13 +132,41 @@ if ($email === '') {
     $messageType = 'error';
 }
 
-    /*
-     * Jelszómezők
-     */
+/*
+ * Jelszómezők
+ */
 
-    $currentPassword = (string)($_POST['current_password'] ?? '');
-    $newPassword = (string)($_POST['new_password'] ?? '');
-    $newPasswordConfirm = (string)($_POST['new_password_confirm'] ?? '');
+$currentPassword = (string)($_POST['current_password'] ?? '');
+$newPassword = (string)($_POST['new_password'] ?? '');
+$newPasswordConfirm = (string)($_POST['new_password_confirm'] ?? '');
+
+/*
+ * Új felhasználó
+ */
+
+if ($isNewUser) {
+
+    if ($newPassword === '') {
+
+        $message = 'Az új jelszó megadása kötelező.';
+        $messageType = 'error';
+
+    } elseif ($newPasswordConfirm === '') {
+
+        $message = 'Az új jelszó ismételt megadása kötelező.';
+        $messageType = 'error';
+
+    } elseif ($newPassword !== $newPasswordConfirm) {
+
+        $message = 'Az új jelszavak nem egyeznek.';
+        $messageType = 'error';
+    }
+
+/*
+ * Meglévő felhasználó
+ */
+
+} else {
 
     /*
      * Jelszó módosítás csak akkor indul,
@@ -185,12 +213,64 @@ if ($email === '') {
             );
         }
     }
+}
+/*
+ * Mentés
+ */
 
-    /*
-     * Mentés
-     */
+if ($messageType !== 'error') {
 
-    if ($messageType !== 'error') {
+    if ($isNewUser) {
+
+        $newPassword = (string)($_POST['new_password'] ?? '');
+        $newPasswordConfirm = (string)($_POST['new_password_confirm'] ?? '');
+
+        if ($newPassword === '') {
+
+            $message = 'Az új jelszó megadása kötelező.';
+            $messageType = 'error';
+
+        } elseif ($newPasswordConfirm === '') {
+
+            $message = 'Az új jelszó ismételt megadása kötelező.';
+            $messageType = 'error';
+
+        } elseif ($newPassword !== $newPasswordConfirm) {
+
+            $message = 'Az új jelszavak nem egyeznek.';
+            $messageType = 'error';
+
+        } elseif (
+            addUser(
+                $updatedData['user'],
+                $updatedData['name'],
+                $updatedData['address'],
+                $updatedData['email'],
+                $newPassword,
+                'user'
+            )
+        ) {
+
+            $message = 'Az új felhasználó sikeresen létrehozva.';
+            $messageType = 'success';
+
+            $user = [
+                'id' => 0,
+                'user' => $updatedData['user'],
+                'name' => $updatedData['name'],
+                'address' => $updatedData['address'],
+                'email' => $updatedData['email'],
+                'hash' => '',
+                'role' => 'user'
+            ];
+
+        } else {
+
+            $message = 'A felhasználónév vagy az e-mail cím már használatban van.';
+            $messageType = 'error';
+        }
+
+    } else {
 
         $saved = updateUser(
             $userId,
@@ -202,13 +282,14 @@ if ($email === '') {
             $message = 'A profil adatai sikeresen módosítva.';
             $messageType = 'success';
 
+            $user['user'] = $updatedData['user'];
             $user['name'] = $updatedData['name'];
             $user['address'] = $updatedData['address'];
             $user['email'] = $updatedData['email'];
 
         } else {
 
-            $message = 'A profil adatainak mentése sikertelen.';
+            $message = 'A felhasználónév már használatban van, vagy a profil adatainak mentése sikertelen.';
             $messageType = 'error';
         }
     }
