@@ -31,6 +31,49 @@ if (empty($_SESSION['cars_csrf_token'])) {
 
 $csrfToken = $_SESSION['cars_csrf_token'];
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if (
+        !isset($_POST['csrf_token']) ||
+        !hash_equals($csrfToken, $_POST['csrf_token'])
+    ) {
+        $message = 'Érvénytelen kérés.';
+        $messageType = 'error';
+    } elseif (
+        isset($_POST['action']) &&
+        $_POST['action'] === 'delete_user'
+    ) {
+
+        $userId = filter_input(
+            INPUT_POST,
+            'user_id',
+            FILTER_VALIDATE_INT
+        );
+
+        if ($userId === false || $userId < 1) {
+
+            $message = 'Érvénytelen felhasználó.';
+            $messageType = 'error';
+
+        } elseif ($userId === (int)$_SESSION['user_id']) {
+
+            $message = 'A saját admin fiókodat nem törölheted.';
+            $messageType = 'error';
+
+        } elseif (deleteUser($userId)) {
+
+            $message = 'A felhasználó sikeresen törölve.';
+            $messageType = 'success';
+
+            $users = loadUsers();
+
+        } else {
+
+            $message = 'A felhasználó törlése sikertelen.';
+            $messageType = 'error';
+        }
+    }
+}
 
 ?>
 <html>
@@ -86,7 +129,7 @@ $csrfToken = $_SESSION['cars_csrf_token'];
 													<table class="table-border text-center">
 														<tr>
 															<td>
-															<a href="/cars/add.php"><button type="submit">Felhasználó hozzáadása</button></a>
+															<a href="/profile/index.php?new=1"><button type="submit">Felhasználó hozzáadása</button></a>
 															</td>
 														</tr>
 													</table>
@@ -134,7 +177,7 @@ $csrfToken = $_SESSION['cars_csrf_token'];
                                                                             		<table class="table-border">
                                                                             			<tr>
                                                                             				<td>
-																							<button type="button" style="width:140px" onclick="toggleUserCars(<?= (int)$user['id'] ?>)">Autói</button>
+																							<button type="button" style="width:140px" onclick="toggleUserCars(<?= (int)$user['id'] ?>)">Autók</button>
 																							</td>
 																						</tr>
 																					</table>
@@ -143,12 +186,9 @@ $csrfToken = $_SESSION['cars_csrf_token'];
                                                                             		<table class="table-border">
                                                                             			<tr>
                                                                             				<td>
-                                                                            				<form method="post" onsubmit="return confirm('Biztosan törölni szeretnéd ezt az autót?');">
-																							<input type="hidden" name="action" value="delete">
-																							<input type="hidden" name="car_id" value="<?= (int)$car['id'] ?>">
-																							<input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
-																							<button style="width:140px" type="submit">Szerkesztés</button>
-																							</form>
+                                                                            				<a href="/profile/index.php?id=<?= (int)$user['id'] ?>">
+                                                                            				<button style="width:140px" type="submit">Szerkesztés</button>
+																							</a>
 																							</td>
 																						</tr>
 																					</table>
@@ -157,9 +197,9 @@ $csrfToken = $_SESSION['cars_csrf_token'];
                                                                             		<table class="table-border">
                                                                             			<tr>
                                                                             				<td>
-                                                                            				<form method="post" onsubmit="return confirm('Biztosan törölni szeretnéd ezt az autót?');">
-																							<input type="hidden" name="action" value="delete">
-																							<input type="hidden" name="car_id" value="<?= (int)$car['id'] ?>">
+                                                                            				<form method="post" onsubmit="return confirm('Biztosan törölni szeretnéd ezt a felhasználót?');">
+																							<input type="hidden" name="action" value="delete_user">
+																							<input type="hidden" name="user_id" value="<?= (int)$user['id'] ?>">
 																							<input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
 																							<button style="width:140px" type="submit">Törlés</button>
 																							</form>
@@ -290,5 +330,23 @@ $userCars = $carsData[$userId] ?? [];
         </td>
     </tr>
 </table>
+<script>
+function toggleUserCars(userId) {
+
+    const selected = document.getElementById('user-cars-' + userId);
+
+    document.querySelectorAll('[id^="user-cars-"]').forEach(function (element) {
+        if (element !== selected) {
+            element.style.display = 'none';
+        }
+    });
+
+    if (selected.style.display === 'none') {
+        selected.style.display = 'block';
+    } else {
+        selected.style.display = 'none';
+    }
+}
+</script>
 </body>
 </html>
