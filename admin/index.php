@@ -132,12 +132,7 @@ $csrfToken = $_SESSION['cars_csrf_token'];
                                                                             		<table class="table-border">
                                                                             			<tr>
                                                                             				<td>
-                                                                            				<form method="post" onsubmit="return confirm('Biztosan törölni szeretnéd ezt az autót?');">
-																							<input type="hidden" name="action" value="delete">
-																							<input type="hidden" name="car_id" value="<?= (int)$car['id'] ?>">
-																							<input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
 																							<button type="button" style="width:140px" onclick="toggleUserCars(<?= (int)$user['id'] ?>)">Autói</button>
-																							</form>
 																							</td>
 																						</tr>
 																					</table>
