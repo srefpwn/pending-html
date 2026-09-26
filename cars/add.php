@@ -2,8 +2,41 @@
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/users/functions.php';
 require_once __DIR__ . '/functions.php';
 
+// Célfelhasználó
+$targetUserId = null;
+
+if (isset($_GET['user_id'])) {
+    $targetUserId = filter_input(
+        INPUT_GET,
+        'user_id',
+        FILTER_VALIDATE_INT
+    );
+
+    if ($targetUserId === false || $targetUserId < 1) {
+        $targetUserId = null;
+    }
+}
+/*
+ * Admin által megadott célfelhasználó ellenőrzése
+ */
+
+if ($targetUserId !== null) {
+
+    if (!isAdmin()) {
+        http_response_code(403);
+        exit('Nincs jogosultságod ehhez a művelethez.');
+    }
+
+    $targetUser = getUserById($targetUserId);
+
+    if ($targetUser === null) {
+        http_response_code(404);
+        exit('A felhasználó nem található.');
+    }
+}
 
 // Vissza URL
 $backUrl = '/cars/';
@@ -59,7 +92,7 @@ $color = $_POST['color'] ?? '';
         /*
          * Autó hozzáadása
          */
-        $result = addUserCar(
+$result = addUserCar(
     $vin,
     $name,
     $brand,
@@ -69,7 +102,8 @@ $color = $_POST['color'] ?? '';
     $body,
     $engine,
     $trim,
-    $color
+    $color,
+    $targetUserId
 );
 
 
