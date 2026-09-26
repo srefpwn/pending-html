@@ -105,3 +105,24 @@ function verifyUserPassword(
         $user['hash']
     );
 }
+
+function deleteUser(int $userId): bool
+{
+    $users = loadUsers();
+
+    foreach ($users as $index => $user) {
+
+        if (
+            isset($user['id']) &&
+            (int)$user['id'] === $userId
+        ) {
+            unset($users[$index]);
+
+            $users = array_values($users);
+
+            return saveUsers($users);
+        }
+    }
+
+    return false;
+}
