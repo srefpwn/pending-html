@@ -222,34 +222,16 @@ if ($messageType !== 'error') {
 
     if ($isNewUser) {
 
-        $newPassword = (string)($_POST['new_password'] ?? '');
-        $newPasswordConfirm = (string)($_POST['new_password_confirm'] ?? '');
+        $saved = addUser(
+            $updatedData['user'],
+            $updatedData['name'],
+            $updatedData['address'],
+            $updatedData['email'],
+            $newPassword,
+            'user'
+        );
 
-        if ($newPassword === '') {
-
-            $message = 'Az új jelszó megadása kötelező.';
-            $messageType = 'error';
-
-        } elseif ($newPasswordConfirm === '') {
-
-            $message = 'Az új jelszó ismételt megadása kötelező.';
-            $messageType = 'error';
-
-        } elseif ($newPassword !== $newPasswordConfirm) {
-
-            $message = 'Az új jelszavak nem egyeznek.';
-            $messageType = 'error';
-
-        } elseif (
-            addUser(
-                $updatedData['user'],
-                $updatedData['name'],
-                $updatedData['address'],
-                $updatedData['email'],
-                $newPassword,
-                'user'
-            )
-        ) {
+        if ($saved) {
 
             $message = 'Az új felhasználó sikeresen létrehozva.';
             $messageType = 'success';
