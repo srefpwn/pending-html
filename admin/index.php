@@ -3,20 +3,14 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/navigation.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/users/functions.php';
 
 if (!isAdmin()) {
     http_response_code(403);
     exit('Hozzáférés megtagadva.');
 }
 
-$users = json_decode(
-    file_get_contents($usersFile),
-    true
-);
-
-if (!is_array($users)) {
-    $users = [];
-}
+$users = loadUsers();
 
 
 // Vissza URL
