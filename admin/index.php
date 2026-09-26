@@ -142,7 +142,7 @@ $csrfToken = $_SESSION['cars_csrf_token'];
 																							<input type="hidden" name="action" value="delete">
 																							<input type="hidden" name="car_id" value="<?= (int)$car['id'] ?>">
 																							<input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
-																							<button style="width:140px" type="submit">Autói</button>
+																							<button type="button" style="width:140px" onclick="toggleUserCars(<?= (int)$user['id'] ?>)">Autói</button>
 																							</form>
 																							</td>
 																						</tr>
