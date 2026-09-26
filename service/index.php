@@ -1,8 +1,9 @@
 <?php
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php';
-require_once __DIR__ . '/functions.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/navigation.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/service/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/users/functions.php';
 
 $backUrl = '/cars/';
 
@@ -21,7 +22,23 @@ $carId = filter_input(
     'car',
     FILTER_VALIDATE_INT
 );
+$userId = filter_input(
+    INPUT_GET,
+    'user_id',
+    FILTER_VALIDATE_INT
+);
+if ($userId !== false && $userId !== null) {
 
+    if (!isAdmin()) {
+        denyAccess();
+    }
+
+    $targetUser = getUserById($userId);
+
+    if ($targetUser === null) {
+        denyAccess();
+    }
+}
 if (
     $carId === false ||
     $carId === null ||
@@ -39,7 +56,12 @@ if (
  * - létezik-e az autó
  * - az autó a felhasználóhoz tartozik
  */
-$service = getServiceContext($carId);
+$service = getServiceContext(
+    $carId,
+    $userId !== false && $userId !== null
+        ? $userId
+        : null
+);
 
 $userId = $service['user_id'];
 $car = $service['car'];
