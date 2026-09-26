@@ -9,6 +9,16 @@ if (!isAdmin()) {
     exit('Hozzáférés megtagadva.');
 }
 
+$users = json_decode(
+    file_get_contents($usersFile),
+    true
+);
+
+if (!is_array($users)) {
+    $users = [];
+}
+
+
 // Vissza URL
 $backUrl = '/';
 
@@ -107,6 +117,7 @@ $csrfToken = $_SESSION['cars_csrf_token'];
                                                 <tr>
                                                     <td class="textv-top">
                                                         <table class="menutable" width="100%" style="padding-bottom:20px;">
+                                                            <?php foreach ($users as $user): ?>
                                                             <tr>
                                                                 <td style="padding:0px;background-color:#cccccc;">
                                                                     <table width="100%" class="text-center table-border">
@@ -115,7 +126,7 @@ $csrfToken = $_SESSION['cars_csrf_token'];
                                                                             <table class="table-border" style="text-align:center;">
                                                                             	<tr>
                                                                             		<td style="padding:10px;background-color:#444444;">
-                                                                            		<span class="epc-title3">Tóth Tamás</span>
+                                                                            		<span class="epc-title3"><?= htmlspecialchars($user['name']) ?></span>
                                                                     				</td>
                                                                            		</tr>
                                                                            	</table>
@@ -337,71 +348,7 @@ $csrfToken = $_SESSION['cars_csrf_token'];
                                                                     </table>
                                                                 </td>
                                                             </tr>
-                                                            <tr>
-                                                                <td style="padding:0px;background-color:#cccccc;">
-                                                                    <table width="100%" class="text-center table-border">
-                                                                        <tr>
-                                                                            <td style="width:100px;text-align:center; padding:20px;">
-                                                                            <table class="table-border" style="text-align:center;">
-                                                                            	<tr>
-                                                                            		<td style="padding:10px;background-color:#444444;">
-                                                                            		<span class="epc-title3">Gutter Richárd</span>
-                                                                    				</td>
-                                                                           		</tr>
-                                                                           	</table>
-                                                                            </td>
-                                                                            <td style="width:140px; padding:20px; height:100%;">
-                                                                            <table class="table-border text-right textv-top" style="height:100%;">
-                                                                            	<tr>
-                                                                            		<td class="textv-bottom" style="vertical-align:bottom;">
-                                                                            		<table class="table-border">
-                                                                            			<tr>
-                                                                            				<td>
-                                                                            				<form method="post" onsubmit="return confirm('Biztosan törölni szeretnéd ezt az autót?');">
-																							<input type="hidden" name="action" value="delete">
-																							<input type="hidden" name="car_id" value="<?= (int)$car['id'] ?>">
-																							<input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
-																							<button style="width:140px" type="submit">Autói</button>
-																							</form>
-																							</td>
-																						</tr>
-																					</table>
-                                                                            		</td>
-                                                                            		<td class="textv-bottom" style="vertical-align:bottom;">
-                                                                            		<table class="table-border">
-                                                                            			<tr>
-                                                                            				<td>
-                                                                            				<form method="post" onsubmit="return confirm('Biztosan törölni szeretnéd ezt az autót?');">
-																							<input type="hidden" name="action" value="delete">
-																							<input type="hidden" name="car_id" value="<?= (int)$car['id'] ?>">
-																							<input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
-																							<button style="width:140px" type="submit">Szerkesztés</button>
-																							</form>
-																							</td>
-																						</tr>
-																					</table>
-                                                                            		</td>
-                                                                            		<td class="textv-bottom" style="vertical-align:bottom;">
-                                                                            		<table class="table-border">
-                                                                            			<tr>
-                                                                            				<td>
-                                                                            				<form method="post" onsubmit="return confirm('Biztosan törölni szeretnéd ezt az autót?');">
-																							<input type="hidden" name="action" value="delete">
-																							<input type="hidden" name="car_id" value="<?= (int)$car['id'] ?>">
-																							<input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
-																							<button style="width:140px" type="submit">Törlés</button>
-																							</form>
-																							</td>
-																						</tr>
-																					</table>
-                                                                            		</td>
-                                                                            	</tr>
-                                                                            </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
+                                                            <?php endforeach; ?>
                                                         </table>
                                                     </td>
                                                 </tr>
