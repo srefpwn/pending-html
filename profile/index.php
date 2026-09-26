@@ -8,11 +8,30 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/users/functions.php';
  * Felhasználó azonosítása
  */
 
-$userId = (int)($_SESSION['user_id'] ?? 0);
+$sessionUserId = (int)($_SESSION['user_id'] ?? 0);
 
-if ($userId < 1) {
+if ($sessionUserId < 1) {
     http_response_code(403);
     exit('A felhasználó azonosítása sikertelen.');
+}
+
+$userId = $sessionUserId;
+
+/*
+ * Admin esetén másik felhasználó szerkesztése
+ */
+
+if (isAdmin() && isset($_GET['id'])) {
+
+    $requestedUserId = filter_input(
+        INPUT_GET,
+        'id',
+        FILTER_VALIDATE_INT
+    );
+
+    if ($requestedUserId !== false && $requestedUserId !== null && $requestedUserId > 0) {
+        $userId = $requestedUserId;
+    }
 }
 
 /*
