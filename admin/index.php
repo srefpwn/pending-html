@@ -4,6 +4,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/navigation.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/users/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/cars/functions.php';
 
 if (!isAdmin()) {
     http_response_code(403);
@@ -11,6 +12,7 @@ if (!isAdmin()) {
 }
 
 $users = loadUsers();
+$carsData = loadUserCarsData();
 
 
 // Vissza URL
