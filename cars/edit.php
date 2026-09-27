@@ -70,6 +70,10 @@ $carsData = loadUserCarsData();
 
 $userKey = (string)$userId;
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/users/functions.php';
+
+$user = getUserById($userId);
+
 $car = null;
 
 if ($messageType !== 'error') {
@@ -342,14 +346,15 @@ $modelConfig =
                                                         <td style="padding:0px;text-align:center;">
         												<span class="epc-title">
         												<?php
-       													if (isAdmin() && (int)$user['id'] !== (int)($_SESSION['user_id'] ?? 0)) {
-          											  	echo 'Autó módosítása - '
-               											 . htmlspecialchars($user['name'] ?? $user['user'] ?? '', ENT_QUOTES, 'UTF-8')
-               											 . ' - Admin';
-       													 } else {
-           												   echo 'Autó Módosítása';
-       													 }
-        												?></span>
+if (isAdmin()) {
+    echo 'Autó módosítása - '
+        . htmlspecialchars($user['name'] ?? $user['user'] ?? '', ENT_QUOTES, 'UTF-8')
+        . ' - Admin';
+} else {
+    echo 'Autó Módosítása';
+}
+?>														
+														</span>
    														</td>
                                                     </tr>
                                                     <!-- Üzenet -->
