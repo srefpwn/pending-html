@@ -9,6 +9,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/cars/functions.php';
  */
 
 $isAdmin = isAdmin();
+$isAdminMode = $isAdmin && isset($_GET['user_id']);
 
 /*
  * Azonosítók
@@ -34,38 +35,27 @@ if (
             $messageType = 'error';
 }
 
-if ($isAdmin) {
+$userId = filter_input(
+    INPUT_GET,
+    'user_id',
+    FILTER_VALIDATE_INT
+);
 
-    $userId = filter_input(
-        INPUT_GET,
-        'user_id',
-        FILTER_VALIDATE_INT
-    );
-
-    if (
-        $userId === false ||
-        $userId === null ||
-        $userId < 1
-    ) {
-            $message =
-                'Érvénytelen felhasználói azonosító.';
-
-            $messageType = 'error';
-    }
-
-} else {
-
+if (
+    $userId === false ||
+    $userId === null ||
+    $userId < 1
+) {
     $userId = (int)($_SESSION['user_id'] ?? 0);
 
     if ($userId < 1) {
-    
-            $message =
-                'A felhasználó azonosítása sikertelen.';
+        $message =
+            'A felhasználó azonosítása sikertelen.';
 
-            $messageType = 'error';
+        $messageType = 'error';
     }
-
 }
+
 $carsData = loadUserCarsData();
 
 $userKey = (string)$userId;
