@@ -2,6 +2,89 @@
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/navigation.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/users/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/cars/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/parts/functions.php';
+
+/*
+ * Autó és felhasználó azonosítása
+ */
+$carId = filter_input(
+    INPUT_GET,
+    'car',
+    FILTER_VALIDATE_INT
+);
+
+$userId = filter_input(
+    INPUT_GET,
+    'user_id',
+    FILTER_VALIDATE_INT
+);
+
+/*
+ * Az autó ID kötelező és érvényes legyen.
+ */
+if (
+    $carId === false ||
+    $carId === null ||
+    $carId <= 0
+) {
+    denyAccess();
+}
+
+/*
+ * Másik felhasználó autóját csak admin nyithatja meg.
+ */
+if ($userId !== false && $userId !== null) {
+    if (!isAdmin()) {
+        denyAccess();
+    }
+
+    $targetUser = getUserById($userId);
+
+    if ($targetUser === null) {
+        denyAccess();
+    }
+} else {
+    $userId = (int)($_SESSION['user_id'] ?? 0);
+}
+
+/*
+ * Megkeressük az autót a tulajdonos autói között.
+ */
+$carsData = loadUserCarsData();
+$userCars = $carsData[(string)$userId] ?? [];
+
+$car = null;
+
+foreach ($userCars as $userCar) {
+    if (
+        isset($userCar['id']) &&
+        (int)$userCar['id'] === $carId
+    ) {
+        $car = $userCar;
+        break;
+    }
+}
+
+if ($car === null) {
+    denyAccess();
+}
+
+/*
+ * Az autó adatai a meglévő adatforrásból.
+ */
+$carName = trim((string)($car['name'] ?? ''));
+$vin = (string)($car['vin'] ?? '');
+
+$partsLoadError = false;
+$parts = [];
+
+try {
+    $parts = loadCarParts((int)$userId, (int)$carId);
+} catch (RuntimeException $e) {
+    $partsLoadError = true;
+}
 
 $backUrl = '/cars/';
 
@@ -46,9 +129,9 @@ if (
             </tr>
 			<tr>
 				<td align="left">
-				<table style="width:100%;">
+				<table style="width:100%;min-height:300px;">
 					<tr>
-						<td>
+						<td class="textv-top">
                         <table align="left" width="100%" class="table-border">
                     		<tr>
                        			<td style="padding:0px;text-align:center;">
@@ -68,6 +151,26 @@ if (
 								</table>
 								</td>
 							</tr>
+                            <!--
+                             * Üzenet
+                            -->
+                            <?php if ($partsLoadError): ?>
+                            <tr>
+                                <td style="padding:20px;text-align:center;">
+                                <span style="font-size:14px;color:red;">
+                                Az alkatrészlista betöltése sikertelen. Kérjük, próbáld meg később.
+                                </span>
+                                </td>
+                        	</tr>
+                           	<?php elseif (empty($parts)): ?>
+                            <tr>
+                                <td style="padding:20px;text-align:center;">
+                                <span style="font-size:14px;color:red;">
+                                Még nincsenek alkatrészek hozzáadva.
+                                </span>
+                                </td>
+                            </tr>
+                            <?php else: ?>
                         </table>
                         <table align="center" class="table-border" width="100%">
                             <tr>
@@ -89,38 +192,32 @@ if (
 									</tr>
 								</table>
                                 <table align="center" style="width:100%;text-align:center;" class="table-border">
+                        <?php foreach ($parts as $index => $part): ?>
+                        <?php
+                        $rowClass = ($index % 2 === 0)
+                            ? 'row-even'
+                            : 'row-odd';
+                        ?>
 									<tr>
-										<td class="pl10 epc-text row-even p5 text-left" width="20%">AZMT-41-010-1763
+										<td class="pl10 epc-text <?= $rowClass ?> p5 text-left" width="20%"><?= htmlspecialchars( $part['part_number'],  ENT_QUOTES, 'UTF-8' ) ?>
 										</td>
-										<td class="pl10 epc-text row-even p5 text-left">Pollenszűrő
+										<td class="pl10 epc-text <?= $rowClass ?> p5 text-left"><?= htmlspecialchars( $part['name'],  ENT_QUOTES,  'UTF-8' ) ?>
 										</td>
-										<td class="epc-text row-even p5 text-center" width="7%">3
+										<td class="epc-text <?= $rowClass ?> p5 text-center" width="7%"><?= $part['quantity'] ?>
 										</td>
-										<td class="epc-text row-even p5 text-center" width="7%"><input type="text">
+										<td class="epc-text <?= $rowClass ?> p5 text-center" width="7%"><input type="text">
 										</td>
-										<td class="row-even" width="140"><a href=""><button style="width:140px" type="submit">Mentés</button></a>
+										<td class="<?= $rowClass ?>" width="140"><a href=""><button style="width:140px" type="submit">Mentés</button></a>
 										</td>
-										<td class="row-even" width="140"><button style="width:140px" type="submit">Törlés</button>
+										<td class="<?= $rowClass ?>" width="140"><button style="width:140px" type="submit">Törlés</button>
 										</td>
 									</tr>
-									<tr>
-										<td class="pl10 epc-text row-odd p5 text-left" width="20%">AZMT-41-010-1763
-										</td>
-										<td class="pl10 epc-text row-odd p5 text-left">Pollenszűrő
-										</td>
-										<td class="epc-text row-odd p5 text-center" width="7%">3
-										</td>
-										<td class="epc-text row-odd p5 text-center" width="7%"><input type="text">
-										</td>
-										<td class="row-odd" width="140"><a href=""><button style="width:140px" type="submit">Mentés</button></a>
-										</td>
-										<td class="row-odd" width="140"><button style="width:140px" type="submit">Törlés</button>
-										</td>
-									</tr>
+                    	<?php endforeach; ?>
 								</table>
                                 </td>
                             </tr>
                         </table>
+                        <?php endif; ?>
 						</td>
 					</tr>
 				</table>
