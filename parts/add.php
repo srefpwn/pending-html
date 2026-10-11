@@ -331,29 +331,7 @@ document.addEventListener('click', async function (event) {
                        			</td>
                   			</tr>
                   		</table>
-                  		<table style="width:100%;" class="table-border">
-							
-                            <!--
-                             * Üzenet
-                            -->
-                            <?php if ($partsLoadError): ?>
-                            <tr>
-                                <td style="padding:20px;text-align:center;">
-                                <span style="font-size:14px;color:red;">
-                                Az alkatrészlista betöltése sikertelen. Kérjük, próbáld meg később.
-                                </span>
-                                </td>
-                        	</tr>
-                           	<?php elseif (empty($parts)): ?>
-                            <tr>
-                                <td style="padding:20px;text-align:center;">
-                                <span style="font-size:14px;color:red;">
-                                Még nincsenek alkatrészek hozzáadva.
-                                </span>
-                                </td>
-                            </tr>
-                            <?php else: ?>
-                        </table>
+                        <form id="part-add-form">
                         <table align="center" class="table-border" width="100%">
                             <tr>
                                 <td style=" padding:20px; text-align:center;">
@@ -368,15 +346,15 @@ document.addEventListener('click', async function (event) {
 									</tr>
 								</table>
                                 <table align="center" style="width:100%;text-align:center;" class="table-border">
-									<tr data-part-row>
+									<tr>
 										<td class="pl10 epc-text row-even p5 text-left" width="20%">
 										<input type="text" id="part_number" name="part_number" required>
 										</td>
 										<td class="pl10 epc-text row-even p5 text-left">
-										<input type="number" id="part_quantity" name="quantity" min="1" step="1" required>
+										<input type="text" id="part_name" name="part_name" required>
 										</td>
-										<td class="epc-text row-even p5 text-center part-current-quantity" width="7%">
-										<input type="text">
+										<td class="epc-text row-even p5 text-center" width="7%">
+										<input type="number" id="part_quantity" name="quantity"  min="1" step="1" required>
 										</td>
 									</tr>
 								</table>
@@ -396,7 +374,7 @@ document.addEventListener('click', async function (event) {
 								</td>
 							</tr>
 						</table>
-                        <?php endif; ?>
+						</form>
 						</td>
 					</tr>
 				</table>
