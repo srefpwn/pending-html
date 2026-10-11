@@ -72,24 +72,35 @@ if ($userId !== false && $userId !== null) {
  */
 $carsData = loadUserCarsData();
 $userCars = $carsData[(string)$userId] ?? [];
-$carExists = false;
+
+$car = null;
 
 foreach ($userCars as $userCar) {
     if (
         isset($userCar['id']) &&
         (int)$userCar['id'] === $carId
     ) {
-        $carExists = true;
+        $car = $userCar;
         break;
     }
 }
 
-if (!$carExists) {
+if ($car === null) {
     sendUpdateResponse(403, [
         'success' => false,
         'message' => 'Az autó nem tartozik ehhez a felhasználóhoz.'
     ]);
 }
+
+$carConfig = getCarConfig($car);
+
+if ($carConfig === null || !isCarPartsEnabled($carConfig)) {
+    sendUpdateResponse(403, [
+        'success' => false,
+        'message' => 'Az alkatrészkezelés nincs engedélyezve ehhez az autóhoz.'
+    ]);
+}
+
 
 /*
  * A megfelelő autó alkatrészfájlja.
