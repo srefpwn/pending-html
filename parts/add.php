@@ -370,10 +370,10 @@ document.addEventListener('click', async function (event) {
                                 <table align="center" style="width:100%;text-align:center;" class="table-border">
 									<tr data-part-row>
 										<td class="pl10 epc-text row-even p5 text-left" width="20%">
-										<input type="text">
+										<input type="text" id="part_number" name="part_number" required>
 										</td>
 										<td class="pl10 epc-text row-even p5 text-left">
-										<input type="text">
+										<input type="number" id="part_quantity" name="quantity" min="1" step="1" required>
 										</td>
 										<td class="epc-text row-even p5 text-center part-current-quantity" width="7%">
 										<input type="text">
@@ -389,7 +389,7 @@ document.addEventListener('click', async function (event) {
 								<table class="table-border text-center">
 									<tr>
 										<td>
-<a href=""><button type="submit">Mentés</button></a>
+										<button type="submit" id="part-add-submit">Mentés</button>
 										</td>
 									</tr>
 								</table>
