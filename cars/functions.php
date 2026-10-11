@@ -113,6 +113,9 @@ function saveVinPermissions(
 
         'servicetips_enable' =>
             (string)($permissions['servicetips_enable'] ?? '0'),
+            
+        'parts_enable' =>
+            (string)($permissions['parts_enable'] ?? '0'),
     ];
 
     $json = json_encode(
@@ -583,6 +586,9 @@ function getCarConfig(array $car): ?array
 
     $config['servicetips_enable'] =
         (string)($permissions['servicetips_enable'] ?? '0');
+        
+    $config['parts_enable'] =
+    (string)($permissions['parts_enable'] ?? '0');
 
     return $config;
 }
@@ -601,4 +607,12 @@ function isCarEpcEnabled(array $carConfig): bool
 function isCarManualEnabled(array $carConfig): bool
 {
     return (string)($carConfig['manual_enable'] ?? '0') === '1';
+}
+
+/*
+ * Alkatrészkezelés elérhetőségének ellenőrzése
+ */
+function isCarPartsEnabled(array $carConfig): bool
+{
+    return (string)($carConfig['parts_enable'] ?? '0') === '1';
 }
