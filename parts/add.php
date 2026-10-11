@@ -4,7 +4,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/navigation.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/users/functions.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/cars/functions.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/parts/functions.php';
 
 /*
  * Autó és felhasználó azonosítása
@@ -77,14 +76,6 @@ if ($car === null) {
 $carName = trim((string)($car['name'] ?? ''));
 $vin = (string)($car['vin'] ?? '');
 
-$partsLoadError = false;
-$parts = [];
-
-try {
-    $parts = loadCarParts((int)$userId, (int)$carId);
-} catch (RuntimeException $e) {
-    $partsLoadError = true;
-}
 
 $backUrl = '/cars/';
 
@@ -109,198 +100,6 @@ if (
         <link href="/css.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="/scripts/jquery.min.js"></script>
 		<script type="text/javascript" src="/scripts/jquery.timers-1.1.2.js"></script>
-		
-
-
-<script>
-document.addEventListener('input', function (event) {
-    if (!event.target.classList.contains('part-quantity-input')) {
-        return;
-    }
-
-    const input = event.target;
-    const value = input.value.trim();
-    const current = Number(input.dataset.current);
-    const row = input.closest('tr');
-    const button = row.querySelector('.part-save-button');
-    const cell = button.closest('td');
-
-    const validInteger = /^[0-9]+$/.test(value);
-    const newQuantity = Number(value);
-
-    const canSave =
-        validInteger &&
-        Number.isSafeInteger(newQuantity) &&
-        newQuantity > 0 &&
-        newQuantity !== current;
-
-    button.disabled = !canSave;
-    cell.classList.toggle('greybutton', !canSave);
-});
-
-document.addEventListener('click', async function (event) {
-    const button = event.target.closest('.part-save-button');
-
-    if (!button || button.disabled) {
-        return;
-    }
-
-    const row = button.closest('tr');
-    const input = row.querySelector('.part-quantity-input');
-    const quantityCell = row.querySelector('.part-current-quantity');
-    const saveCell = button.closest('td');
-
-    if (!input || !quantityCell || !saveCell) {
-        return;
-    }
-
-    const quantityText = input.value.trim();
-
-    if (!/^[0-9]+$/.test(quantityText)) {
-        return;
-    }
-
-    const quantity = Number(quantityText);
-    const currentQuantity = Number(input.dataset.current);
-
-    if (
-        !Number.isSafeInteger(quantity) ||
-        quantity <= 0 ||
-        quantity === currentQuantity
-    ) {
-        return;
-    }
-
-    const data = new URLSearchParams();
-
-    data.set('car', <?= json_encode((int)$carId) ?>);
-    data.set('part_id', input.dataset.partId);
-    data.set('quantity', String(quantity));
-
-    <?php if (isset($_GET['user_id'])): ?>
-    data.set('user_id', <?= json_encode((int)$userId) ?>);
-    <?php endif; ?>
-
-    button.disabled = true;
-    button.textContent = 'Mentés...';
-
-    try {
-        const response = await fetch('/parts/update.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: data.toString()
-        });
-
-        const result = await response.json();
-
-        if (!response.ok || !result.success) {
-            throw new Error(
-                result.message || 'A mentés sikertelen.'
-            );
-        }
-
-        quantityCell.textContent = String(result.quantity);
-        input.dataset.current = String(result.quantity);
-        input.placeholder = String(result.quantity);
-        input.value = '';
-
-        saveCell.classList.add('greybutton');
-        button.disabled = true;
-    } catch (error) {
-        alert(error.message || 'Hiba történt a mentés során.');
-    } finally {
-        button.textContent = 'Mentés';
-
-        const value = input.value.trim();
-        const current = Number(input.dataset.current);
-        const validInteger = /^[0-9]+$/.test(value);
-        const newQuantity = Number(value);
-
-        const canSave =
-            validInteger &&
-            Number.isSafeInteger(newQuantity) &&
-            newQuantity > 0 &&
-            newQuantity !== current;
-
-        button.disabled = !canSave;
-        saveCell.classList.toggle('greybutton', !canSave);
-    }
-});
-
-document.addEventListener('click', async function (event) {
-    const button = event.target.closest('.part-delete-button');
-
-    if (!button || button.disabled) {
-        return;
-    }
-
-    if (!confirm('Biztosan törlöd ezt az alkatrészt?')) {
-        return;
-    }
-
-    const row = button.closest('tr');
-    const input = row.querySelector('.part-quantity-input');
-    const partId = input?.dataset.partId;
-
-    if (!partId) {
-        alert('Nem található az alkatrész azonosítója.');
-        return;
-    }
-
-    const data = new URLSearchParams();
-
-    data.set('car', <?= json_encode((int)$carId) ?>);
-    data.set('part_id', partId);
-
-    <?php if (isset($_GET['user_id'])): ?>
-    data.set('user_id', <?= json_encode((int)$userId) ?>);
-    <?php endif; ?>
-
-    button.disabled = true;
-
-    try {
-        const response = await fetch('/parts/delete.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: data.toString()
-        });
-
-        const result = await response.json();
-
-        if (!response.ok || !result.success) {
-            throw new Error(
-                result.message || 'A törlés sikertelen.'
-            );
-        }
-
-        row.remove();
-
-        const tbody = document.querySelector('.parts-table tbody');
-
-        if (tbody && !tbody.querySelector('tr[data-part-row]')) {
-            const emptyRow = document.createElement('tr');
-            const cell = document.createElement('td');
-
-            cell.colSpan = 5;
-            cell.textContent = 'Még nincsenek alkatrészek hozzáadva.';
-            cell.className = 'p5 text-center';
-
-            emptyRow.appendChild(cell);
-            tbody.appendChild(emptyRow);
-        }
-    } catch (error) {
-        button.disabled = false;
-        alert(error.message || 'Hiba történt a törlés során.');
-    }
-});
-
-</script>
-
-
 </head>
 <body>
 <table class="table-100-center site-bg">
@@ -331,7 +130,7 @@ document.addEventListener('click', async function (event) {
                        			</td>
                   			</tr>
                   		</table>
-                        <form id="part-add-form">
+                        <form id="part-add-form" method="post">
                         <table align="center" class="table-border" width="100%">
                             <tr>
                                 <td style=" padding:20px; text-align:center;">
