@@ -405,7 +405,7 @@ document.addEventListener('click', async function (event) {
 										<td class="epc-text <?= $rowClass ?> p5 text-center part-current-quantity" width="7%"><?= $part['quantity'] ?>
 										</td>
 										<td class="epc-text <?= $rowClass ?> p5 text-center" width="7%">
-										<input type="text" inputmode="numeric" pattern="[0-9]*" class="part-quantity-input" data-current="<?= (int)$part['quantity'] ?>" data-part-id="<?= (int)$part['id'] ?>" placeholder="<?= (int)$part['quantity'] ?>" style="width:60px;" autocomplete="off">
+										<input type="text" inputmode="numeric" class="part-quantity-input" data-current="<?= (int)$part['quantity'] ?>" data-part-id="<?= (int)$part['id'] ?>" placeholder="<?= (int)$part['quantity'] ?>" style="width:60px;" autocomplete="off">
 										</td>
 										<td class="<?= $rowClass ?> greybutton" width="140">
 										<button type="button" class="part-save-button" disabled style="width:140px">Mentés</button>
