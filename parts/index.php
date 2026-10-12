@@ -107,6 +107,92 @@ natcasesort($partCategories);
 $partCategories = array_values($partCategories);
 
 
+/*
+ * AJAX-os alkatrészszűrés
+ */
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+    ($_GET['ajax'] ?? '') === 'filter'
+) {
+    header('Content-Type: text/html; charset=UTF-8');
+
+    $selectedCategory = trim((string)($_POST['category'] ?? ''));
+    $search = trim((string)($_POST['search'] ?? ''));
+
+    $filteredParts = [];
+
+    foreach ($parts as $part) {
+        $category = (string)($part['category'] ?? '');
+        $partNumber = (string)($part['part_number'] ?? '');
+        $partName = (string)($part['name'] ?? '');
+
+        if (
+            $selectedCategory !== '' &&
+            $category !== $selectedCategory
+        ) {
+            continue;
+        }
+
+        if ($search !== '') {
+            $searchText = $partNumber . ' ' . $partName;
+
+            $matches = function_exists('mb_stripos')
+                ? mb_stripos($searchText, $search, 0, 'UTF-8') !== false
+                : stripos($searchText, $search) !== false;
+
+            if (!$matches) {
+                continue;
+            }
+        }
+
+        $filteredParts[] = $part;
+    }
+
+    if (empty($filteredParts)) {
+        echo '<tr><td colspan="6" class="p5 text-center">';
+        echo 'Nincs a feltételeknek megfelelő alkatrész.';
+        echo '</td></tr>';
+        exit;
+    }
+
+    foreach ($filteredParts as $index => $part) {
+        $rowClass = ($index % 2 === 0) ? 'row-even' : 'row-odd';
+
+        $category = (string)($part['category'] ?? '');
+        $partNumber = (string)$part['part_number'];
+        $partName = (string)$part['name'];
+        $quantity = (int)$part['quantity'];
+        $partId = (int)$part['id'];
+        ?>
+        <tr
+            data-part-row
+            data-category="<?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?>"
+        >
+            <td class="pl10 epc-text <?= $rowClass ?> p5 text-left" width="20%"><?= htmlspecialchars($partNumber, ENT_QUOTES, 'UTF-8') ?></td>
+
+            <td class="pl10 epc-text <?= $rowClass ?> p5 text-left"><?= htmlspecialchars($partName, ENT_QUOTES, 'UTF-8') ?></td>
+
+            <td class="epc-text <?= $rowClass ?> p5 text-center part-current-quantity" width="7%"><?= $quantity ?></td>
+
+            <td class="epc-text <?= $rowClass ?> p5 text-center" width="7%">
+                <input type="text" inputmode="numeric" class="part-quantity-input" data-current="<?= $quantity ?>" data-part-id="<?= $partId ?>" placeholder="<?= $quantity ?>" style="width:60px;" autocomplete="off">
+            </td>
+
+            <td class="<?= $rowClass ?> greybutton" width="140">
+                <button type="button" class="part-save-button" disabled style="width:140px">Mentés</button>
+            </td>
+
+            <td class="<?= $rowClass ?>" width="140">
+                <button style="width:140px" type="button" class="part-delete-button">Törlés</button>
+            </td>
+        </tr>
+        <?php
+    }
+
+    exit;
+}
+
+
 $backUrl = '/cars/';
 
 if (
@@ -319,6 +405,75 @@ document.addEventListener('click', async function (event) {
     }
 });
 
+
+const categoryFilter = document.getElementById('part_category_filter');
+const searchInput = document.getElementById('part_search');
+const filterButton = document.getElementById('part_filter_button');
+
+let filterTimer;
+
+async function filterParts() {
+    const table = document.querySelector('.parts-table');
+
+    if (!table) {
+        return;
+    }
+
+    const data = new URLSearchParams();
+
+    data.set('category', categoryFilter.value);
+    data.set('search', searchInput.value.trim());
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('ajax', 'filter');
+
+    filterButton.disabled = true;
+
+    try {
+        const response = await fetch(url.toString(), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: data.toString()
+        });
+
+        if (!response.ok) {
+            throw new Error('A szűrés sikertelen.');
+        }
+
+        const html = await response.text();
+        const tbody = table.querySelector('tbody');
+
+        if (tbody) {
+            tbody.innerHTML = html;
+        }
+    } catch (error) {
+        alert(error.message || 'Hiba történt a szűrés során.');
+    } finally {
+        filterButton.disabled = false;
+    }
+}
+
+filterButton.addEventListener('click', filterParts);
+
+categoryFilter.addEventListener('change', filterParts);
+
+searchInput.addEventListener('input', function () {
+    clearTimeout(filterTimer);
+
+    filterTimer = setTimeout(filterParts, 300);
+});
+
+searchInput.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        clearTimeout(filterTimer);
+        filterParts();
+    }
+});
+
+
 </script>
 
 
@@ -414,7 +569,7 @@ document.addEventListener('click', async function (event) {
                         <table align="center" class="table-border" width="100%">
                             <tr>
                                 <td style=" padding:20px; text-align:center;">
-                                <table align="center" style="width:100%;text-align:center;" class="table-border">											
+                                <table align="center" style="width:100%;text-align:center;" class="table-border parts-table">											
 									<tr>
 										<td class="pl10 epc-text row-odd p10 text-left" width="20%" style="background-color:#bb271a;color:#ffffff;">Cikkszám
 										</td>
@@ -437,7 +592,7 @@ document.addEventListener('click', async function (event) {
                             ? 'row-even'
                             : 'row-odd';
                         ?>
-									<tr data-part-row>
+									<tr data-part-row data-category="<?= htmlspecialchars((string)$part['category'], ENT_QUOTES, 'UTF-8') ?>">
 										<td class="pl10 epc-text <?= $rowClass ?> p5 text-left" width="20%"><?= htmlspecialchars( $part['part_number'],  ENT_QUOTES, 'UTF-8' ) ?>
 										</td>
 										<td class="pl10 epc-text <?= $rowClass ?> p5 text-left"><?= htmlspecialchars( $part['name'],  ENT_QUOTES,  'UTF-8' ) ?>
