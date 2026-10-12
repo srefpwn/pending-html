@@ -350,6 +350,25 @@ document.addEventListener('click', async function (event) {
 								</table>
 								</td>
 							</tr>
+							<tr>
+								<td style="padding:20px; text-align:center;">
+								<table class="table-border text-center">
+									<tr>
+										<td>
+										<select>
+										<option value="">Válassz kategóriát</option>
+										</select>
+										</td>
+										<td>
+										<input type="text" id="part_search" placeholder="Cikkszám vagy megnevezés">
+										</td>
+										<td>
+										<button type="button" id="part_filter_button">Szűrés</button>
+										</td>
+									</tr>
+								</table>
+								</td>
+							</tr>
                             <!--
                              * Üzenet
                             -->
