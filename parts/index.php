@@ -91,6 +91,22 @@ try {
     $partsLoadError = true;
 }
 
+
+$partCategories = [];
+
+foreach ($parts as $part) {
+    $category = trim((string)($part['category'] ?? ''));
+
+    if ($category !== '') {
+        $partCategories[$category] = $category;
+    }
+}
+
+$partCategories = array_values($partCategories);
+natcasesort($partCategories);
+$partCategories = array_values($partCategories);
+
+
 $backUrl = '/cars/';
 
 if (
@@ -354,12 +370,17 @@ document.addEventListener('click', async function (event) {
 								<td style="padding:20px; text-align:center;">
 								<table class="table-border text-center">
 									<tr>
-										<td>
-										<select>
-										<option value="">Válassz kategóriát</option>
+										<td style="padding-right:10px;">
+										<span class="select-wrapper2">
+										<select id="part_category_filter">
+    										<option value="">Összes kategória</option>
+    										<?php foreach ($partCategories as $category): ?>
+        									<option value="<?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?></option>
+    										<?php endforeach; ?>
 										</select>
+										</span>
 										</td>
-										<td>
+										<td style="padding-right:10px;">
 										<input type="text" id="part_search" placeholder="Cikkszám vagy megnevezés">
 										</td>
 										<td>
