@@ -405,7 +405,7 @@ document.addEventListener('click', async function (event) {
     }
 });
 
-
+document.addEventListener('DOMContentLoaded', function () {
 const categoryFilter = document.getElementById('part_category_filter');
 const searchInput = document.getElementById('part_search');
 const filterButton = document.getElementById('part_filter_button');
@@ -413,7 +413,7 @@ const filterButton = document.getElementById('part_filter_button');
 let filterTimer;
 
 async function filterParts() {
-    const table = document.querySelector('.parts-table');
+    const table = document.querySelector('.parts-list');
 
     if (!table) {
         return;
@@ -457,22 +457,7 @@ async function filterParts() {
 
 filterButton.addEventListener('click', filterParts);
 
-categoryFilter.addEventListener('change', filterParts);
-
-searchInput.addEventListener('input', function () {
-    clearTimeout(filterTimer);
-
-    filterTimer = setTimeout(filterParts, 300);
 });
-
-searchInput.addEventListener('keydown', function (event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        clearTimeout(filterTimer);
-        filterParts();
-    }
-});
-
 
 </script>
 
@@ -525,9 +510,9 @@ searchInput.addEventListener('keydown', function (event) {
 								<td style="padding:20px; text-align:center;">
 								<table class="table-border text-center">
 									<tr>
-										<td style="padding-right:10px;">
+										<td style="padding-left:5px;padding-right:5px;background-color:#cccccc;">
 										<span class="select-wrapper2">
-										<select id="part_category_filter">
+										<select id="part_category_filter" style="width:170px;">
     										<option value="">Összes kategória</option>
     										<?php foreach ($partCategories as $category): ?>
         									<option value="<?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?></option>
@@ -535,10 +520,10 @@ searchInput.addEventListener('keydown', function (event) {
 										</select>
 										</span>
 										</td>
-										<td style="padding-right:10px;">
-										<input type="text" id="part_search" placeholder="Cikkszám vagy megnevezés">
+										<td style="padding-right:5px;background-color:#cccccc;">
+										<input type="text" id="part_search" placeholder="Cikkszám vagy megnevezés" style="width:170px;">
 										</td>
-										<td>
+										<td style="padding-left:5px;">
 										<button type="button" id="part_filter_button">Szűrés</button>
 										</td>
 									</tr>
@@ -585,7 +570,7 @@ searchInput.addEventListener('keydown', function (event) {
 										</td>
 									</tr>
 								</table>
-                                <table align="center" style="width:100%;text-align:center;" class="table-border">
+                                <table align="center" style="width:100%;text-align:center;" class="table-border parts-list">
                         <?php foreach ($parts as $index => $part): ?>
                         <?php
                         $rowClass = ($index % 2 === 0)
