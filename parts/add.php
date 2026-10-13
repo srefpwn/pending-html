@@ -5,6 +5,16 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/navigation.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/users/functions.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/cars/functions.php';
 
+$partCategories = [
+    'Folyadékok',
+    'Szűrők',
+    'Fék',
+    'Futómű',
+    'Motor',
+    'Csavarok, alátétek',
+  	'Patentek',
+    'Egyéb'
+];
 /*
  * Autó és felhasználó azonosítása
  */
@@ -91,20 +101,24 @@ if (
 $formError = '';
 $partNumber = '';
 $partName = '';
+$partCategory = '';
 $quantity = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $partNumber = trim((string)($_POST['part_number'] ?? ''));
     $partName = trim((string)($_POST['part_name'] ?? ''));
+    $partCategory = trim((string)($_POST['part_category'] ?? ''));
     $quantityInput = trim((string)($_POST['quantity'] ?? ''));
 
     $quantity = filter_var($quantityInput, FILTER_VALIDATE_INT);
 
-    if ($partNumber === '' || $partName === '') {
-        $formError = 'A cikkszám és a megnevezés megadása kötelező.';
-    } elseif ($quantity === false || $quantity < 1) {
-        $formError = 'A darabszámnak legalább 1 egész számnak kell lennie.';
-    } else {
+   if ($partNumber === '' || $partName === '') {
+    $formError = 'A cikkszám és a megnevezés megadása kötelező.';
+} elseif (!in_array($partCategory, $partCategories, true)) {
+    $formError = 'Válassz egy érvényes kategóriát.';
+} elseif ($quantity === false || $quantity < 1) {
+    $formError = 'A darabszámnak legalább 1 egész számnak kell lennie.';
+} else {
         $partsDir = $_SERVER['DOCUMENT_ROOT']
             . '/data/parts/' . $userId;
 
@@ -156,6 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'id' => $maxId + 1,
                         'part_number' => $partNumber,
                         'name' => $partName,
+    					'category' => $partCategory,
                         'quantity' => $quantity
                     ];
 
@@ -276,7 +291,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 										<input type="text" id="part_name" name="part_name" value="<?= htmlspecialchars($partName, ENT_QUOTES, 'UTF-8') ?>" required>
 										</td>
 										<td class="pl10 epc-text row-even p5 text-left">
-										<input type="text" id="part_category" name="part_category" value="<?= htmlspecialchars($partcategory, ENT_QUOTES, 'UTF-8') ?>" required>
+										<select id="part_category" name="part_category" required>
+											<option value="">Válassz kategóriát</option>
+    										<?php foreach ($partCategories as $category): ?>
+        									<option value="<?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?>"<?= $partCategory === $category ? 'selected' : '' ?>>
+        									<?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?>
+        									</option>
+    										<?php endforeach; ?>
+										</select>
 										</td>
 										<td class="epc-text row-even p5 text-center" width="7%">
 										<input type="number" id="part_quantity" name="quantity"  min="1" step="1" value="<?= htmlspecialchars((string)$quantity, ENT_QUOTES, 'UTF-8') ?>" required>
