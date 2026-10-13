@@ -161,7 +161,9 @@ if (
         $category = (string)($part['category'] ?? '');
         $partNumber = (string)$part['part_number'];
         $partName = (string)$part['name'];
-        $quantity = (int)$part['quantity'];
+        $quantity = (float)$part['quantity'];
+		$quantityDisplay = rtrim(rtrim(number_format($quantity, 1, ',', ''), '0'), ',');
+		$unit = (string)($part['unit'] ?? 'db');
         $partId = (int)$part['id'];
         ?>
         <tr
@@ -172,7 +174,7 @@ if (
 
             <td class="pl10 epc-text <?= $rowClass ?> p5 text-left"><?= htmlspecialchars($partName, ENT_QUOTES, 'UTF-8') ?></td>
 
-            <td class="epc-text <?= $rowClass ?> p5 text-center part-current-quantity" width="7%"><?= $quantity ?></td>
+            <td class="epc-text <?= $rowClass ?> p5 text-center part-current-quantity" width="7%"><?= htmlspecialchars($quantityDisplay . ' ' . $unit, ENT_QUOTES, 'UTF-8') ?></td>
 
             <td class="epc-text <?= $rowClass ?> p5 text-center" width="7%">
                 <input type="text" inputmode="numeric" class="part-quantity-input" data-current="<?= $quantity ?>" data-part-id="<?= $partId ?>" placeholder="<?= $quantity ?>" style="width:60px;" autocomplete="off">
@@ -386,7 +388,7 @@ document.addEventListener('click', async function (event) {
 
         row.remove();
 
-        const tbody = document.querySelector('.parts-table tbody');
+		const tbody = document.querySelector('.parts-list tbody');
 
         if (tbody && !tbody.querySelector('tr[data-part-row]')) {
             const emptyRow = document.createElement('tr');
@@ -560,7 +562,7 @@ filterButton.addEventListener('click', filterParts);
 										</td>
 										<td class="pl10 epc-text row-odd p10 text-left" style="background-color:#bb271a;color:#ffffff;">Megnevezés
 										</td>
-										<td class="epc-text row-odd p10 text-center" width="7%" style="background-color:#bb271a;color:#ffffff;">Darab
+										<td class="epc-text row-odd p10 text-center" width="7%" style="background-color:#bb271a;color:#ffffff;">Mennyiség
 										</td>
 										<td class="pl10 epc-text row-odd p10 text-center" width="7%" style="background-color:#bb271a;color:#ffffff;">Változás
 										</td>
@@ -582,7 +584,17 @@ filterButton.addEventListener('click', filterParts);
 										</td>
 										<td class="pl10 epc-text <?= $rowClass ?> p5 text-left"><?= htmlspecialchars( $part['name'],  ENT_QUOTES,  'UTF-8' ) ?>
 										</td>
-										<td class="epc-text <?= $rowClass ?> p5 text-center part-current-quantity" width="7%"><?= $part['quantity'] ?>
+										<?php
+$quantity = (float)$part['quantity'];
+
+$quantityDisplay = rtrim(
+    rtrim(number_format($quantity, 1, ',', ''), '0'),
+    ','
+);
+
+$unit = (string)($part['unit'] ?? 'db');
+?>
+										<td class="epc-text <?= $rowClass ?> p5 text-center part-current-quantity" width="7%"><?= htmlspecialchars($quantityDisplay . ' ' . $unit, ENT_QUOTES, 'UTF-8') ?>
 										</td>
 										<td class="epc-text <?= $rowClass ?> p5 text-center" width="7%">
 										<input type="text" inputmode="numeric" class="part-quantity-input" data-current="<?= (int)$part['quantity'] ?>" data-part-id="<?= (int)$part['id'] ?>" placeholder="<?= (int)$part['quantity'] ?>" style="width:60px;" autocomplete="off">
