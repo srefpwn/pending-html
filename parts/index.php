@@ -177,7 +177,7 @@ if (
             <td class="epc-text <?= $rowClass ?> p5 text-center part-current-quantity" width="7%"><?= htmlspecialchars($quantityDisplay . ' ' . $unit, ENT_QUOTES, 'UTF-8') ?></td>
 
             <td class="epc-text <?= $rowClass ?> p5 text-center" width="7%">
-                <input type="text" inputmode="numeric" class="part-quantity-input" data-current="<?= $quantity ?>" data-part-id="<?= $partId ?>" placeholder="<?= $quantity ?>" style="width:60px;" autocomplete="off">
+            <input type="text" inputmode="decimal" class="part-quantity-input" data-current="<?= $quantity ?>" data-unit="<?= htmlspecialchars($unit, ENT_QUOTES, 'UTF-8') ?>" data-part-id="<?= $partId ?>" placeholder="<?= $quantity ?>" style="width:60px;" autocomplete="off">
             </td>
 
             <td class="<?= $rowClass ?> greybutton" width="140">
@@ -234,14 +234,19 @@ document.addEventListener('input', function (event) {
     const button = row.querySelector('.part-save-button');
     const cell = button.closest('td');
 
-    const validInteger = /^[0-9]+$/.test(value);
-    const newQuantity = Number(value);
+const unit = input.dataset.unit || 'db';
 
-    const canSave =
-        validInteger &&
-        Number.isSafeInteger(newQuantity) &&
-        newQuantity > 0 &&
-        newQuantity !== current;
+const validFormat = unit === 'db'
+    ? /^[0-9]+$/.test(value)
+    : /^[0-9]+(?:[.,][0-9])?$/.test(value);
+
+const newQuantity = Number(value.replace(',', '.'));
+
+const canSave =
+    validFormat &&
+    Number.isFinite(newQuantity) &&
+    newQuantity > 0 &&
+    newQuantity !== current;
 
     button.disabled = !canSave;
     cell.classList.toggle('greybutton', !canSave);
@@ -263,22 +268,27 @@ document.addEventListener('click', async function (event) {
         return;
     }
 
-    const quantityText = input.value.trim();
+const quantityText = input.value.trim();
+const unit = input.dataset.unit || 'db';
 
-    if (!/^[0-9]+$/.test(quantityText)) {
-        return;
-    }
+const validFormat = unit === 'db'
+    ? /^[0-9]+$/.test(quantityText)
+    : /^[0-9]+(?:[.,][0-9])?$/.test(quantityText);
 
-    const quantity = Number(quantityText);
-    const currentQuantity = Number(input.dataset.current);
+if (!validFormat) {
+    return;
+}
 
-    if (
-        !Number.isSafeInteger(quantity) ||
-        quantity <= 0 ||
-        quantity === currentQuantity
-    ) {
-        return;
-    }
+const quantity = Number(quantityText.replace(',', '.'));
+const currentQuantity = Number(input.dataset.current);
+
+if (
+    !Number.isFinite(quantity) ||
+    quantity <= 0 ||
+    quantity === currentQuantity
+) {
+    return;
+}
 
     const data = new URLSearchParams();
 
@@ -310,7 +320,14 @@ document.addEventListener('click', async function (event) {
             );
         }
 
-        quantityCell.textContent = String(result.quantity);
+        const unit = input.dataset.unit || 'db';
+
+const quantityDisplay = Number(result.quantity).toLocaleString(
+    'hu-HU',
+    { maximumFractionDigits: 1 }
+);
+
+quantityCell.textContent = quantityDisplay + ' ' + unit;
         input.dataset.current = String(result.quantity);
         input.placeholder = String(result.quantity);
         input.value = '';
@@ -597,7 +614,7 @@ $unit = (string)($part['unit'] ?? 'db');
 										<td class="epc-text <?= $rowClass ?> p5 text-center part-current-quantity" width="7%"><?= htmlspecialchars($quantityDisplay . ' ' . $unit, ENT_QUOTES, 'UTF-8') ?>
 										</td>
 										<td class="epc-text <?= $rowClass ?> p5 text-center" width="7%">
-										<input type="text" inputmode="numeric" class="part-quantity-input" data-current="<?= (int)$part['quantity'] ?>" data-part-id="<?= (int)$part['id'] ?>" placeholder="<?= (int)$part['quantity'] ?>" style="width:60px;" autocomplete="off">
+										<input type="text" inputmode="decimal" class="part-quantity-input" data-current="<?= (float)$part['quantity'] ?>" data-unit="<?= htmlspecialchars($unit, ENT_QUOTES, 'UTF-8') ?>" data-part-id="<?= (int)$part['id'] ?>" placeholder="<?= $part['quantity'] ?>" style="width:60px;" autocomplete="off">
 										</td>
 										<td class="<?= $rowClass ?> greybutton" width="140">
 										<button type="button" class="part-save-button" disabled style="width:140px">Mentés</button>
