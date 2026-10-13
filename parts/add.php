@@ -102,12 +102,14 @@ $formError = '';
 $partNumber = '';
 $partName = '';
 $partCategory = '';
+$partUnit = 'db';
 $quantity = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $partNumber = trim((string)($_POST['part_number'] ?? ''));
     $partName = trim((string)($_POST['part_name'] ?? ''));
-    $partCategory = trim((string)($_POST['part_category'] ?? ''));
+    $partCategory = trim((string)($_POST['part_category'] ?? ''))
+	$partUnit = trim((string)($_POST['unit'] ?? ''));
     $quantityInput = trim((string)($_POST['quantity'] ?? ''));
 
     $quantity = filter_var($quantityInput, FILTER_VALIDATE_INT);
@@ -116,6 +118,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $formError = 'A cikkszám és a megnevezés megadása kötelező.';
 } elseif (!in_array($partCategory, $partCategories, true)) {
     $formError = 'Válassz egy érvényes kategóriát.';
+} elseif (!in_array($partUnit, ['db', 'l', 'kg'], true)) {
+
+    $formError = 'Válassz egy érvényes mértékegységet.';
+
 } elseif ($quantity === false || $quantity < 1) {
     $formError = 'A darabszámnak legalább 1 egész számnak kell lennie.';
 } else {
@@ -171,6 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'part_number' => $partNumber,
                         'name' => $partName,
     					'category' => $partCategory,
+						'unit' => $partUnit,
                         'quantity' => $quantity
                     ];
 
