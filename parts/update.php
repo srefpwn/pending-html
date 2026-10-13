@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     ]);
 }
 
+
 $carId = filter_input(INPUT_POST, 'car', FILTER_VALIDATE_INT);
 $userId = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
 $partId = filter_input(INPUT_POST, 'part_id', FILTER_VALIDATE_INT);
@@ -29,16 +30,22 @@ $quantityInput = trim((string)($_POST['quantity'] ?? ''));
 if (
     $carId === false || $carId === null || $carId <= 0 ||
     $partId === false || $partId === null || $partId <= 0 ||
-    $quantity === false || $quantity === null || $quantity <= 0
+    $quantityInput === '' ||
+    !preg_match('/^[0-9]+(?:[.,][0-9])?$/', $quantityInput) ||
+    (float)str_replace(',', '.', $quantityInput) <= 0
 ) {
     sendUpdateResponse(400, [
         'success' => false,
         'message' => 'Érvénytelen adatok.'
     ]);
 }
-$quantityInput === '' ||
-!preg_match('/^[0-9]+(?:[.,][0-9])?$/', $quantityInput) ||
-(float)str_replace(',', '.', $quantityInput) <= 0
+
+$quantityInput = str_replace(',', '.', $quantityInput);
+
+
+
+
+
 /*
  * Felhasználó azonosítása.
  * Másik felhasználó autóját csak admin kezelheti.
@@ -169,9 +176,50 @@ foreach ($parts as &$part) {
         (int)$part['id'] === $partId
     ) {
         $partFound = true;
-        $currentQuantity = (int)($part['quantity'] ?? -1);
+        
+$unit = (string)($part['unit'] ?? 'db');
 
-        if ($currentQuantity === $quantity) {
+if ($unit === 'db') {
+    if (!preg_match('/^[0-9]+$/', $quantityInput)) {
+        unset($part);
+        flock($file, LOCK_UN);
+        fclose($file);
+
+        sendUpdateResponse(400, [
+            'success' => false,
+            'message' => 'A darabszám csak egész szám lehet.'
+        ]);
+    }
+
+    $quantity = (int)$quantityInput;
+} elseif (in_array($unit, ['l', 'kg'], true)) {
+    $quantity = (float)$quantityInput;
+} else {
+    unset($part);
+    flock($file, LOCK_UN);
+    fclose($file);
+
+    sendUpdateResponse(400, [
+        'success' => false,
+        'message' => 'Ismeretlen mértékegység.'
+    ]);
+}
+
+$currentQuantity = (float)($part['quantity'] ?? -1);
+
+if ($currentQuantity === (float)$quantity) {
+    unset($part);
+    flock($file, LOCK_UN);
+    fclose($file);
+
+    sendUpdateResponse(400, [
+        'success' => false,
+        'message' => 'Az új mennyiség megegyezik a jelenlegivel.'
+    ]);
+}
+
+$part['quantity'] = $quantity;
+
             unset($part);
             flock($file, LOCK_UN);
             fclose($file);
