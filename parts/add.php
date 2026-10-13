@@ -278,7 +278,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 										</td>
 										<td class="pl10 epc-text row-odd p10 text-left" style="background-color:#bb271a;color:#ffffff;">Kategória
 										</td>
-										<td class="epc-text row-odd p10 text-center" width="7%" style="background-color:#bb271a;color:#ffffff;">Darab
+										<td class="epc-text row-odd p10 text-center" width="7%" style="background-color:#bb271a;color:#ffffff;">Mennyiség
+										</td>
+										<td class="epc-text row-odd p10 text-center" width="7%" style="background-color:#bb271a;color:#ffffff;">Mértékegység
 										</td>
 									</tr>
 								</table>
@@ -298,6 +300,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         									<?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?>
         									</option>
     										<?php endforeach; ?>
+										</select>
+										</td>
+										<td class="pl10 epc-text row-even p5 text-left">
+										<select id="part_unit" name="unit" required>
+    										<option value="db">Darab (db)</option>
+    										<option value="l">Liter (l)</option>
+    										<option value="kg">Kilogramm (kg)</option>
 										</select>
 										</td>
 										<td class="epc-text row-even p5 text-center" width="7%">
