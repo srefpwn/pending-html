@@ -69,6 +69,7 @@ function loadCarParts(int $userId, int $carId): array
             'id' => (int)$part->id,
             'part_number' => (string)$part->part_number,
             'name' => (string)$part->name,
+    		'category' => (string)($part->category ?? ''),
             'quantity' => (int)$part->quantity
         ];
     }
