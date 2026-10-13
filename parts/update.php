@@ -43,9 +43,6 @@ if (
 $quantityInput = str_replace(',', '.', $quantityInput);
 
 
-
-
-
 /*
  * Felhasználó azonosítása.
  * Másik felhasználó autóját csak admin kezelheti.
@@ -217,21 +214,9 @@ if ($currentQuantity === (float)$quantity) {
         'message' => 'Az új mennyiség megegyezik a jelenlegivel.'
     ]);
 }
-
 $part['quantity'] = $quantity;
 
-            unset($part);
-            flock($file, LOCK_UN);
-            fclose($file);
-
-            sendUpdateResponse(400, [
-                'success' => false,
-                'message' => 'Az új darabszám megegyezik a jelenlegivel.'
-            ]);
-        }
-
-        $part['quantity'] = $quantity;
-        break;
+break;
     }
 }
 unset($part);
