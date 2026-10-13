@@ -108,7 +108,7 @@ $quantity = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $partNumber = trim((string)($_POST['part_number'] ?? ''));
     $partName = trim((string)($_POST['part_name'] ?? ''));
-    $partCategory = trim((string)($_POST['part_category'] ?? ''))
+    $partCategory = trim((string)($_POST['part_category'] ?? ''));
 	$partUnit = trim((string)($_POST['unit'] ?? ''));
     $quantityInput = trim((string)($_POST['quantity'] ?? ''));
 
@@ -279,27 +279,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <td style=" padding:20px; text-align:center;">
                                 <table align="center" style="width:100%;text-align:center;" class="table-border">											
 									<tr>
+										<td class="pl10 epc-text row-odd p10 text-left" width="20%" style="background-color:#bb271a;color:#ffffff;">Kategória
+										</td>
 										<td class="pl10 epc-text row-odd p10 text-left" width="20%" style="background-color:#bb271a;color:#ffffff;">Cikkszám
 										</td>
 										<td class="pl10 epc-text row-odd p10 text-left" style="background-color:#bb271a;color:#ffffff;">Megnevezés
 										</td>
-										<td class="pl10 epc-text row-odd p10 text-left" style="background-color:#bb271a;color:#ffffff;">Kategória
+										<td class="epc-text row-odd p10 text-left" width="7%" style="background-color:#bb271a;color:#ffffff;">Mennyiség
 										</td>
-										<td class="epc-text row-odd p10 text-center" width="7%" style="background-color:#bb271a;color:#ffffff;">Mennyiség
-										</td>
-										<td class="epc-text row-odd p10 text-center" width="7%" style="background-color:#bb271a;color:#ffffff;">Mértékegység
+										<td class="epc-text row-odd p10 text-left" width="12%" style="background-color:#bb271a;color:#ffffff;">Mértékegység
 										</td>
 									</tr>
 								</table>
                                 <table align="center" style="width:100%;text-align:center;" class="table-border">
 									<tr>
 										<td class="pl10 epc-text row-even p5 text-left" width="20%">
-										<input type="text" id="part_number" name="part_number" value="<?= htmlspecialchars($partNumber, ENT_QUOTES, 'UTF-8') ?>" required>
-										</td>
-										<td class="pl10 epc-text row-even p5 text-left">
-										<input type="text" id="part_name" name="part_name" value="<?= htmlspecialchars($partName, ENT_QUOTES, 'UTF-8') ?>" required>
-										</td>
-										<td class="pl10 epc-text row-even p5 text-left">
+										<span class="select-wrapper2">
 										<select id="part_category" name="part_category" required>
 											<option value="">Válassz kategóriát</option>
     										<?php foreach ($partCategories as $category): ?>
@@ -308,16 +303,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         									</option>
     										<?php endforeach; ?>
 										</select>
+										</span>
+										</td>
+										<td class="pl10 epc-text row-even p5 text-left" width="20%">
+										<input type="text" id="part_number" name="part_number" value="<?= htmlspecialchars($partNumber, ENT_QUOTES, 'UTF-8') ?>" required>
 										</td>
 										<td class="pl10 epc-text row-even p5 text-left">
+										<input type="text" id="part_name" name="part_name" value="<?= htmlspecialchars($partName, ENT_QUOTES, 'UTF-8') ?>" required>
+										</td>
+										<td class="epc-text row-even p5 text-center" width="7%">
+										<input type="number" id="part_quantity" name="quantity"  min="1" step="1" value="<?= htmlspecialchars((string)$quantity, ENT_QUOTES, 'UTF-8') ?>" required>
+										</td>
+										<td class="pl10 epc-text row-even p5 text-left" width="12%">
+										<span class="select-wrapper2">
 										<select id="part_unit" name="unit" required>
     										<option value="db">Darab (db)</option>
     										<option value="l">Liter (l)</option>
     										<option value="kg">Kilogramm (kg)</option>
 										</select>
-										</td>
-										<td class="epc-text row-even p5 text-center" width="7%">
-										<input type="number" id="part_quantity" name="quantity"  min="1" step="1" value="<?= htmlspecialchars((string)$quantity, ENT_QUOTES, 'UTF-8') ?>" required>
+										</span>
 										</td>
 									</tr>
 								</table>
