@@ -339,19 +339,28 @@ quantityCell.textContent = quantityDisplay + ' ' + unit;
     } finally {
         button.textContent = 'Mentés';
 
-        const value = input.value.trim();
-        const current = Number(input.dataset.current);
-        const validInteger = /^[0-9]+$/.test(value);
-        const newQuantity = Number(value);
 
-        const canSave =
-            validInteger &&
-            Number.isSafeInteger(newQuantity) &&
-            newQuantity > 0 &&
-            newQuantity !== current;
+const value = input.value.trim();
 
-        button.disabled = !canSave;
-        saveCell.classList.toggle('greybutton', !canSave);
+const current = Number(input.dataset.current);
+const unit = input.dataset.unit || 'db';
+
+const validFormat = unit === 'db'
+    ? /^[0-9]+$/.test(value)
+    : /^[0-9]+(?:[.,][0-9])?$/.test(value);
+
+const newQuantity = Number(value.replace(',', '.'));
+
+const canSave =
+    validFormat &&
+    Number.isFinite(newQuantity) &&
+    newQuantity > 0 &&
+    newQuantity !== current;
+
+button.disabled = !canSave;
+
+saveCell.classList.toggle('greybutton', !canSave);
+
     }
 });
 
